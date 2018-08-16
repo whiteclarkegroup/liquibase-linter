@@ -1,5 +1,7 @@
 # Liquibase Linter
-Liquibase extension to add configurable script linting. 
+Liquibase extension to add configurable script linting.
+
+[![Build Status](https://travis-ci.org/whiteclarkegroup/liquibase-linter.svg?branch=master)](https://travis-ci.org/Luke-Rogers/speedcheck)
 
 ## Setup
 To add `liquibase-linter` into your project just add the artifact as a dependency to the `liquibase-maven-plugin`
