@@ -1,6 +1,7 @@
 package com.wcg.liquibase.linters;
 
 import com.wcg.liquibase.config.Config;
+import com.wcg.liquibase.config.rules.RuleType;
 import com.wcg.liquibase.resolvers.ChangeSetParameterResolver;
 import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
 import liquibase.change.core.UpdateDataChange;
@@ -25,7 +26,7 @@ class ModifyDataChangeLinterTest {
 
     @Test
     void should_enforce_where_condition_on_certain_tables(ChangeSet changeSet, Config config) {
-        for (String table : config.getRules().getModifyDataEnforceWhere().getRuleConfig().getRequireWhere()) {
+        for (String table : RuleType.MODIFY_DATA_ENFORCE_WHERE.create(config.getRules()).getRuleConfig().getRequireWhere()) {
             UpdateDataChange updateDataChange = new UpdateDataChange();
             updateDataChange.setTableName(table);
             updateDataChange.setChangeSet(changeSet);

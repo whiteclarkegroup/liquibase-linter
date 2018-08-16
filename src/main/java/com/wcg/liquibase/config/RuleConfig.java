@@ -34,6 +34,10 @@ public class RuleConfig {
         this.maxLength = builder.maxLength;
     }
 
+    public static RuleConfig disabled() {
+        return RuleConfig.builder().withEnabled(false).build();
+    }
+
     public static RuleConfigBuilder builder() {
         return new RuleConfigBuilder();
     }
@@ -50,10 +54,6 @@ public class RuleConfig {
         return errorMessage;
     }
 
-    void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
-    }
-
     public List<String> getRequireWhere() {
         return requireWhere;
     }
@@ -64,6 +64,14 @@ public class RuleConfig {
 
     public String getPatternString() {
         return patternString;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public String getDynamicValue() {
+        return dynamicValue;
     }
 
     public Optional<Expression> getConditionalExpression() {
@@ -85,6 +93,19 @@ public class RuleConfig {
             pattern = Pattern.compile(patternString);
         }
         return Optional.ofNullable(pattern);
+    }
+
+    public RuleConfig mixin(RuleConfig toMix) {
+        Optional<RuleConfig> configOptional = Optional.ofNullable(toMix);
+        return RuleConfig.builder()
+                .withEnabled(configOptional.map(RuleConfig::isEnabled).orElse(enabled))
+                .withRequireWhere(configOptional.map(RuleConfig::getRequireWhere).orElse(requireWhere))
+                .withErrorMessage(configOptional.map(RuleConfig::getErrorMessage).orElse(errorMessage))
+                .withPattern(configOptional.map(RuleConfig::getPatternString).orElse(patternString))
+                .withDynamicValue(configOptional.map(RuleConfig::getDynamicValue).orElse(dynamicValue))
+                .withCondition(configOptional.map(RuleConfig::getCondition).orElse(condition))
+                .withMaxLength(configOptional.map(RuleConfig::getMaxLength).orElse(maxLength))
+                .build();
     }
 
     public static class RuleConfigBuilder {

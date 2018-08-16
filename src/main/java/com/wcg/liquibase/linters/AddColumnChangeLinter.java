@@ -1,10 +1,12 @@
 package com.wcg.liquibase.linters;
 
 import com.wcg.liquibase.Linter;
-import com.wcg.liquibase.config.Rules;
+import com.wcg.liquibase.config.RuleConfig;
 import liquibase.change.AddColumnConfig;
 import liquibase.change.core.AddColumnChange;
 import liquibase.exception.ChangeLogParseException;
+
+import java.util.Map;
 
 public class AddColumnChangeLinter implements Linter<AddColumnChange> {
 
@@ -12,11 +14,11 @@ public class AddColumnChangeLinter implements Linter<AddColumnChange> {
     private ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
-    public void lint(AddColumnChange change, Rules rules) throws ChangeLogParseException {
+    public void lint(AddColumnChange change, Map<String, RuleConfig> ruleConfigs) throws ChangeLogParseException {
         for (AddColumnConfig addColumnConfig : change.getColumns()) {
-            getObjectNameLinter().lintObjectName(addColumnConfig.getName(), change, rules);
+            getObjectNameLinter().lintObjectName(addColumnConfig.getName(), change, ruleConfigs);
         }
-        getColumnConfigLinter().lintColumnConfig(change, rules);
+        getColumnConfigLinter().lintColumnConfig(change, ruleConfigs);
     }
 
     ColumnConfigLinter getColumnConfigLinter() {

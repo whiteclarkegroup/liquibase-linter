@@ -4,6 +4,7 @@ import com.wcg.liquibase.ChangeLogLinter;
 import com.wcg.liquibase.config.Config;
 import com.wcg.liquibase.config.ConfigLoader;
 import com.wcg.liquibase.config.rules.RuleRunner;
+import com.wcg.liquibase.config.rules.RuleType;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -52,7 +53,7 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
 
     void checkSchemaName(ParsedNode parsedNode, Config config) throws ChangeLogParseException {
         if ("schemaName".equals(parsedNode.getName())) {
-            RuleRunner.forGeneric().run(config.getRules().getSchemaName(), parsedNode.getValue().toString());
+            RuleRunner.forGeneric(config.getRules()).run(RuleType.SCHEMA_NAME, parsedNode.getValue().toString());
         }
         if (parsedNode.getChildren() != null && !parsedNode.getChildren().isEmpty()) {
             for (ParsedNode childNode : parsedNode.getChildren()) {

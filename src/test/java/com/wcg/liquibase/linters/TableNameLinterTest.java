@@ -51,7 +51,7 @@ class TableNameLinterTest {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> tableNameLinter.lintTableName("TEST_TEST_TEST_TEST_TEST_TEST", createTableChange, config.getRules()));
 
-        assertTrue(changeLogParseException.getMessage().contains("Table 'TEST_TEST_TEST_TEST_TEST_TEST' name must not be longer than " + config.getRules().getTableNameLength().getRuleConfig().getMaxLength()));
+        assertTrue(changeLogParseException.getMessage().contains("Table 'TEST_TEST_TEST_TEST_TEST_TEST' name must not be longer than " + 26));
     }
 
     @DisplayName("Should not allow table name exceeding max length")

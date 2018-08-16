@@ -1,22 +1,25 @@
 package com.wcg.liquibase.linters;
 
 import com.wcg.liquibase.ChangeLogParseExceptionHelper;
-import com.wcg.liquibase.config.Rules;
+import com.wcg.liquibase.config.RuleConfig;
 import com.wcg.liquibase.config.rules.RuleRunner;
+import com.wcg.liquibase.config.rules.RuleType;
 import liquibase.change.AbstractChange;
 import liquibase.exception.ChangeLogParseException;
 
+import java.util.Map;
+
 public class ObjectNameLinter {
 
-    void lintObjectName(final String objectName, final AbstractChange change, final Rules rules) throws ChangeLogParseException {
+    void lintObjectName(final String objectName, final AbstractChange change, Map<String, RuleConfig> ruleConfigs) throws ChangeLogParseException {
         ensureNameTruthy(objectName, change);
-        RuleRunner.forChange(change).run(rules.getObjectName(), objectName);
-        lintObjectNameLength(objectName, change, rules);
+        RuleRunner.forChange(ruleConfigs, change).run(RuleType.OBJECT_NAME, objectName);
+        lintObjectNameLength(objectName, change, ruleConfigs);
     }
 
-    void lintObjectNameLength(final String objectName, final AbstractChange change, Rules rules) throws ChangeLogParseException {
+    void lintObjectNameLength(final String objectName, final AbstractChange change, Map<String, RuleConfig> ruleConfigs) throws ChangeLogParseException {
         ensureNameTruthy(objectName, change);
-        RuleRunner.forChange(change).run(rules.getObjectNameLength(), objectName);
+        RuleRunner.forChange(ruleConfigs, change).run(RuleType.OBJECT_NAME_LENGTH, objectName);
     }
 
     private void ensureNameTruthy(String objectName, AbstractChange change) throws ChangeLogParseException {

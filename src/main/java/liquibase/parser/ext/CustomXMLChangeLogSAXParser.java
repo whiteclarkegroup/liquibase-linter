@@ -2,7 +2,8 @@ package liquibase.parser.ext;
 
 import com.wcg.liquibase.config.Config;
 import com.wcg.liquibase.config.ConfigLoader;
-import com.wcg.liquibase.config.rules.generic.GenericRule;
+import com.wcg.liquibase.config.rules.Rule;
+import com.wcg.liquibase.config.rules.RuleType;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.core.ParsedNode;
@@ -36,7 +37,7 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser {
     }
 
     void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
-        final GenericRule rule = config.getRules().getNoDuplicateIncludes();
+        final Rule rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
         if (rule.getRuleConfig().isEnabled()) {
             if (alreadyParsed.contains(physicalChangeLogLocation)) {
                 throw new ChangeLogParseException(String.format(rule.getRuleConfig().getErrorMessage(), physicalChangeLogLocation));

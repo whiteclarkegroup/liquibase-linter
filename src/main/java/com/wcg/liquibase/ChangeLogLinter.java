@@ -3,6 +3,7 @@ package com.wcg.liquibase;
 import com.google.common.collect.ImmutableList;
 import com.wcg.liquibase.config.Config;
 import com.wcg.liquibase.config.rules.RuleRunner;
+import com.wcg.liquibase.config.rules.RuleType;
 import liquibase.change.Change;
 import liquibase.change.core.*;
 import liquibase.changelog.ChangeSet;
@@ -60,7 +61,7 @@ public class ChangeLogLinter {
 
     @SuppressWarnings("unchecked")
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config) throws ChangeLogParseException {
-        RuleRunner.forDatabaseChangeLog(databaseChangeLog).run(config.getRules().getFileNameNoSpaces(), databaseChangeLog);
+        RuleRunner.forDatabaseChangeLog(config.getRules(), databaseChangeLog).run(RuleType.FILE_NAME_NO_SPACES, databaseChangeLog);
         lintChangeSets(databaseChangeLog, config);
     }
 
@@ -74,16 +75,16 @@ public class ChangeLogLinter {
             Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
-            RuleRunner.forDatabaseChangeLog(databaseChangeLog)
-                    .run(config.getRules().getNoPreconditions(), changeSet::getPreconditions)
-                    .run(config.getRules().getHasContext(), contexts)
-                    .run(config.getRules().getHasComment(), changeSet::getComments)
-                    .run(config.getRules().getIsolateDDLChanges(), changes);
+            RuleRunner.forDatabaseChangeLog(config.getRules(), databaseChangeLog)
+                    .run(RuleType.NO_PRECONDITIONS, changeSet.getPreconditions())
+                    .run(RuleType.HAS_CONTEXT, contexts)
+                    .run(RuleType.HAS_COMMENT, changeSet.getComments())
+                    .run(RuleType.ISOLATE_DDL_CHANGES, changes);
 
             for (Change change : changes) {
-                RuleRunner.forChange(change)
-                        .run(config.getRules().getValidContext(), contexts)
-                        .run(config.getRules().getSeparateDdlContexts(), contexts);
+                RuleRunner.forChange(config.getRules(), change)
+                        .run(RuleType.VALID_CONTEXT, contexts)
+                        .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
                 lint(change, config);
             }
 
