@@ -1,6 +1,7 @@
-package com.wcg.liquibase.config.rules;
+package com.wcg.liquibase.config.rules.generic;
 
 import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.Rule;
 import liquibase.change.Change;
 
 public class MaxLengthRule extends Rule<String> {
@@ -15,7 +16,7 @@ public class MaxLengthRule extends Rule<String> {
     }
 
     @Override
-    String buildErrorMessage(String object, Change change) {
+    protected String buildErrorMessage(String object, Change change) {
         return String.format(getRuleConfig().getErrorMessage(), object, getRuleConfig().getMaxLength());
     }
 

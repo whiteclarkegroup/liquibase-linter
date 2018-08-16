@@ -7,13 +7,13 @@ public abstract class Rule<T> {
 
     private final RuleConfig ruleConfig;
 
-    Rule(RuleConfig ruleConfig) {
+    protected Rule(RuleConfig ruleConfig) {
         this.ruleConfig = ruleConfig;
     }
 
-    abstract boolean invalid(T object, Change change);
+    protected abstract boolean invalid(T object, Change change);
 
-    String buildErrorMessage(T object, Change change) {
+    protected String buildErrorMessage(T object, Change change) {
         return ruleConfig.getErrorMessage();
     }
 

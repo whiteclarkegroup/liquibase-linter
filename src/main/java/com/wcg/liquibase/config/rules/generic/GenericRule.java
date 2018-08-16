@@ -1,6 +1,7 @@
-package com.wcg.liquibase.config.rules;
+package com.wcg.liquibase.config.rules.generic;
 
 import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.Rule;
 import liquibase.change.Change;
 
 public class GenericRule extends Rule {

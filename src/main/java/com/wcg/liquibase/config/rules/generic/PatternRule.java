@@ -1,6 +1,7 @@
-package com.wcg.liquibase.config.rules;
+package com.wcg.liquibase.config.rules.generic;
 
 import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.Rule;
 import liquibase.change.Change;
 
 import java.util.regex.Pattern;
@@ -25,14 +26,19 @@ public class PatternRule extends Rule {
 
     @Override
     public boolean invalid(Object object, Change change) {
-        String value = (String) object;
-        if (getRuleConfig().getPatternString().contains(DYNAMIC_VALUE)) {
-            return !getDynamicPattern(getDynamicValue(change)).matcher(value).matches();
-        } else return !getRuleConfig().getPattern().map(pattern -> pattern.matcher(value).matches()).orElse(true);
+        final String value = (String) object;
+        if (getRuleConfig().getPatternString() != null) {
+            if (getRuleConfig().getPatternString().contains(DYNAMIC_VALUE)) {
+                return !getDynamicPattern(getDynamicValue(change)).matcher(value).matches();
+            } else {
+                return !getRuleConfig().getPattern().map(pattern -> pattern.matcher(value).matches()).orElse(true);
+            }
+        }
+        return false;
     }
 
     @Override
-    String buildErrorMessage(Object object, Change change) {
+    protected String buildErrorMessage(Object object, Change change) {
         return String.format(getRuleConfig().getErrorMessage(), object);
     }
 

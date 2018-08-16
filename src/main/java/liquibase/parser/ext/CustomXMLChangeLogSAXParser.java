@@ -2,7 +2,7 @@ package liquibase.parser.ext;
 
 import com.wcg.liquibase.config.Config;
 import com.wcg.liquibase.config.ConfigLoader;
-import com.wcg.liquibase.config.rules.GenericRule;
+import com.wcg.liquibase.config.rules.generic.GenericRule;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.core.ParsedNode;

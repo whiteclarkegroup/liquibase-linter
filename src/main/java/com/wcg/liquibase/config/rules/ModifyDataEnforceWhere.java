@@ -12,11 +12,11 @@ public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> {
 
     @Override
     public boolean invalid(AbstractModifyDataChange modifyDataChange, Change change) {
-        return getRuleConfig().getEnforceWhere().contains(modifyDataChange.getTableName()) && (modifyDataChange.getWhere() == null || modifyDataChange.getWhere().isEmpty());
+        return getRuleConfig().getRequireWhere().contains(modifyDataChange.getTableName()) && (modifyDataChange.getWhere() == null || modifyDataChange.getWhere().isEmpty());
     }
 
     @Override
-    String buildErrorMessage(AbstractModifyDataChange modifyDataChange, Change change) {
+    protected String buildErrorMessage(AbstractModifyDataChange modifyDataChange, Change change) {
         return String.format(getRuleConfig().getErrorMessage(), modifyDataChange.getTableName());
     }
 

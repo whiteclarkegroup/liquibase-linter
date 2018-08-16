@@ -9,10 +9,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class ChangeLogLinter {
@@ -70,14 +67,16 @@ public class ChangeLogLinter {
             if (isIgnorable(changeSet, config)) {
                 continue;
             }
-            RuleRunner ruleRunner = RuleRunner.forDatabaseChangeLog(databaseChangeLog);
-            ruleRunner.run(config.getRules().getNoPreconditions(), changeSet::getPreconditions);
-            Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : new HashSet<>();
-            ruleRunner.run(config.getRules().getHasContext(), changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : new HashSet<>())
-                    .run(config.getRules().getHasComment(), changeSet::getComments);
 
-            final List<Change> changes = changeSet.getChanges();
-            ruleRunner.run(config.getRules().getIsolateDDLChanges(), changes);
+            Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
+            List<Change> changes = changeSet.getChanges();
+
+            RuleRunner.forDatabaseChangeLog(databaseChangeLog)
+                    .run(config.getRules().getNoPreconditions(), changeSet::getPreconditions)
+                    .run(config.getRules().getHasContext(), contexts)
+                    .run(config.getRules().getHasComment(), changeSet::getComments)
+                    .run(config.getRules().getIsolateDDLChanges(), changes);
+
             for (Change change : changes) {
                 RuleRunner.forChange(change)
                         .run(config.getRules().getValidContext(), contexts)

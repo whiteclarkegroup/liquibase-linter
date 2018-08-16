@@ -1,6 +1,7 @@
 package com.wcg.liquibase.config.rules;
 
 import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.generic.PatternRule;
 import liquibase.change.Change;
 
 import java.util.Collection;

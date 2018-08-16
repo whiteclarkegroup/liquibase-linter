@@ -50,11 +50,11 @@ public class ConfigTest {
     }
 
     private RuleConfig buildSchemaNameRule(boolean enabled) {
-        return new RuleConfig(enabled, null, null, null, null, null, null);
+        return RuleConfig.builder().withEnabled(enabled).build();
     }
 
     private RuleConfig buildRuleWithErrorMessage(String errorMessage) {
-        return new RuleConfig(true, errorMessage, null, null, null, null, null);
+        return RuleConfig.builder().withEnabled(true).withErrorMessage(errorMessage).build();
     }
 
     private Config mockConfig(RuleConfig schemaNameRule) {
