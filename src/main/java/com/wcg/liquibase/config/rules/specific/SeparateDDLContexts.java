@@ -1,4 +1,4 @@
-package com.wcg.liquibase.config.rules;
+package com.wcg.liquibase.config.rules.specific;
 
 import com.wcg.liquibase.config.RuleConfig;
 import com.wcg.liquibase.config.rules.generic.PatternRule;

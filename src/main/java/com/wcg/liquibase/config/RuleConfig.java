@@ -1,6 +1,5 @@
 package com.wcg.liquibase.config;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.expression.Expression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -15,12 +14,12 @@ public class RuleConfig {
     private static final String DYNAMIC_VALUE = "{{value}}";
 
     private final boolean enabled;
-    private String errorMessage;
     private final String condition;
     private final String patternString;
     private final String dynamicValue;
     private final List<String> requireWhere;
     private final Integer maxLength;
+    private String errorMessage;
     private Pattern pattern;
     private Expression conditionExpression;
     private Expression dynamicValueExpression;
@@ -33,6 +32,10 @@ public class RuleConfig {
         this.dynamicValue = builder.dynamicValue;
         this.requireWhere = builder.requireWhere;
         this.maxLength = builder.maxLength;
+    }
+
+    public static RuleConfigBuilder builder() {
+        return new RuleConfigBuilder();
     }
 
     private boolean isDynamicPattern() {
@@ -82,10 +85,6 @@ public class RuleConfig {
             pattern = Pattern.compile(patternString);
         }
         return Optional.ofNullable(pattern);
-    }
-
-    public static RuleConfigBuilder builder() {
-        return new RuleConfigBuilder();
     }
 
     public static class RuleConfigBuilder {

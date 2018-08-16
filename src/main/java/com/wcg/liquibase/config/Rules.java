@@ -3,8 +3,9 @@ package com.wcg.liquibase.config;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.wcg.liquibase.config.rules.*;
+import com.wcg.liquibase.config.rules.Rule;
 import com.wcg.liquibase.config.rules.generic.*;
+import com.wcg.liquibase.config.rules.specific.*;
 
 import static java.util.Optional.ofNullable;
 
