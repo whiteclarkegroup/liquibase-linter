@@ -7,7 +7,7 @@ Liquibase extension to add configurable script linting.
 To add `liquibase-linter` into your project just add the artifact as a dependency to the `liquibase-maven-plugin`
 The extension will automatically be picked up by liquibase and the rules applied.
 
-```
+```xml
 <plugin>
     <groupId>org.liquibase</groupId>
     <artifactId>liquibase-maven-plugin</artifactId>
@@ -45,7 +45,7 @@ To configure `liquibase-linter` add a file named `lqllint.json` to the root of y
 This will be picked up by the linter and override any default rules.
 
 ### File structure
-```
+```json
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
@@ -98,7 +98,7 @@ Note: all rules are disabled by default
 | foreign-key-must-use-base-and-referenced-table-name | Foreign key must incorporate base and referenced table name       | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 
 #### Example config file
-```
+```json
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
