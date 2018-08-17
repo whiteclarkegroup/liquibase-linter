@@ -7,7 +7,7 @@ Liquibase extension to add configurable script linting.
 To add `liquibase-linter` into your project just add the artifact as a dependency to the `liquibase-maven-plugin`
 The extension will automatically be picked up by liquibase and the rules applied.
 
-```
+```xml
 <plugin>
     <groupId>org.liquibase</groupId>
     <artifactId>liquibase-maven-plugin</artifactId>
@@ -41,11 +41,11 @@ The extension will automatically be picked up by liquibase and the rules applied
 
 ## Configuration
 
-To configure `liquibase-linter` add a file named `lqllint.js` to the root of your project. 
+To configure `liquibase-linter` add a file named `lqllint.json` to the root of your project. 
 This will be picked up by the linter and override any default rules.
 
 ### File structure
-```
+```json
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
@@ -98,7 +98,7 @@ Note: all rules are disabled by default
 | foreign-key-must-use-base-and-referenced-table-name | Foreign key must incorporate base and referenced table name       | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 
 #### Example config file
-```
+```json
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
@@ -225,3 +225,5 @@ Note: all rules are disabled by default
 #### Context ignore pattern
 If there is a set of changes that you always want ignored based on their context you can configure this using `ignore-context-pattern`.
 
+#### Skipping a changeSet
+Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lqlint-ignore", then the linter will not enforce any rules on that changeSet.
