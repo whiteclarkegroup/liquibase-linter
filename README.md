@@ -41,7 +41,7 @@ The extension will automatically be picked up by liquibase and the rules applied
 
 ## Configuration
 
-To configure `liquibase-linter` add a file named `lqllint.js` to the root of your project. 
+To configure `liquibase-linter` add a file named `lqllint.json` to the root of your project. 
 This will be picked up by the linter and override any default rules.
 
 ### File structure
