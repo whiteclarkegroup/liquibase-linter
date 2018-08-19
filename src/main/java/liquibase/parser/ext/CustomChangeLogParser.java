@@ -17,15 +17,17 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
 
     private ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     private ConfigLoader configLoader = new ConfigLoader();
+    private Config config;
 
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
+        loadConfig(resourceAccessor);
+
         ParsedNode parsedNode = parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
         if (parsedNode == null) {
             return null;
         }
 
-        Config config = configLoader.load(resourceAccessor);
         RuleRunner ruleRunner = config.getRuleRunner();
 
         checkSchemaName(parsedNode, ruleRunner);
@@ -60,6 +62,12 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
             for (ParsedNode childNode : parsedNode.getChildren()) {
                 checkSchemaName(childNode, ruleRunner);
             }
+        }
+    }
+
+    private void loadConfig(ResourceAccessor resourceAccessor) {
+        if (config == null) {
+            config = configLoader.load(resourceAccessor);
         }
     }
 
