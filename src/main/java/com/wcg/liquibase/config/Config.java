@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wcg.liquibase.config.rules.RuleRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,6 +39,10 @@ public class Config {
 
     public Map<String, RuleConfig> getRules() {
         return rules;
+    }
+
+    public RuleRunner getRuleRunner() {
+        return new RuleRunner(this.rules);
     }
 
     Config mixin(Config toMix) {

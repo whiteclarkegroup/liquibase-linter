@@ -1,13 +1,11 @@
 package com.wcg.liquibase;
 
-import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.RuleRunner;
 import liquibase.change.Change;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Map;
-
 public interface Linter<T extends Change> {
 
-    void lint(T change, Map<String, RuleConfig> ruleConfigs) throws ChangeLogParseException;
+    void lint(T change, RuleRunner ruleRunner) throws ChangeLogParseException;
 
 }

@@ -1,8 +1,8 @@
 package com.wcg.liquibase.linters;
 
-import com.wcg.liquibase.config.Config;
+import com.wcg.liquibase.config.rules.RuleRunner;
 import com.wcg.liquibase.resolvers.AddColumnChangeParameterResolver;
-import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
+import com.wcg.liquibase.resolvers.RuleRunnerParameterResolver;
 import liquibase.change.AddColumnConfig;
 import liquibase.change.core.AddColumnChange;
 import liquibase.exception.ChangeLogParseException;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.mockito.Mockito.*;
 
-@ExtendWith({AddColumnChangeParameterResolver.class, DefaultConfigParameterResolver.class})
+@ExtendWith({AddColumnChangeParameterResolver.class, RuleRunnerParameterResolver.class})
 class AddColumnChangeLinterTest {
 
     private AddColumnChangeLinter addColumnChangeLinter;
@@ -39,20 +39,20 @@ class AddColumnChangeLinterTest {
 
     @DisplayName("Should call column config linter")
     @Test
-    void should_call_column_config_linter(AddColumnChange addColumnChange, Config config) throws ChangeLogParseException {
+    void should_call_column_config_linter(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);
-        addColumnChangeLinter.lint(addColumnChange, config.getRules());
-        verify(columnConfigLinter, times(1)).lintColumnConfig(addColumnChange, config.getRules());
+        addColumnChangeLinter.lint(addColumnChange, ruleRunner);
+        verify(columnConfigLinter, times(1)).lintColumnConfig(addColumnChange, ruleRunner);
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(AddColumnChange addColumnChange, Config config) throws ChangeLogParseException {
+    void should_use_object_name_linter_for_name_length_check(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);
-        addColumnChangeLinter.lint(addColumnChange, config.getRules());
-        verify(objectNameLinter, times(1)).lintObjectName("TEST", addColumnChange, config.getRules());
+        addColumnChangeLinter.lint(addColumnChange, ruleRunner);
+        verify(objectNameLinter, times(1)).lintObjectName("TEST", addColumnChange, ruleRunner);
     }
 }

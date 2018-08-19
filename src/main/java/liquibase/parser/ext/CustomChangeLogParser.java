@@ -26,8 +26,9 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
         }
 
         Config config = configLoader.load(resourceAccessor);
+        RuleRunner ruleRunner = config.getRuleRunner();
 
-        checkSchemaName(parsedNode, config);
+        checkSchemaName(parsedNode, ruleRunner);
 
         DatabaseChangeLog changeLog = new DatabaseChangeLog(physicalChangeLogLocation);
         changeLog.setChangeLogParameters(changeLogParameters);
@@ -37,7 +38,7 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
             throw new ChangeLogParseException(e);
         }
 
-        changeLogLinter.lintChangeLog(changeLog, config);
+        changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
         return changeLog;
     }
 
@@ -51,13 +52,13 @@ public class CustomChangeLogParser extends XMLChangeLogSAXParser implements Chan
         return 100;
     }
 
-    void checkSchemaName(ParsedNode parsedNode, Config config) throws ChangeLogParseException {
+    void checkSchemaName(ParsedNode parsedNode, RuleRunner ruleRunner) throws ChangeLogParseException {
         if ("schemaName".equals(parsedNode.getName())) {
-            RuleRunner.forGeneric(config.getRules()).run(RuleType.SCHEMA_NAME, parsedNode.getValue().toString());
+            ruleRunner.forGeneric().run(RuleType.SCHEMA_NAME, parsedNode.getValue().toString());
         }
         if (parsedNode.getChildren() != null && !parsedNode.getChildren().isEmpty()) {
             for (ParsedNode childNode : parsedNode.getChildren()) {
-                checkSchemaName(childNode, config);
+                checkSchemaName(childNode, ruleRunner);
             }
         }
     }
