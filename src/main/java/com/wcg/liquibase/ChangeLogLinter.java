@@ -60,12 +60,12 @@ public class ChangeLogLinter {
     private static final Pattern LINT_IGNORE = Pattern.compile(".*lql-ignore.*");
 
     @SuppressWarnings("unchecked")
-    public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config) throws ChangeLogParseException {
-        RuleRunner.forDatabaseChangeLog(config.getRules(), databaseChangeLog).run(RuleType.FILE_NAME_NO_SPACES, databaseChangeLog);
-        lintChangeSets(databaseChangeLog, config);
+    public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+        ruleRunner.forDatabaseChangeLog(databaseChangeLog).run(RuleType.FILE_NAME_NO_SPACES, databaseChangeLog);
+        lintChangeSets(databaseChangeLog, config, ruleRunner);
     }
 
-    private void lintChangeSets(DatabaseChangeLog databaseChangeLog, Config config) throws ChangeLogParseException {
+    private void lintChangeSets(DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         final List<ChangeSet> changeSets = databaseChangeLog.getChangeSets();
         for (ChangeSet changeSet : changeSets) {
             if (isIgnorable(changeSet, config)) {
@@ -75,17 +75,17 @@ public class ChangeLogLinter {
             Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
-            RuleRunner.forDatabaseChangeLog(config.getRules(), databaseChangeLog)
+            ruleRunner.forDatabaseChangeLog(databaseChangeLog)
                     .run(RuleType.NO_PRECONDITIONS, changeSet.getPreconditions())
                     .run(RuleType.HAS_CONTEXT, contexts)
                     .run(RuleType.HAS_COMMENT, changeSet.getComments())
                     .run(RuleType.ISOLATE_DDL_CHANGES, changes);
 
             for (Change change : changes) {
-                RuleRunner.forChange(config.getRules(), change)
+                ruleRunner.forChange(change)
                         .run(RuleType.VALID_CONTEXT, contexts)
                         .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
-                lint(change, config);
+                lint(change, ruleRunner);
             }
 
         }
@@ -108,10 +108,10 @@ public class ChangeLogLinter {
     }
 
     @SuppressWarnings("unchecked")
-    private void lint(Change change, Config config) throws ChangeLogParseException {
+    private void lint(Change change, RuleRunner ruleRunner) throws ChangeLogParseException {
         final Optional<Linter> linter = LinterFactory.getLinter(change);
         if (linter.isPresent()) {
-            linter.get().lint(change, config.getRules());
+            linter.get().lint(change, ruleRunner);
         }
     }
 

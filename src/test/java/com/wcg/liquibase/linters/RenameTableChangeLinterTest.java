@@ -1,8 +1,8 @@
 package com.wcg.liquibase.linters;
 
-import com.wcg.liquibase.config.Config;
+import com.wcg.liquibase.config.rules.RuleRunner;
 import com.wcg.liquibase.resolvers.ChangeSetParameterResolver;
-import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
+import com.wcg.liquibase.resolvers.RuleRunnerParameterResolver;
 import liquibase.change.core.RenameTableChange;
 import liquibase.changelog.ChangeSet;
 import liquibase.exception.ChangeLogParseException;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.mockito.Mockito.*;
 
-@ExtendWith({ChangeSetParameterResolver.class, DefaultConfigParameterResolver.class})
+@ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
 class RenameTableChangeLinterTest {
 
     private RenameTableChangeLinter renameTableChangeLinter;
@@ -29,14 +29,14 @@ class RenameTableChangeLinterTest {
     }
 
     @Test
-    void should_call_table_name_linter(ChangeSet changeSet, Config config) throws ChangeLogParseException {
+    void should_call_table_name_linter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         RenameTableChange renameTableChange = new RenameTableChange();
         renameTableChange.setNewTableName("TEST");
         renameTableChange.setChangeSet(changeSet);
         changeSet.addChange(renameTableChange);
 
-        renameTableChangeLinter.lint(renameTableChange, config.getRules());
-        verify(tableNameLinter, times(1)).lintTableName("TEST", renameTableChange, config.getRules());
+        renameTableChangeLinter.lint(renameTableChange, ruleRunner);
+        verify(tableNameLinter, times(1)).lintTableName("TEST", renameTableChange, ruleRunner);
     }
 
 }

@@ -1,8 +1,8 @@
 package com.wcg.liquibase.linters;
 
-import com.wcg.liquibase.config.Config;
+import com.wcg.liquibase.config.rules.RuleRunner;
 import com.wcg.liquibase.resolvers.AddColumnChangeParameterResolver;
-import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
+import com.wcg.liquibase.resolvers.RuleRunnerParameterResolver;
 import liquibase.change.AddColumnConfig;
 import liquibase.change.ConstraintsConfig;
 import liquibase.change.core.AddColumnChange;
@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith({AddColumnChangeParameterResolver.class, DefaultConfigParameterResolver.class})
+@ExtendWith({AddColumnChangeParameterResolver.class, RuleRunnerParameterResolver.class})
 class ColumnConfigLinterTest {
 
     private ColumnConfigLinter columnConfigLinter;
@@ -27,13 +27,13 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should not allow add column without remarks")
     @Test
-    void should_not_allow_add_column_without_remarks(AddColumnChange addColumnChange, Config config) {
+    void should_not_allow_add_column_without_remarks(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);
 
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, config.getRules()));
+                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner));
 
         assertTrue(changeLogParseException.getMessage().contains("Add column must contain remarks"));
 
@@ -41,7 +41,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should allow add column with remarks")
     @Test
-    void should_allow_add_column_with_remarks_and_nullable(AddColumnChange addColumnChange, Config config) throws ChangeLogParseException {
+    void should_allow_add_column_with_remarks_and_nullable(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -50,12 +50,12 @@ class ColumnConfigLinterTest {
         addColumnConfig.setConstraints(constraints);
         addColumnChange.addColumn(addColumnConfig);
 
-        columnConfigLinter.lintColumnConfig(addColumnChange, config.getRules());
+        columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner);
     }
 
     @DisplayName("Should enforce use of nullable constraint")
     @Test
-    void should_enforce_use_of_nullable_constraint(AddColumnChange addColumnChange, Config config) {
+    void should_enforce_use_of_nullable_constraint(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -64,14 +64,14 @@ class ColumnConfigLinterTest {
         addColumnChange.addColumn(addColumnConfig);
 
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, config.getRules()));
+                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner));
 
         assertTrue(changeLogParseException.getMessage().contains("Add column must specify nullable constraint"));
     }
 
     @DisplayName("Should not allow primary key attribute")
     @Test
-    void should_not_allow_primary_key_attribute(AddColumnChange addColumnChange, Config config) {
+    void should_not_allow_primary_key_attribute(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -82,7 +82,7 @@ class ColumnConfigLinterTest {
         addColumnChange.addColumn(addColumnConfig);
 
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, config.getRules()));
+                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner));
 
         assertTrue(changeLogParseException.getMessage().contains("Add column must not use primary key attribute. Instead use AddPrimaryKey change type"));
     }

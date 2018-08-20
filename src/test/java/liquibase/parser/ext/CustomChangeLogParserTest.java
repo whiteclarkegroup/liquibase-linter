@@ -1,7 +1,7 @@
 package liquibase.parser.ext;
 
-import com.wcg.liquibase.config.Config;
-import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
+import com.wcg.liquibase.config.rules.RuleRunner;
+import com.wcg.liquibase.resolvers.RuleRunnerParameterResolver;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.core.ParsedNode;
 import org.junit.jupiter.api.Test;
@@ -12,22 +12,22 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ExtendWith(DefaultConfigParameterResolver.class)
+@ExtendWith(RuleRunnerParameterResolver.class)
 public class CustomChangeLogParserTest {
 
     @Test
-    void should_allow_token_schema_name(Config config) throws ChangeLogParseException {
+    void should_allow_token_schema_name(RuleRunner ruleRunner) throws ChangeLogParseException {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("${schema_name}");
-        customChangeLogParser.checkSchemaName(parsedNode, config);
+        customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
     }
 
     @Test
-    void should_not_allow_raw_schema_name(Config config) {
+    void should_not_allow_raw_schema_name(RuleRunner ruleRunner) {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("SCHEMA_NAME");
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> customChangeLogParser.checkSchemaName(parsedNode, config));
+                assertThrows(ChangeLogParseException.class, () -> customChangeLogParser.checkSchemaName(parsedNode, ruleRunner));
 
         assertTrue(changeLogParseException.getMessage().contains("Must use schema name token, not SCHEMA_NAME"));
     }

@@ -1,19 +1,17 @@
 package com.wcg.liquibase.linters;
 
 import com.wcg.liquibase.Linter;
-import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.RuleRunner;
 import liquibase.change.core.RenameColumnChange;
 import liquibase.exception.ChangeLogParseException;
-
-import java.util.Map;
 
 public class RenameColumnChangeLinter implements Linter<RenameColumnChange> {
 
     private ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
-    public void lint(RenameColumnChange change, Map<String, RuleConfig> ruleConfigs) throws ChangeLogParseException {
-        getObjectNameLinter().lintObjectName(change.getNewColumnName(), change, ruleConfigs);
+    public void lint(RenameColumnChange change, RuleRunner ruleRunner) throws ChangeLogParseException {
+        getObjectNameLinter().lintObjectName(change.getNewColumnName(), change, ruleRunner);
     }
 
     ObjectNameLinter getObjectNameLinter() {
