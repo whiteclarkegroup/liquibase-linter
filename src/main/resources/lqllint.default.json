@@ -122,6 +122,10 @@
       "pattern": null,
       "condition": null,
       "dynamicValue": null
+    },
+    "drop-not-null-require-column-data-type": {
+      "enabled": false,
+      "errorMessage": "Drop not null constraint column data type attribute must be populated"
     }
   }
 }
