@@ -1,7 +1,7 @@
 package com.wcg.liquibase.integration;
 
 import com.google.common.io.CharStreams;
-import com.wcg.liquibase.resolvers.LiquibaseIntegrationTest;
+import com.wcg.liquibase.resolvers.LiquibaseLinterIntegrationTest;
 import com.wcg.liquibase.resolvers.LiquibaseIntegrationTestResolver;
 import liquibase.Contexts;
 import liquibase.Liquibase;
@@ -18,7 +18,7 @@ class FileNameNoSpacesIntegrationTest {
 
     @DisplayName("Should not allow file name with spaces")
     @Test
-    @LiquibaseIntegrationTest(changeLogFile = "file-name no-spaces.xml", configFile = "file-name-no-spaces.json")
+    @LiquibaseLinterIntegrationTest(changeLogFile = "file-name no-spaces.xml", configFile = "file-name-no-spaces.json")
     void should_not_allow_file_name_with_spaces(Liquibase liquibase) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> liquibase.update(new Contexts(), CharStreams.nullWriter()));

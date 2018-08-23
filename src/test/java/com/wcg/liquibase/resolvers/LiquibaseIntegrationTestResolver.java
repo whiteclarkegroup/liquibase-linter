@@ -32,7 +32,7 @@ public class LiquibaseIntegrationTestResolver implements ParameterResolver {
         try {
             Optional<Method> method = extensionContext.getTestMethod();
             if (method.isPresent()) {
-                LiquibaseIntegrationTest testConfig = method.get().getAnnotation(LiquibaseIntegrationTest.class);
+                LiquibaseLinterIntegrationTest testConfig = method.get().getAnnotation(LiquibaseLinterIntegrationTest.class);
                 DatabaseConnection conn = new OfflineConnection("offline:h2");
                 ResourceAccessor resourceAccessor = new ConfigAwareFileSystemResourceAccessor("/integration/" + testConfig.configFile());
                 return new Liquibase("src/test/resources/integration/" + testConfig.changeLogFile(), resourceAccessor, conn);
