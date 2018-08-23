@@ -73,6 +73,7 @@ Note: all rules are disabled by default
 
 | Key        | Description           | Additional Attributes |
 | ------------- |:-------------:| -----:|
+| no-duplicate-includes      | Changelog file cannot be included more than once  | |
 | schema-name      | Pattern that the schema name attribute must follow | <ul><li>pattern</li></ul> |
 | file-name-no-spaces      | File name cannot contain any spaces      |  |
 | no-preconditions | Preconditions are not allowed to be used      |  |
@@ -90,18 +91,24 @@ Note: all rules are disabled by default
 | create-column-nullable-constraint | Create column must specify if the column is nullable      |  |
 | create-column-no-define-primary-key | Create column cannot specify primary key, force use of add primary key instead       | |
 | modify-data-enforce-where | List of tables that must have a where clause when updating      | <ul><li>requireWhere</li></ul> |
+| modify-data-starts-with-where | Modify data clause cannot start with 'where' | |
 | create-index-name | Pattern index name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | unique-constraint-name | Pattern unique constraint name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | primary-key-must-be-named | Pattern primary key name must follow | <ul><li>pattern</li></ul> |
 | primary-key-must-use-table-name | Primary key must incorporate table name      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | foreign-key-must-be-named | Pattern foreign key name must follow      | <ul><li>pattern</li></ul> |
 | foreign-key-must-use-base-and-referenced-table-name | Foreign key must incorporate base and referenced table name       | <ul><li>pattern</li><li>dynamicValue</li></ul> |
+| drop-not-null-require-column-data-type | Drop not null constraint column data type attribute must be populated | |
 
 #### Example config file
 ```json
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
+    "no-duplicate-includes": {
+      "enabled": true,
+      "errorMessage": "Changelog file '%s' was included more than once"
+    },
     "schema-name": {
       "enabled": true,
       "pattern": "^\\$\\{[a-z_]+\\}$",
@@ -177,8 +184,12 @@ Note: all rules are disabled by default
       "enabled": true,
       "errorMessage": "Modify data on table '%s' must have a where condition",
       "requireWhere": [
-        "UDT_TABLE_VALUE"
+        "MUST_HAVE_WHERE"
       ]
+    },
+    "modify-data-starts-with-where": {
+      "enabled": true,
+      "errorMessage": "Modify data where starts with where, that's probably a mistake"
     },
     "create-index-name": {
       "enabled": true,
@@ -189,19 +200,19 @@ Note: all rules are disabled by default
     },
     "unique-constraint-name": {
       "enabled": true,
-      "errorMessage": "Unique constraint '%s' must follow pattern table name followed by 'U' and a number e.g. APPLICATION_U1",
+      "errorMessage": "Unique constraint '%s' must follow pattern table name followed by 'U' and a number e.g. TABLE_U1",
       "pattern": "^{{value}}_U[0-9]+$",
       "condition": "(tableName + '_U').length() <= 28",
       "dynamicValue": "tableName"
     },
     "primary-key-must-be-named": {
       "enabled": true,
-      "errorMessage": "Primary key constraint '%s' must end with '_PK' e.g. APPLICATION_PK",
+      "errorMessage": "Primary key constraint '%s' must end with '_PK' e.g. TABLE_PK",
       "pattern": "^[A-Z_]+_PK$"
     },
     "primary-key-must-use-table-name": {
       "enabled": true,
-      "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK' e.g. APPLICATION_PK",
+      "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK' e.g. TABLE_PK",
       "pattern": "^{{value}}_PK$",
       "condition": "(tableName + '_PK').length() <= 30",
       "dynamicValue": "tableName"
@@ -217,6 +228,10 @@ Note: all rules are disabled by default
       "pattern": "^{{value}}_FK$",
       "condition": "(baseTableName + referencedTableName + '_FK').length() <= 30",
       "dynamicValue": "baseTableName + '_' + referencedTableName"
+    },
+    "drop-not-null-require-column-data-type": {
+      "enabled": true,
+      "errorMessage": "Drop not null constraint column data type attribute must be populated"
     }
   }
 }

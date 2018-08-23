@@ -124,6 +124,10 @@
       "pattern": "^{{value}}_FK$",
       "condition": "(baseTableName + referencedTableName + '_FK').length() <= 30",
       "dynamicValue": "baseTableName + '_' + referencedTableName"
+    },
+    "drop-not-null-require-column-data-type": {
+      "enabled": true,
+      "errorMessage": "Drop not null constraint column data type attribute must be populated"
     }
   }
 }

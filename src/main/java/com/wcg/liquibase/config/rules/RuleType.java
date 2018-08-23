@@ -33,7 +33,8 @@ public enum RuleType {
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new),
     VALID_CONTEXT("valid-context", ValidContext::new),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new),
-    MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new);
+    MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new),
+    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new);
 
     private String key;
     private Function<RuleConfig, Rule> factory;
