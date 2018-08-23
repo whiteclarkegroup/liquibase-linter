@@ -9,6 +9,8 @@ import java.util.Set;
 
 public class ConfigLoader {
 
+    public static final String LQLLINT_CONFIG = "/lqllint.json";
+
     public Config load(ResourceAccessor resourceAccessor) {
         return loadDefaults().mixin(loadOverrides(resourceAccessor));
     }
@@ -23,7 +25,7 @@ public class ConfigLoader {
 
     private Config loadOverrides(ResourceAccessor resourceAccessor) {
         try {
-            Set<InputStream> resourcesAsStream = resourceAccessor.getResourcesAsStream("/lqllint.json");
+            Set<InputStream> resourcesAsStream = resourceAccessor.getResourcesAsStream(LQLLINT_CONFIG);
             if (resourcesAsStream != null && !resourcesAsStream.isEmpty()) {
                 try (InputStream inputStream = resourcesAsStream.iterator().next()) {
                     return Config.fromInputStream(inputStream);

@@ -5,3 +5,4 @@ pom.xml.versionsBackup
 .svn/*
 **/.mvm/*
 **/node_modules/*
+databasechangelog.csv
