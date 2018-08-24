@@ -17,7 +17,7 @@ public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> {
     }
 
     @Override
-    protected String buildErrorMessage(AbstractModifyDataChange modifyDataChange, Change change) {
+    protected String buildErrorMessage(AbstractModifyDataChange modifyDataChange) {
         return String.format(getRuleConfig().getErrorMessage(), modifyDataChange.getTableName());
     }
 

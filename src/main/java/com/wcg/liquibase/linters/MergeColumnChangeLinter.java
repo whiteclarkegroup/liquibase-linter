@@ -7,7 +7,7 @@ import liquibase.exception.ChangeLogParseException;
 
 public class MergeColumnChangeLinter implements Linter<MergeColumnChange> {
 
-    private ObjectNameLinter objectNameLinter = new ObjectNameLinter();
+    private final ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
     public void lint(MergeColumnChange change, RuleRunner ruleRunner) throws ChangeLogParseException {

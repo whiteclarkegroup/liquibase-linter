@@ -8,8 +8,8 @@ import liquibase.exception.ChangeLogParseException;
 
 public class AddColumnChangeLinter implements Linter<AddColumnChange> {
 
-    private ColumnConfigLinter columnConfigLinter = new ColumnConfigLinter();
-    private ObjectNameLinter objectNameLinter = new ObjectNameLinter();
+    private final ColumnConfigLinter columnConfigLinter = new ColumnConfigLinter();
+    private final ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
     public void lint(AddColumnChange change, RuleRunner ruleRunner) throws ChangeLogParseException {

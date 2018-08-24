@@ -38,7 +38,7 @@ public class PatternRule extends Rule {
     }
 
     @Override
-    protected String buildErrorMessage(Object object, Change change) {
+    protected String buildErrorMessage(Object object) {
         return String.format(getRuleConfig().getErrorMessage(), object);
     }
 

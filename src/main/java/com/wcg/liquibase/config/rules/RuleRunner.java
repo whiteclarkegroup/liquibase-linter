@@ -43,7 +43,7 @@ public class RuleRunner {
         public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
             final Rule rule = ruleType.create(ruleConfigs);
             if (shouldApply(rule, change) && rule.invalid(object, change)) {
-                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, rule.buildErrorMessage(object, change));
+                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, rule.buildErrorMessage(object));
             }
             return this;
         }

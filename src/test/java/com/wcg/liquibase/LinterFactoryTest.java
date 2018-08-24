@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings("OptionalGetWithoutIsPresent")
 class LinterFactoryTest {
 
     @DisplayName("Should return add column linter for add column change type")

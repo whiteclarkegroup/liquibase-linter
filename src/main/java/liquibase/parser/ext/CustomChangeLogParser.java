@@ -13,10 +13,11 @@ import liquibase.parser.core.ParsedNode;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.resource.ResourceAccessor;
 
+@SuppressWarnings("WeakerAccess")
 public class CustomChangeLogParser extends XMLChangeLogSAXParser implements ChangeLogParser {
 
-    private ChangeLogLinter changeLogLinter = new ChangeLogLinter();
-    private ConfigLoader configLoader = new ConfigLoader();
+    private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
+    private final ConfigLoader configLoader = new ConfigLoader();
     private Config config;
 
     @Override

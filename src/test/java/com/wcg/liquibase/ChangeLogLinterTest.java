@@ -62,7 +62,7 @@ class ChangeLogLinterTest {
     @Test
     void shouldNotLintChangeSetsWithLintDisabledComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
-        ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "coment includes lql-ignore foo");
+        ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "comment includes lql-ignore foo");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
         verify(changeSet, never()).getChanges();
     }
@@ -159,7 +159,7 @@ class ChangeLogLinterTest {
     @Test
     void shouldNotAllowChangeLogWithoutComment(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
-        ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), null);
+        getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), null);
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner));
 

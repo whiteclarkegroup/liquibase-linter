@@ -36,8 +36,8 @@ public enum RuleType {
     MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new),
     DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new);
 
-    private String key;
-    private Function<RuleConfig, Rule> factory;
+    private final String key;
+    private final Function<RuleConfig, Rule> factory;
 
     RuleType(String key, Function<RuleConfig, Rule> factory) {
         this.key = key;
