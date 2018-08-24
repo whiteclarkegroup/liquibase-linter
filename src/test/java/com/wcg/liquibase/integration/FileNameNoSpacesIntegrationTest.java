@@ -16,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
+protected class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
 
     @DisplayName("Should not allow file name with spaces")
     @LiquibaseLinterIntegrationTest(changeLogFile = "file-name no-spaces.xml", configFile = "file-name-no-spaces.json")
-    void should_not_allow_file_name_with_spaces(Liquibase liquibase) {
+    void shouldNotAllowFileNameWithSpaces(Liquibase liquibase) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> liquibase.update(new Contexts(), CharStreams.nullWriter()));
         assertTrue(changeLogParseException.getMessage().contains("src/test/resources/integration/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces"));
