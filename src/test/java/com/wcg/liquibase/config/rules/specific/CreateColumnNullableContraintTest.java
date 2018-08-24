@@ -18,13 +18,13 @@ class CreateColumnNullableContraintTest {
 
     @DisplayName("Null constraints should be invalid")
     @Test
-    void null_constraints_should_be_invalid() {
+    void nullConstraintsShouldBeInvalid() {
         assertTrue(createColumnNullableConstraint.invalid(null, null));
     }
 
     @DisplayName("Null nullable attribute should be invalid")
     @Test
-    void null_nullable_attribute_should_be_invalid() {
+    void nullNullableAttributeShouldBeInvalid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         assertNull(constraintsConfig.isNullable());
         assertTrue(createColumnNullableConstraint.invalid(constraintsConfig, null));
@@ -32,7 +32,7 @@ class CreateColumnNullableContraintTest {
 
     @DisplayName("Not null nullable attribute should be valid")
     @Test
-    void not_null_nullable_attribute_should_be_invalid() {
+    void notNullNullableAttributeShouldBeInvalid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         constraintsConfig.setNullable(Boolean.TRUE);
         assertTrue(constraintsConfig.isNullable());

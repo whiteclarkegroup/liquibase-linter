@@ -13,7 +13,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return add column linter for add column change type")
     @Test
-    void should_return_add_column_linter() {
+    void shouldReturnAddColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddColumnChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -23,7 +23,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return create table linter for create table change type")
     @Test
-    void should_return_create_table_linter() {
+    void shouldReturnCreateTableLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new CreateTableChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -33,7 +33,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return update data change linter")
     @Test
-    void should_return_update_data_change_linter() {
+    void shouldReturnUpdateDataChangeLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new UpdateDataChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -43,7 +43,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return delete data change linter")
     @Test
-    void should_return_delete_data_change_linter() {
+    void shouldReturnDeleteDataChangeLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new DeleteDataChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -53,7 +53,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return create index change linter")
     @Test
-    void should_return_create_index_change_linter() {
+    void shouldReturnCreateIndexChangeLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new CreateIndexChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -63,7 +63,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return add unique constraint linter")
     @Test
-    void should_return_add_unique_constraint_linter() {
+    void shouldReturnAddUniqueConstraintLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddUniqueConstraintChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -73,7 +73,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return add primary key constraint linter")
     @Test
-    void should_return_add_primary_key_linter() {
+    void shouldReturnAddPrimaryKeyLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddPrimaryKeyChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -83,7 +83,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return add foreign key constraint linter")
     @Test
-    void should_return_add_foreign_key_linter() {
+    void shouldReturnAddForeignKeyLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddForeignKeyConstraintChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -93,7 +93,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return rename table change linter")
     @Test
-    void should_return_rename_table_linter() {
+    void shouldReturnRenameTableLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new RenameTableChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -103,7 +103,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return rename view change linter")
     @Test
-    void should_return_rename_view_linter() {
+    void shouldReturnRenameViewLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new RenameViewChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -113,7 +113,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return rename column change linter")
     @Test
-    void should_return_rename_column_linter() {
+    void shouldReturnRenameColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new RenameColumnChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),
@@ -123,7 +123,7 @@ class LinterFactoryTest {
 
     @DisplayName("Should return merge column change linter")
     @Test
-    void should_return_merge_column_linter() {
+    void shouldReturnMergeColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new MergeColumnChange());
         assertAll(
                 () -> assertTrue(linter.isPresent()),

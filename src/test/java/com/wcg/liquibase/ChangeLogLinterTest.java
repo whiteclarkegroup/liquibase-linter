@@ -40,7 +40,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Change set should have at least one context")
     @Test
-    void should_have_at_least_one_context_per_change_set(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
+    void shouldHaveAtLeastOneContextPerChangeSet(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> changeLogLinter.lintChangeLog(changeSet.getChangeLog(), config, ruleRunner));
 
@@ -49,7 +49,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should lint change sets with standard comment")
     @Test
-    void should_lint_change_sets_with_standard_comment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldLintChangeSetsWithStandardComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
@@ -59,7 +59,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not lint change sets with lint disabled comment")
     @Test
-    void should_not_lint_change_sets_with_lint_disabled_comment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotLintChangeSetsWithLintDisabledComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "coment includes lql-ignore foo");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
@@ -68,7 +68,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not fall over on null comment")
     @Test
-    void should_not_fall_over_on_null_comment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotFallOverOnNullComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
@@ -77,7 +77,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not allow more than one ddl_test change in a change set")
     @Test
-    void should_not_allow_more_than_one_ddl_test_change_in_a_change_set(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowMoreThanOneDdlTestChangeInAChangeSet(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         addChangeToChangeSet(changeSet, new AddColumnChange(), new AddColumnChange());
@@ -90,7 +90,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should allow one ddl_test change in a change set")
     @Test
-    void should_allow_one_ddl_test_change_in_a_change_set(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowOneDdlTestChangeInAChangeSet(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         addChangeToChangeSet(changeSet, new AddColumnChange());
@@ -100,7 +100,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not allow ddl_test changes in context other than ddl_test")
     @Test
-    void should_not_allow_ddl_test_changes_in_context_other_than_ddl_test(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowDdlTestChangesInContextOtherThanDdlTest(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml_test"), "Comment");
         addChangeToChangeSet(changeSet, new AddColumnChange());
@@ -113,7 +113,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not allow dml changes in ddl_test context")
     @Test
-    void should_not_allow_dml_changes_in_ddl_test_context(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowDmlChangesInDdlTestContext(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         addChangeToChangeSet(changeSet, new InsertDataChange());
@@ -126,7 +126,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not allow spaces in filename - it causes issues on some platforms")
     @Test
-    void should_not_allow_spaces_in_filename(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowSpacesInFilename(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog passingChangelog = mock(DatabaseChangeLog.class);
         when(passingChangelog.getFilePath()).thenReturn("modules/foo/nice.xml");
 
@@ -142,7 +142,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not lint baseline script")
     @Test
-    void should_not_lint_baseline_script(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotLintBaselineScript(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("baseline_ddl_test"), "Test Data column");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
@@ -151,7 +151,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not allow change set without a comment")
     @Test
-    void should_not_allow_change_log_without_comment(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowChangeLogWithoutComment(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), null);
         ChangeLogParseException changeLogParseException =
@@ -162,7 +162,7 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not context with suffix not ending in _test  or _script")
     @Test
-    void should_not_allow_context_with_suffix_not_ending_in_allowed(Config config, RuleRunner ruleRunner) {
+    void shouldNotAllowContextWithSuffixNotEndingInAllowed(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), "Comment");
         addChangeToChangeSet(changeSet, new AddColumnChange());
@@ -174,7 +174,7 @@ class ChangeLogLinterTest {
     }
 
     @Test
-    void should_prevent_precondition(Config config, RuleRunner ruleRunner) {
+    void shouldPreventPrecondition(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("core_test"), "Comment");
         SqlPrecondition precondition = new SqlPrecondition();

@@ -24,19 +24,19 @@ class ModifyDataEnforceWhereTest {
 
     @DisplayName("null where clause on table without requirement should be valid")
     @Test
-    void null_where_clause_on_table_without_requirement_should_be_valid() {
+    void nullWhereClauseOnTableWithoutRequirementShouldBeValid() {
         assertFalse(modifyDataEnforceWhere.invalid(withWhere("MAGIC", null), null));
     }
 
     @DisplayName("null where clause on table with requirement should be invalid")
     @Test
-    void null_where_clause_on_table_with_requirement_should_be_invalid() {
+    void nullWhereClauseOnTableWithRequirementShouldBeInvalid() {
         assertTrue(modifyDataEnforceWhere.invalid(withWhere("TESTING_TABLE", null), null));
     }
 
     @DisplayName("null where clause on table with requirement should be invalid")
     @Test
-    void where_clause_on_table_with_requirement_should_be_valid() {
+    void whereClauseOnTableWithRequirementShouldBeValid() {
         assertFalse(modifyDataEnforceWhere.invalid(withWhere("TESTING_TABLE", "TEST = 'test"), null));
     }
 

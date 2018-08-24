@@ -29,7 +29,7 @@ class RenameViewChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         RenameViewChange renameViewChange = new RenameViewChange();
         renameViewChange.setChangeSet(changeSet);
         renameViewChange.setNewViewName("TEST_TEST");

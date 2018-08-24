@@ -19,19 +19,19 @@ class MaxLengthRuleTest {
 
     @DisplayName("Value exceeding max length should be invalid")
     @Test
-    void valid_exceeding_max_length_should_be_invalid() {
+    void validExceedingMaxLengthShouldBeInvalid() {
         assertTrue(maxLengthRule.invalid("too long", null));
     }
 
     @DisplayName("Short value should be valid")
     @Test
-    void short_value_should_be_valid() {
+    void shortValueShouldBeValid() {
         assertFalse(maxLengthRule.invalid("short", null));
     }
 
     @DisplayName("Null value should be valid")
     @Test
-    void null_value_should_be_valid() {
+    void nullValueShouldBeValid() {
         assertFalse(maxLengthRule.invalid(null, null));
     }
 

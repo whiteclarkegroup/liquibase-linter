@@ -16,14 +16,14 @@ import static org.mockito.Mockito.when;
 public class CustomChangeLogParserTest {
 
     @Test
-    void should_allow_token_schema_name(RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowTokenSchemaName(RuleRunner ruleRunner) throws ChangeLogParseException {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("${schema_name}");
         customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
     }
 
     @Test
-    void should_not_allow_raw_schema_name(RuleRunner ruleRunner) {
+    void shouldNotAllowRawSchemaName(RuleRunner ruleRunner) {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("SCHEMA_NAME");
         ChangeLogParseException changeLogParseException =

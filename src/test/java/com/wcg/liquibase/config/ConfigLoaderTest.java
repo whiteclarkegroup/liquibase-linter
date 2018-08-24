@@ -16,7 +16,7 @@ class ConfigLoaderTest {
     }
 
     @Test
-    void should_load_defaults() {
+    void shouldLoadDefaults() {
         Config config = configLoader.load(new FileSystemResourceAccessor());
         assertNotNull(config);
     }

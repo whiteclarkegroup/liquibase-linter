@@ -29,7 +29,7 @@ class RenameTableChangeLinterTest {
     }
 
     @Test
-    void should_call_table_name_linter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldCallTableNameLinter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         RenameTableChange renameTableChange = new RenameTableChange();
         renameTableChange.setNewTableName("TEST");
         renameTableChange.setChangeSet(changeSet);

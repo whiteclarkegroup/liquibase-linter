@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class ConfigTest {
 
     @Test
-    void should_not_fail_on_null_override_mixin() {
+    void shouldNotFailOnNullOverrideMixin() {
         Config config = mockConfig(buildSchemaNameRule(false));
         config.mixin(null);
         assertFalse(RuleType.SCHEMA_NAME.create(config.getRules()).isEnabled());
     }
 
     @Test
-    void should_mixin_overrides() {
+    void shouldMixinOverrides() {
         Config config = mockConfig(buildSchemaNameRule(false));
         assertFalse(RuleType.SCHEMA_NAME.create(config.getRules()).isEnabled());
         Config override = mockConfig(buildSchemaNameRule(true));
@@ -25,7 +25,7 @@ class ConfigTest {
     }
 
     @Test
-    void should_override_rule_if_null() {
+    void shouldOverrideRuleIfNull() {
         Config config = mockConfig(buildSchemaNameRule(false));
         assertFalse(RuleType.SCHEMA_NAME.create(config.getRules()).isEnabled());
         Config override = mockConfig(buildSchemaNameRule(false));
@@ -34,7 +34,7 @@ class ConfigTest {
     }
 
     @Test
-    void should_not_force_to_override_error_message() {
+    void shouldNotForceToOverrideErrorMessage() {
         Config config = mockConfig(buildRuleWithErrorMessage("Default Error Message"));
         assertEquals(RuleType.SCHEMA_NAME.create(config.getRules()).getErrorMessage(), "Default Error Message");
         Config override = mockConfig(buildRuleWithErrorMessage(null));
@@ -43,7 +43,7 @@ class ConfigTest {
     }
 
     @Test
-    void should_be_able_to_override_error_message() {
+    void shouldBeAbleToOverrideErrorMessage() {
         Config config = mockConfig(buildRuleWithErrorMessage("Default Error Message"));
         assertEquals(RuleType.SCHEMA_NAME.create(config.getRules()).getErrorMessage(), "Default Error Message");
         Config override = mockConfig(buildRuleWithErrorMessage("Override Error Message"));

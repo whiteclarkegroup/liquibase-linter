@@ -16,21 +16,21 @@ class PatternRuleTest {
 
     @DisplayName("Alpha pattern digits string should be invalid")
     @Test
-    void alpha_pattern_digits_string_should_be_invalid() {
+    void alphaPatternDigitsStringShouldBeInvalid() {
         PatternRule patternRule = new PatternRule(RuleConfig.builder().withPattern("^[A-Z]+$").build());
         assertTrue(patternRule.invalid("123", null));
     }
 
     @DisplayName("Alpha pattern alpha string should be valid")
     @Test
-    void alpha_pattern_alpha_string_should_be_valid() {
+    void alphaPatternAlphaStringShouldBeValid() {
         PatternRule patternRule = new PatternRule(RuleConfig.builder().withPattern("^[A-Z]+$").build());
         assertFalse(patternRule.invalid("ABC", null));
     }
 
     @DisplayName("Dynamic pattern digits string should be invalid")
     @Test
-    void dyanmic_pattern_digits_string_should_be_invalid(AddColumnChange columnChange) {
+    void dyanmicPatternDigitsStringShouldBeInvalid(AddColumnChange columnChange) {
         PatternRule patternRule = new PatternRule(RuleConfig.builder().withPattern("^TEST-{{value}}$").withDynamicValue("tableName").build());
         columnChange.setTableName("MAGIC");
         assertTrue(patternRule.invalid("123", columnChange));
@@ -38,7 +38,7 @@ class PatternRuleTest {
 
     @DisplayName("Dynamic pattern value should be valid")
     @Test
-    void dyanmic_pattern_digits_vaue_should_be_invalid(AddColumnChange columnChange) {
+    void dyanmicPatternDigitsVaueShouldBeInvalid(AddColumnChange columnChange) {
         PatternRule patternRule = new PatternRule(RuleConfig.builder().withPattern("^TEST-{{value}}$").withDynamicValue("tableName").build());
         columnChange.setTableName("MAGIC");
         assertFalse(patternRule.invalid("TEST-MAGIC", columnChange));
@@ -46,7 +46,7 @@ class PatternRuleTest {
 
     @DisplayName("Null pattern should be valid")
     @Test
-    void null_should_be_valid() {
+    void nullShouldBeValid() {
         PatternRule patternRule = new PatternRule(RuleConfig.builder().build());
         assertFalse(patternRule.invalid("123", null));
     }

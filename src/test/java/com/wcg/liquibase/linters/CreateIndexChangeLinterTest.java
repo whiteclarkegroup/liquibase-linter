@@ -32,7 +32,7 @@ class CreateIndexChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateIndexChange validChange = new CreateIndexChange();
         validChange.setChangeSet(changeSet);
         validChange.setTableName("TEST_TEST");
@@ -44,7 +44,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should reject name where prefix doesn't match table name")
     @Test
-    void should_validate_inconsistent_with_table_name(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldValidateInconsistentWithTableName(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange validChange = new CreateIndexChange();
         validChange.setChangeSet(changeSet);
         validChange.setTableName("TEST");
@@ -57,7 +57,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should reject name where suffix isn't one of _PK, _Un or _In")
     @Test
-    void should_validate_unsuitable_suffix(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldValidateUnsuitableSuffix(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange validChange = new CreateIndexChange();
         validChange.setChangeSet(changeSet);
         validChange.setTableName("TEST_TEST");
@@ -70,7 +70,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should validate name in correct format for misc index")
     @Test
-    void should_validate_name_in_correct_format_misc(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatMisc(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
@@ -81,7 +81,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should validate name in correct format for unique constraint index")
     @Test
-    void should_validate_name_in_correct_format_unique(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatUnique(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
@@ -92,7 +92,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should validate name in correct format for primary key index")
     @Test
-    void should_validate_name_in_correct_format_primary(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatPrimary(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
@@ -103,7 +103,7 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void should_not_validate_if_name_in_format_more_than_max_length(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateIndexChange constraintChange = new CreateIndexChange();
         constraintChange.setChangeSet(changeSet);
         constraintChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");

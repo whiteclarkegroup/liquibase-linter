@@ -27,7 +27,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should not allow add column without remarks")
     @Test
-    void should_not_allow_add_column_without_remarks(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
+    void shouldNotAllowAddColumnWithoutRemarks(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);
@@ -41,7 +41,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should allow add column with remarks")
     @Test
-    void should_allow_add_column_with_remarks_and_nullable(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowAddColumnWithRemarksAndNullable(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -55,7 +55,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should enforce use of nullable constraint")
     @Test
-    void should_enforce_use_of_nullable_constraint(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
+    void shouldEnforceUseOfNullableConstraint(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -71,7 +71,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should not allow primary key attribute")
     @Test
-    void should_not_allow_primary_key_attribute(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
+    void shouldNotAllowPrimaryKeyAttribute(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");

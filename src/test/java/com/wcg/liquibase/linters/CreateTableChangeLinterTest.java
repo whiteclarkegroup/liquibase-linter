@@ -39,7 +39,7 @@ class CreateTableChangeLinterTest {
 
     @DisplayName("Should not allow create table without remarks attribute")
     @Test
-    void should_not_allow_add_column_without_remarks(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotAllowAddColumnWithoutRemarks(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setChangeSet(changeSet);
@@ -54,7 +54,7 @@ class CreateTableChangeLinterTest {
 
     @DisplayName("Should allow create table with remarks attribute")
     @Test
-    void should_allow_add_column_with_remarks(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowAddColumnWithRemarks(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setRemarks("REMARK");
@@ -65,7 +65,7 @@ class CreateTableChangeLinterTest {
     }
 
     @Test
-    void should_call_table_name_linter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldCallTableNameLinter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setRemarks("REMARK");

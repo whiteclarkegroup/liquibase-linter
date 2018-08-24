@@ -27,7 +27,7 @@ class ModifyDataChangeLinterTest {
     }
 
     @Test
-    void should_enforce_where_condition_on_certain_tables(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
+    void shouldEnforceWhereConditionOnCertainTables(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
         for (String table : RuleType.MODIFY_DATA_ENFORCE_WHERE.create(config.getRules()).getRuleConfig().getRequireWhere()) {
             UpdateDataChange updateDataChange = new UpdateDataChange();
             updateDataChange.setTableName(table);
@@ -41,7 +41,7 @@ class ModifyDataChangeLinterTest {
     }
 
     @Test
-    void should_not_allow_where_condition_to_start_with_where_case_insensitive(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotAllowWhereConditionToStartWithWhereCaseInsensitive(ChangeSet changeSet, RuleRunner ruleRunner) {
         UpdateDataChange updateDataChange = new UpdateDataChange();
         updateDataChange.setTableName("TABLE");
         updateDataChange.setChangeSet(changeSet);

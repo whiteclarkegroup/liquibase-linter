@@ -26,13 +26,13 @@ class DropNotNullConstraintChangeLinterTest {
 
     @DisplayName("Should allow non null column data type")
     @Test
-    void should_allow_non_null_column_data_type(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowNonNullColumnDataType(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         dropNotNullConstraintChangeLinter.lint(build(changeSet, "NVARCHAR(10)"), ruleRunner);
     }
 
     @DisplayName("Should not allow null column data type")
     @Test
-    void should_not_allow_null_column_data_type(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotAllowNullColumnDataType(ChangeSet changeSet, RuleRunner ruleRunner) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> dropNotNullConstraintChangeLinter.lint(build(changeSet, null), ruleRunner));
 
@@ -41,7 +41,7 @@ class DropNotNullConstraintChangeLinterTest {
 
     @DisplayName("Should not allow blank column data type")
     @Test
-    void should_not_allow_blank_column_data_type(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotAllowBlankColumnDataType(ChangeSet changeSet, RuleRunner ruleRunner) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> dropNotNullConstraintChangeLinter.lint(build(changeSet, ""), ruleRunner));
 

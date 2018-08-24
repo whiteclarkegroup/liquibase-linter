@@ -29,7 +29,7 @@ class ObjectNameLinterTest {
 
     @DisplayName("Should only allow uppercase with _ separator")
     @Test
-    void should_only_allow_uppercase_with_underscore_separator(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldOnlyAllowUppercaseWithUnderscoreSeparator(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         final List<String> invalidNames = Arrays.asList("_TEST", "TEST_", "TE ST", "TeST");
         for (String invalidName : invalidNames) {
             ChangeLogParseException changeLogParseException =
@@ -42,7 +42,7 @@ class ObjectNameLinterTest {
 
     @DisplayName("Should only allow names under max length")
     @Test
-    void should_only_allow_names_under_max_length(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldOnlyAllowNamesUnderMaxLength(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         String tooLong = "TEST_TEST_TEST_TEST_TEST_TEST_TEST";
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> objectNameLinter.lintObjectName(tooLong, addColumnChange, ruleRunner));
@@ -54,7 +54,7 @@ class ObjectNameLinterTest {
 
     @DisplayName("Should catch when name is null, when trying to lint length")
     @Test
-    void should_catch_null_names_when_checking_length(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
+    void shouldCatchNullNamesWhenCheckingLength(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> objectNameLinter.lintObjectNameLength(null, addColumnChange, ruleRunner));
         assertTrue(changeLogParseException.getMessage().contains("Object name is null"));
@@ -62,7 +62,7 @@ class ObjectNameLinterTest {
 
     @DisplayName("Should allow uppercase with, numbers and _ separator")
     @Test
-    void should_only_allow_uppercase_with_numbers_and_underscore_separator(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldOnlyAllowUppercaseWithNumbersAndUnderscoreSeparator(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         final List<String> invalidNames = Arrays.asList("_TEST", "TEST_", "TE ST", "TeST");
         for (String invalidName : invalidNames) {
             ChangeLogParseException changeLogParseException =
@@ -74,7 +74,7 @@ class ObjectNameLinterTest {
 
     @DisplayName("Should allow uppercase with, numbers and _ separator")
     @Test
-    void should_not_allow_null_object_name(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
+    void shouldNotAllowNullObjectName(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         final List<String> invalidNames = Collections.singletonList(null);
         for (String invalidName : invalidNames) {
             ChangeLogParseException changeLogParseException =

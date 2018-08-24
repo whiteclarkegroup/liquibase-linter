@@ -20,19 +20,19 @@ class ModifyDataStartsWithWhereTest {
 
     @DisplayName("null where clause should be valid")
     @Test
-    void null_where_clause_should_be_valid() {
+    void nullWhereClauseShouldBeValid() {
         assertFalse(modifyDataStartsWithWhere.invalid(withWhere(null), null));
     }
 
     @DisplayName("where clause not starting with 'where' should be valid")
     @Test
-    void null_clause_not_starting_with_where_should_be_valid() {
+    void nullClauseNotStartingWithWhereShouldBeValid() {
         assertFalse(modifyDataStartsWithWhere.invalid(withWhere("TEST"), null));
     }
 
     @DisplayName("where clause starting with 'where' should be invalid")
     @Test
-    void null_clause_starting_with_where_should_be_invalid() {
+    void nullClauseStartingWithWhereShouldBeInvalid() {
         assertTrue(modifyDataStartsWithWhere.invalid(withWhere("wHerE"), null));
     }
 

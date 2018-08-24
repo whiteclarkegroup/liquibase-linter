@@ -29,7 +29,7 @@ class MergeColumnChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         MergeColumnChange mergeColumnChange = new MergeColumnChange();
         mergeColumnChange.setChangeSet(changeSet);
         mergeColumnChange.setFinalColumnName("TEST_TEST");

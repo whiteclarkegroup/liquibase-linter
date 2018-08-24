@@ -21,19 +21,19 @@ class HasValuesRuleTest {
 
     @DisplayName("Empty list should be invalid")
     @Test
-    void empty_list_should_be_invalid() {
+    void emptyListShouldBeInvalid() {
         assertTrue(hasValuesRule.invalid(new ArrayList<>(), null));
     }
 
     @DisplayName("Null list should be invalid")
     @Test
-    void null_list_should_be_invalid() {
+    void nullListShouldBeInvalid() {
         assertTrue(hasValuesRule.invalid(null, null));
     }
 
     @DisplayName("Populated list should be valid")
     @Test
-    void populated_list_should_be_valid() {
+    void populatedListShouldBeValid() {
         assertFalse(hasValuesRule.invalid(Collections.singleton("TEST"), null));
     }
 }

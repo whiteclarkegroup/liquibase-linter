@@ -32,7 +32,7 @@ class AddUniqueConstraintChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddUniqueConstraintChange constraintChangeValid = new AddUniqueConstraintChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
@@ -44,7 +44,7 @@ class AddUniqueConstraintChangeLinterTest {
 
     @DisplayName("Should validate name in incorrect format")
     @Test
-    void should_validate_name_in_incorrect_format(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldValidateNameInIncorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddUniqueConstraintChange constraintChangeInvalid = new AddUniqueConstraintChange();
         constraintChangeInvalid.setChangeSet(changeSet);
         constraintChangeInvalid.setTableName("MAGIC");
@@ -57,7 +57,7 @@ class AddUniqueConstraintChangeLinterTest {
 
     @DisplayName("Should validate name in correct format")
     @Test
-    void should_validate_name_in_correct_format(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddUniqueConstraintChange constraintChangeValid = new AddUniqueConstraintChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
@@ -68,7 +68,7 @@ class AddUniqueConstraintChangeLinterTest {
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void should_not_validate_if_name_in_format_more_than_max_length(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddUniqueConstraintChange constraintChange = new AddUniqueConstraintChange();
         constraintChange.setChangeSet(changeSet);
         constraintChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
