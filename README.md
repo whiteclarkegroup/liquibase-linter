@@ -1,7 +1,7 @@
 # Liquibase Linter
 Liquibase extension to add configurable script linting.
 
-[![Build Status](https://travis-ci.org/whiteclarkegroup/liquibase-linter.svg?branch=master)](https://travis-ci.org/whiteclarkegroup/liquibase-linter)
+[![Build Status](https://travis-ci.org/whiteclarkegroup/liquibase-linter.svg?branch=master)](https://travis-ci.org/whiteclarkegroup/liquibase-linter) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/320a8a4be4fd44feb9d6102ccdc7e240)](https://www.codacy.com/project/whiteclarkegroup/liquibase-linter/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiteclarkegroup/liquibase-linter&amp;utm_campaign=Badge_Grade_Dashboard)
 
 ## Setup
 To add `liquibase-linter` into your project just add the artifact as a dependency to the `liquibase-maven-plugin`
