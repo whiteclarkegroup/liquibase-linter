@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.ThrowingConsumer;
 
+import java.io.Writer;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -22,12 +23,14 @@ abstract class LinterIntegrationTest {
     @TestFactory
     Stream<DynamicTest> dynamicTests() {
         ThrowingConsumer<IntegrationTestConfig> testExecutor = running -> {
-            Liquibase liquibase = LiquibaseIntegrationTestResolver.buildLiquibase(running.getChangeLogFile(), running.getConfigFile());
+            final Liquibase liquibase = LiquibaseIntegrationTestResolver.buildLiquibase(running.getChangeLogFile(), running.getConfigFile());
+            final Writer nullWriter = CharStreams.nullWriter();
+            final Contexts contexts = new Contexts();
             if (running.getMessage() != null) {
-                ChangeLogParseException changeLogParseException = assertThrows(ChangeLogParseException.class, () -> liquibase.update(new Contexts(), CharStreams.nullWriter()));
-                assertTrue(changeLogParseException.getMessage().contains("src/test/resources/integration/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces"));
+                ChangeLogParseException changeLogParseException = assertThrows(ChangeLogParseException.class, () -> liquibase.update(contexts, nullWriter));
+                assertTrue(changeLogParseException.getMessage().contains(running.getMessage()));
             } else {
-                liquibase.update(new Contexts(), CharStreams.nullWriter());
+                liquibase.update(contexts, nullWriter);
             }
         };
         return DynamicTest.stream(getTests().iterator(), IntegrationTestConfig::getDisplayName, testExecutor);

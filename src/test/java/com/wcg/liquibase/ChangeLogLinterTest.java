@@ -153,8 +153,6 @@ class ChangeLogLinterTest {
     @Test
     void should_not_allow_change_log_without_comment(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
-        ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), null);
-
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner));
 

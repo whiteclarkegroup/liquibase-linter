@@ -72,7 +72,7 @@ public class ChangeLogLinter {
                 continue;
             }
 
-            Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
+            Collection<String> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
             ruleRunner.forDatabaseChangeLog(databaseChangeLog)
