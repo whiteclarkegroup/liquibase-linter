@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ConfigTest {
+class ConfigTest {
 
     @Test
     void should_not_fail_on_null_override_mixin() {

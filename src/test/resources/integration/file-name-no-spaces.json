@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "file-name-no-spaces": {
+      "enabled": true
+    }
+  }
+}

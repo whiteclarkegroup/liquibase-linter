@@ -72,7 +72,7 @@ public class ChangeLogLinter {
                 continue;
             }
 
-            Collection<? extends Object> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
+            Collection<String> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
             ruleRunner.forDatabaseChangeLog(databaseChangeLog)
@@ -96,7 +96,7 @@ public class ChangeLogLinter {
     }
 
     private boolean isIgnorableContext(ChangeSet changeSet, Config config) {
-        if (config.getIgnoreContextPattern() != null && changeSet.getContexts() != null) {
+        if (config.getIgnoreContextPattern() != null && changeSet.getContexts() != null && !changeSet.getContexts().getContexts().isEmpty()) {
             return changeSet.getContexts().getContexts().stream()
                     .allMatch(context -> config.getIgnoreContextPattern().matcher(context).matches());
         }
