@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith({AddColumnChangeParameterResolver.class, RuleRunnerParameterResolver.class})
 class ColumnConfigLinterTest {
@@ -41,7 +42,7 @@ class ColumnConfigLinterTest {
 
     @DisplayName("Should allow add column with remarks")
     @Test
-    void shouldAllowAddColumnWithRemarksAndNullable(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowAddColumnWithRemarksAndNullable(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnConfig.setRemarks("REMARK");
@@ -50,7 +51,11 @@ class ColumnConfigLinterTest {
         addColumnConfig.setConstraints(constraints);
         addColumnChange.addColumn(addColumnConfig);
 
-        columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner);
+        try {
+            columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should enforce use of nullable constraint")

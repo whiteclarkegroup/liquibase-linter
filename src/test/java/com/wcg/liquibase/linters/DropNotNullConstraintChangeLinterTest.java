@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
 class DropNotNullConstraintChangeLinterTest {
@@ -26,8 +27,12 @@ class DropNotNullConstraintChangeLinterTest {
 
     @DisplayName("Should allow non null column data type")
     @Test
-    void shouldAllowNonNullColumnDataType(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
-        dropNotNullConstraintChangeLinter.lint(build(changeSet, "NVARCHAR(10)"), ruleRunner);
+    void shouldAllowNonNullColumnDataType(ChangeSet changeSet, RuleRunner ruleRunner) {
+        try {
+            dropNotNullConstraintChangeLinter.lint(build(changeSet, "NVARCHAR(10)"), ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not allow null column data type")

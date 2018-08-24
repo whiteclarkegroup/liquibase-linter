@@ -26,6 +26,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, DefaultConfigParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -90,12 +91,17 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should allow one ddl_test change in a change set")
     @Test
-    void shouldAllowOneDdlTestChangeInAChangeSet(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowOneDdlTestChangeInAChangeSet(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         addChangeToChangeSet(changeSet, new AddColumnChange());
 
-        changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
+        try {
+            changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
+
     }
 
     @DisplayName("Should not allow ddl_test changes in context other than ddl_test")
@@ -191,7 +197,8 @@ class ChangeLogLinterTest {
         assertTrue(changeLogParseException.getMessage().contains("Preconditions are not allowed in this project"));
     }
 
-    private <T extends Change> void addChangeToChangeSet(ChangeSet changeSet, T... changes) {
+    @SafeVarargs
+    private final <T extends Change> void addChangeToChangeSet(ChangeSet changeSet, T... changes) {
         when(changeSet.getChanges()).thenReturn(Arrays.asList(changes));
         for (T change : changes) {
             change.setChangeSet(changeSet);

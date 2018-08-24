@@ -11,8 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -54,14 +53,17 @@ class CreateTableChangeLinterTest {
 
     @DisplayName("Should allow create table with remarks attribute")
     @Test
-    void shouldAllowAddColumnWithRemarks(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowAddColumnWithRemarks(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setRemarks("REMARK");
         createTableChange.setChangeSet(changeSet);
         changeSet.addChange(createTableChange);
-
-        createTableChangeLinter.lint(createTableChange, ruleRunner);
+        try {
+            createTableChangeLinter.lint(createTableChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @Test

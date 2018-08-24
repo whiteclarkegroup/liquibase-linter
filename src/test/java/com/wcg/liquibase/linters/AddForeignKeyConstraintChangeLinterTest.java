@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -57,24 +58,34 @@ class AddForeignKeyConstraintChangeLinterTest {
 
     @DisplayName("Should validate name in correct format")
     @Test
-    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddForeignKeyConstraintChange addForeignKeyConstraintChange = new AddForeignKeyConstraintChange();
         addForeignKeyConstraintChange.setChangeSet(changeSet);
         addForeignKeyConstraintChange.setBaseTableName("BASE");
         addForeignKeyConstraintChange.setReferencedTableName("REFERENCE");
         addForeignKeyConstraintChange.setConstraintName("BASE_REFERENCE_FK");
-        addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner);
+
+        try {
+            addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddForeignKeyConstraintChange addForeignKeyConstraintChange = new AddForeignKeyConstraintChange();
         addForeignKeyConstraintChange.setChangeSet(changeSet);
         addForeignKeyConstraintChange.setBaseTableName("TEST_TEST_TEST_TEST_TEST");
         addForeignKeyConstraintChange.setReferencedTableName("REFERENCE");
         addForeignKeyConstraintChange.setConstraintName("TEST_PK_ABC_FK");
-        addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner);
+
+        try {
+            addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format but validate ending when longer than max length")

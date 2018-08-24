@@ -9,17 +9,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(RuleRunnerParameterResolver.class)
-public class CustomChangeLogParserTest {
+class CustomChangeLogParserTest {
 
     @Test
-    void shouldAllowTokenSchemaName(RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowTokenSchemaName(RuleRunner ruleRunner) {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("${schema_name}");
-        customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
+        try {
+            customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @Test

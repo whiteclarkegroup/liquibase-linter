@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -55,23 +56,33 @@ class AddPrimaryKeyChangeLinterTest {
 
     @DisplayName("Should validate name in correct format")
     @Test
-    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST");
         addPrimaryKeyChange.setConstraintName("TEST_PK");
-        addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+
+        try {
+            addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
         addPrimaryKeyChange.setConstraintName("INVALID_NAME_PK");
         changeSet.addChange(addPrimaryKeyChange);
-        addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+
+        try {
+            addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format but validate ending when longer than max length")

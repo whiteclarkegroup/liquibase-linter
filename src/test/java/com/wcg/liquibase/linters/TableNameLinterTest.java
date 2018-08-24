@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
 class TableNameLinterTest {
@@ -72,13 +73,17 @@ class TableNameLinterTest {
 
     @DisplayName("Should allow valid table name")
     @Test
-    void shouldAllowValidTableName(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowValidTableName(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST_TABLE_NAME");
         createTableChange.setRemarks("REMARK");
         createTableChange.setChangeSet(changeSet);
         changeSet.addChange(createTableChange);
 
-        tableNameLinter.lintTableName("TEST_TABLE_NAME", createTableChange, ruleRunner);
+        try {
+            tableNameLinter.lintTableName("TEST_TABLE_NAME", createTableChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 }

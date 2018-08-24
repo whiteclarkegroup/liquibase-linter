@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -57,24 +58,34 @@ class AddUniqueConstraintChangeLinterTest {
 
     @DisplayName("Should validate name in correct format")
     @Test
-    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddUniqueConstraintChange constraintChangeValid = new AddUniqueConstraintChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
         constraintChangeValid.setConstraintName("TEST_TEST_U1");
         changeSet.addChange(constraintChangeValid);
-        addUniqueConstraintChangeLinter.lint(constraintChangeValid, ruleRunner);
+
+        try {
+            addUniqueConstraintChangeLinter.lint(constraintChangeValid, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddUniqueConstraintChange constraintChange = new AddUniqueConstraintChange();
         constraintChange.setChangeSet(changeSet);
         constraintChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
         constraintChange.setConstraintName("INVALID_NAME");
         changeSet.addChange(constraintChange);
-        addUniqueConstraintChangeLinter.lint(constraintChange, ruleRunner);
+
+        try {
+            addUniqueConstraintChangeLinter.lint(constraintChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
 }

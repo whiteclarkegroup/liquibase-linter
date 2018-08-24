@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -70,46 +71,62 @@ class CreateIndexChangeLinterTest {
 
     @DisplayName("Should validate name in correct format for misc index")
     @Test
-    void shouldValidateNameInCorrectFormatMisc(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatMisc(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
         constraintChangeValid.setIndexName("TEST_TEST_I1");
         changeSet.addChange(constraintChangeValid);
-        createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        try {
+            createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should validate name in correct format for unique constraint index")
     @Test
-    void shouldValidateNameInCorrectFormatUnique(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatUnique(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
         constraintChangeValid.setIndexName("TEST_TEST_U1");
         changeSet.addChange(constraintChangeValid);
-        createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        try {
+            createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should validate name in correct format for primary key index")
     @Test
-    void shouldValidateNameInCorrectFormatPrimary(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormatPrimary(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange constraintChangeValid = new CreateIndexChange();
         constraintChangeValid.setChangeSet(changeSet);
         constraintChangeValid.setTableName("TEST_TEST");
         constraintChangeValid.setIndexName("TEST_TEST_PK");
         changeSet.addChange(constraintChangeValid);
-        createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        try {
+            createIndexChangeLinter.lint(constraintChangeValid, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateIndexChange constraintChange = new CreateIndexChange();
         constraintChange.setChangeSet(changeSet);
         constraintChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
         constraintChange.setIndexName("INVALID_NAME");
         changeSet.addChange(constraintChange);
-        createIndexChangeLinter.lint(constraintChange, ruleRunner);
+        try {
+            createIndexChangeLinter.lint(constraintChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
 }
