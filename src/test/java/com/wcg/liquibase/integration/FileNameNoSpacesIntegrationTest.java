@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-protected class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
+class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
 
     @DisplayName("Should not allow file name with spaces")
     @LiquibaseLinterIntegrationTest(changeLogFile = "file-name no-spaces.xml", configFile = "file-name-no-spaces.json")
