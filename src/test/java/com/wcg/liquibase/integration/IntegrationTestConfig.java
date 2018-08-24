@@ -6,18 +6,19 @@ class IntegrationTestConfig {
     private final String configFile;
     private final String message;
 
-    IntegrationTestConfig(String displayName, String changeLogFile, String configFile) {
-        this.displayName = displayName;
-        this.changeLogFile = changeLogFile;
-        this.configFile = configFile;
-        this.message = null;
-    }
-
-    IntegrationTestConfig(String displayName, String changeLogFile, String configFile, String message) {
+    private IntegrationTestConfig(String displayName, String changeLogFile, String configFile, String message) {
         this.displayName = displayName;
         this.changeLogFile = changeLogFile;
         this.configFile = configFile;
         this.message = message;
+    }
+
+    public static IntegrationTestConfig shouldPass(String displayName, String changeLogFile, String configFile) {
+        return new IntegrationTestConfig(displayName, changeLogFile, configFile, null);
+    }
+
+    public static IntegrationTestConfig shouldFail(String displayName, String changeLogFile, String configFile, String message) {
+        return new IntegrationTestConfig(displayName, changeLogFile, configFile, message);
     }
 
     String getDisplayName() {
