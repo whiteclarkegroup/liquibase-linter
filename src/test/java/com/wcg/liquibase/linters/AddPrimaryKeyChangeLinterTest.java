@@ -11,8 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -32,7 +31,7 @@ class AddPrimaryKeyChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST");
@@ -43,7 +42,7 @@ class AddPrimaryKeyChangeLinterTest {
 
     @DisplayName("Should validate name in incorrect format")
     @Test
-    void should_validate_name_in_incorrect_format(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldValidateNameInIncorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST");
@@ -55,28 +54,38 @@ class AddPrimaryKeyChangeLinterTest {
 
     @DisplayName("Should validate name in correct format")
     @Test
-    void should_validate_name_in_correct_format(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldValidateNameInCorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST");
         addPrimaryKeyChange.setConstraintName("TEST_PK");
-        addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+
+        try {
+            addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format is longer than max length")
     @Test
-    void should_not_validate_if_name_in_format_more_than_max_length(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotValidateIfNameInFormatMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
         addPrimaryKeyChange.setConstraintName("INVALID_NAME_PK");
         changeSet.addChange(addPrimaryKeyChange);
-        addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+
+        try {
+            addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @DisplayName("Should not validate if name in format but validate ending when longer than max length")
     @Test
-    void should_not_validate_name_in_format_but_validate_ending_when_more_than_max_length(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotValidateNameInFormatButValidateEndingWhenMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
         AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
         addPrimaryKeyChange.setChangeSet(changeSet);
         addPrimaryKeyChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");

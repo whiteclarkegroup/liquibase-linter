@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class CustomXMLChangeLogSAXParserTest {
 
     @Test
-    void should_prevent_duplicate_includes(Config config) throws Exception {
+    void shouldPreventDuplicateIncludes(Config config) throws Exception {
         CustomXMLChangeLogSAXParser parser = new CustomXMLChangeLogSAXParser();
 
         // do a couple includes

@@ -11,8 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -39,7 +38,7 @@ class CreateTableChangeLinterTest {
 
     @DisplayName("Should not allow create table without remarks attribute")
     @Test
-    void should_not_allow_add_column_without_remarks(ChangeSet changeSet, RuleRunner ruleRunner) {
+    void shouldNotAllowAddColumnWithoutRemarks(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setChangeSet(changeSet);
@@ -54,18 +53,21 @@ class CreateTableChangeLinterTest {
 
     @DisplayName("Should allow create table with remarks attribute")
     @Test
-    void should_allow_add_column_with_remarks(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowAddColumnWithRemarks(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setRemarks("REMARK");
         createTableChange.setChangeSet(changeSet);
         changeSet.addChange(createTableChange);
-
-        createTableChangeLinter.lint(createTableChange, ruleRunner);
+        try {
+            createTableChangeLinter.lint(createTableChange, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @Test
-    void should_call_table_name_linter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldCallTableNameLinter(ChangeSet changeSet, RuleRunner ruleRunner) throws ChangeLogParseException {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("TEST");
         createTableChange.setRemarks("REMARK");

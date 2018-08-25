@@ -18,13 +18,13 @@ class CreateColumnNoDefinePrimaryKeyTest {
 
     @DisplayName("Null constraints should be invalid")
     @Test
-    void null_constraints_should_be_invalid() {
+    void nullConstraintsShouldBeInvalid() {
         assertTrue(createColumnNoDefinePrimaryKey.invalid(null, null));
     }
 
     @DisplayName("Null primary key attribute should be valid")
     @Test
-    void null_primary_key_attribute_should_be_valid() {
+    void nullPrimaryKeyAttributeShouldBeValid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         assertNull(constraintsConfig.isPrimaryKey());
         assertFalse(createColumnNoDefinePrimaryKey.invalid(constraintsConfig, null));
@@ -32,7 +32,7 @@ class CreateColumnNoDefinePrimaryKeyTest {
 
     @DisplayName("False primary key attribute should be valid")
     @Test
-    void false_primary_key_attribute_should_be_valid() {
+    void falsePrimaryKeyAttributeShouldBeValid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         constraintsConfig.setPrimaryKey(Boolean.FALSE);
         assertFalse(constraintsConfig.isPrimaryKey());
@@ -41,7 +41,7 @@ class CreateColumnNoDefinePrimaryKeyTest {
 
     @DisplayName("False primary key attribute should be valid")
     @Test
-    void false_primary_key_attribute_should_be_invalid() {
+    void falsePrimaryKeyAttributeShouldBeInvalid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         constraintsConfig.setPrimaryKey(Boolean.TRUE);
         assertTrue(constraintsConfig.isPrimaryKey());

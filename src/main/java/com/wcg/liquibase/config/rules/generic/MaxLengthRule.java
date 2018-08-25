@@ -16,7 +16,7 @@ public class MaxLengthRule extends Rule<String> {
     }
 
     @Override
-    protected String buildErrorMessage(String object, Change change) {
+    protected String buildErrorMessage(String object) {
         return String.format(getRuleConfig().getErrorMessage(), object, getRuleConfig().getMaxLength());
     }
 

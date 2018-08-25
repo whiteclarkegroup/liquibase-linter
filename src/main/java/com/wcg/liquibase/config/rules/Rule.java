@@ -13,7 +13,7 @@ public abstract class Rule<T> {
 
     protected abstract boolean invalid(T object, Change change);
 
-    protected String buildErrorMessage(T object, Change change) {
+    protected String buildErrorMessage(T object) {
         return ruleConfig.getErrorMessage();
     }
 

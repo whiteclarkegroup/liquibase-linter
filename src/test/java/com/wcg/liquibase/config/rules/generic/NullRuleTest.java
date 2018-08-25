@@ -18,13 +18,13 @@ class NullRuleTest {
 
     @DisplayName("Null should be valid")
     @Test
-    void null_should_be_valid() {
+    void nullShouldBeValid() {
         assertFalse(nullRule.invalid(null, null));
     }
 
     @DisplayName("Not null should be invalid")
     @Test
-    void not_null_should_be_valid() {
+    void notNullShouldBeValid() {
         assertTrue(nullRule.invalid("TEST", null));
     }
 }

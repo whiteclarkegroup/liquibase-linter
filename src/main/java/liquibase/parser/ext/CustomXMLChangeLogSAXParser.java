@@ -13,6 +13,7 @@ import liquibase.resource.ResourceAccessor;
 import java.util.HashSet;
 import java.util.Set;
 
+@SuppressWarnings("WeakerAccess")
 public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser {
     private final Set<String> alreadyParsed = new HashSet<>();
     private final ConfigLoader configLoader = new ConfigLoader();

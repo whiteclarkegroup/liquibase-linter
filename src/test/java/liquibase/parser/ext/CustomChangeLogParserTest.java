@@ -7,23 +7,26 @@ import liquibase.parser.core.ParsedNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(RuleRunnerParameterResolver.class)
-public class CustomChangeLogParserTest {
+class CustomChangeLogParserTest {
 
     @Test
-    void should_allow_token_schema_name(RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldAllowTokenSchemaName(RuleRunner ruleRunner) {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("${schema_name}");
-        customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
+        try {
+            customChangeLogParser.checkSchemaName(parsedNode, ruleRunner);
+        } catch (ChangeLogParseException e) {
+            fail(e);
+        }
     }
 
     @Test
-    void should_not_allow_raw_schema_name(RuleRunner ruleRunner) {
+    void shouldNotAllowRawSchemaName(RuleRunner ruleRunner) {
         CustomChangeLogParser customChangeLogParser = new CustomChangeLogParser();
         ParsedNode parsedNode = mockParsedNode("SCHEMA_NAME");
         ChangeLogParseException changeLogParseException =

@@ -19,13 +19,13 @@ class FileNameNoSpacesTest {
 
     @DisplayName("Filename with spaces should be invalid")
     @Test
-    void filename_with_spaces_should_be_invalid() {
+    void filenameWithSpacesShouldBeInvalid() {
         assertTrue(fileNameNoSpaces.invalid(withFilePath("//test/dir/this has spaces.xml"), null));
     }
 
     @DisplayName("Filename with spaces should be invalid")
     @Test
-    void filename_without_spaces_should_be_valid() {
+    void filenameWithoutSpacesShouldBeValid() {
         assertFalse(fileNameNoSpaces.invalid(withFilePath("//test/dir/this-has-spaces.xml"), null));
     }
 

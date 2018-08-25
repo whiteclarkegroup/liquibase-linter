@@ -39,7 +39,7 @@ class AddColumnChangeLinterTest {
 
     @DisplayName("Should call column config linter")
     @Test
-    void should_call_column_config_linter(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldCallColumnConfigLinter(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);
@@ -48,7 +48,7 @@ class AddColumnChangeLinterTest {
     }
 
     @Test
-    void should_use_object_name_linter_for_name_length_check(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldUseObjectNameLinterForNameLengthCheck(AddColumnChange addColumnChange, RuleRunner ruleRunner) throws ChangeLogParseException {
         AddColumnConfig addColumnConfig = new AddColumnConfig();
         addColumnConfig.setName("TEST");
         addColumnChange.addColumn(addColumnConfig);

@@ -7,7 +7,7 @@ import liquibase.exception.ChangeLogParseException;
 
 public class RenameColumnChangeLinter implements Linter<RenameColumnChange> {
 
-    private ObjectNameLinter objectNameLinter = new ObjectNameLinter();
+    private final ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
     public void lint(RenameColumnChange change, RuleRunner ruleRunner) throws ChangeLogParseException {

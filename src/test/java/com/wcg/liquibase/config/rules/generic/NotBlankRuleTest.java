@@ -18,19 +18,19 @@ class NotBlankRuleTest {
 
     @DisplayName("Empty string should be invalid")
     @Test
-    void empty_string_should_be_invalid() {
+    void emptyStringShouldBeInvalid() {
         assertTrue(notBlankRule.invalid("", null));
     }
 
     @DisplayName("Null string should be invalid")
     @Test
-    void null_string_should_be_invalid() {
+    void nullStringShouldBeInvalid() {
         assertTrue(notBlankRule.invalid(null, null));
     }
 
     @DisplayName("Populated string should be valid")
     @Test
-    void populated_string_should_be_valid() {
+    void populatedStringShouldBeValid() {
         assertFalse(notBlankRule.invalid("TEST", null));
     }
 }

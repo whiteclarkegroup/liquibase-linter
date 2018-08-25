@@ -19,7 +19,7 @@ public class RuleConfig {
     private final String dynamicValue;
     private final List<String> requireWhere;
     private final Integer maxLength;
-    private String errorMessage;
+    private final String errorMessage;
     private Pattern pattern;
     private Expression conditionExpression;
     private Expression dynamicValueExpression;
@@ -66,11 +66,11 @@ public class RuleConfig {
         return patternString;
     }
 
-    public String getCondition() {
+    private String getCondition() {
         return condition;
     }
 
-    public String getDynamicValue() {
+    private String getDynamicValue() {
         return dynamicValue;
     }
 
@@ -127,7 +127,7 @@ public class RuleConfig {
             return this;
         }
 
-        public RuleConfigBuilder withCondition(String condition) {
+        RuleConfigBuilder withCondition(String condition) {
             this.condition = condition;
             return this;
         }
