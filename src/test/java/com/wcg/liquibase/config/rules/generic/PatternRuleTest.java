@@ -1,6 +1,6 @@
 package com.wcg.liquibase.config.rules.generic;
 
-import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.RuleConfig;
 import com.wcg.liquibase.resolvers.AddColumnChangeParameterResolver;
 import liquibase.change.core.AddColumnChange;
 import org.junit.jupiter.api.DisplayName;

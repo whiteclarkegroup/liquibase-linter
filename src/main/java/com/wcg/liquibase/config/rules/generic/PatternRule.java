@@ -1,12 +1,13 @@
 package com.wcg.liquibase.config.rules.generic;
 
-import com.wcg.liquibase.config.RuleConfig;
 import com.wcg.liquibase.config.rules.Rule;
+import com.wcg.liquibase.config.rules.RuleConfig;
+import com.wcg.liquibase.config.rules.WithFormattedErrorMessage;
 import liquibase.change.Change;
 
 import java.util.regex.Pattern;
 
-public class PatternRule extends Rule {
+public class PatternRule extends Rule implements WithFormattedErrorMessage {
 
     private static final String DYNAMIC_VALUE = "{{value}}";
 
@@ -38,8 +39,7 @@ public class PatternRule extends Rule {
     }
 
     @Override
-    protected String buildErrorMessage(Object object) {
-        return String.format(getRuleConfig().getErrorMessage(), object);
+    public String formatErrorMessage(String errorMessage, Object object) {
+        return String.format(errorMessage, object);
     }
-
 }

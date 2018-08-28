@@ -1,11 +1,12 @@
 package com.wcg.liquibase.config.rules.specific;
 
-import com.wcg.liquibase.config.RuleConfig;
 import com.wcg.liquibase.config.rules.Rule;
+import com.wcg.liquibase.config.rules.RuleConfig;
+import com.wcg.liquibase.config.rules.WithFormattedErrorMessage;
 import liquibase.change.Change;
 import liquibase.change.core.AbstractModifyDataChange;
 
-public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> {
+public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> implements WithFormattedErrorMessage<AbstractModifyDataChange> {
 
     public ModifyDataEnforceWhere(RuleConfig ruleConfig) {
         super(ruleConfig);
@@ -17,8 +18,7 @@ public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> {
     }
 
     @Override
-    protected String buildErrorMessage(AbstractModifyDataChange modifyDataChange) {
-        return String.format(getRuleConfig().getErrorMessage(), modifyDataChange.getTableName());
+    public String formatErrorMessage(String errorMessage, AbstractModifyDataChange modifyDataChange) {
+        return String.format(errorMessage, modifyDataChange.getTableName());
     }
-
 }

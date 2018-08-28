@@ -1,6 +1,6 @@
 package com.wcg.liquibase.config.rules.specific;
 
-import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.RuleConfig;
 import liquibase.change.core.AbstractModifyDataChange;
 import liquibase.change.core.UpdateDataChange;
 import org.junit.jupiter.api.BeforeEach;

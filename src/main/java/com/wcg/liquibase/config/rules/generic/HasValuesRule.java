@@ -1,7 +1,7 @@
 package com.wcg.liquibase.config.rules.generic;
 
-import com.wcg.liquibase.config.RuleConfig;
 import com.wcg.liquibase.config.rules.Rule;
+import com.wcg.liquibase.config.rules.RuleConfig;
 import liquibase.change.Change;
 
 import java.util.Collection;
