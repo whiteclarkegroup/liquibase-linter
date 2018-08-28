@@ -1,6 +1,6 @@
 package com.wcg.liquibase.config.rules.generic;
 
-import com.wcg.liquibase.config.RuleConfig;
+import com.wcg.liquibase.config.rules.RuleConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

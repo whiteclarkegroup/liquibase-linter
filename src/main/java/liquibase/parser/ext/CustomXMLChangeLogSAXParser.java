@@ -15,6 +15,7 @@ import liquibase.parser.core.ParsedNode;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.resource.ResourceAccessor;
 
+import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
@@ -82,7 +83,8 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         final Rule rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
         if (rule.getRuleConfig().isEnabled()) {
             if (alreadyParsed.contains(physicalChangeLogLocation)) {
-                throw new ChangeLogParseException(String.format(rule.getRuleConfig().getErrorMessage(), physicalChangeLogLocation));
+                final String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(RuleType.NO_DUPLICATE_INCLUDES.getDefaultErrorMessage());
+                throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
             alreadyParsed.add(physicalChangeLogLocation);
         }

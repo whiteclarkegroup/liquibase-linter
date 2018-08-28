@@ -1,4 +1,4 @@
-package com.wcg.liquibase.config;
+package com.wcg.liquibase.config.rules;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.expression.Expression;
@@ -50,7 +50,7 @@ public class RuleConfig {
         return enabled;
     }
 
-    public String getErrorMessage() {
+    String getErrorMessage() {
         return errorMessage;
     }
 
@@ -93,19 +93,6 @@ public class RuleConfig {
             pattern = Pattern.compile(patternString);
         }
         return Optional.ofNullable(pattern);
-    }
-
-    public RuleConfig mixin(RuleConfig toMix) {
-        Optional<RuleConfig> configOptional = Optional.ofNullable(toMix);
-        return RuleConfig.builder()
-                .withEnabled(configOptional.map(RuleConfig::isEnabled).orElse(enabled))
-                .withRequireWhere(configOptional.map(RuleConfig::getRequireWhere).orElse(requireWhere))
-                .withErrorMessage(configOptional.map(RuleConfig::getErrorMessage).orElse(errorMessage))
-                .withPattern(configOptional.map(RuleConfig::getPatternString).orElse(patternString))
-                .withDynamicValue(configOptional.map(RuleConfig::getDynamicValue).orElse(dynamicValue))
-                .withCondition(configOptional.map(RuleConfig::getCondition).orElse(condition))
-                .withMaxLength(configOptional.map(RuleConfig::getMaxLength).orElse(maxLength))
-                .build();
     }
 
     public static class RuleConfigBuilder {

@@ -1,12 +1,12 @@
 package com.wcg.liquibase.config.rules;
 
 import com.wcg.liquibase.ChangeLogParseExceptionHelper;
-import com.wcg.liquibase.config.RuleConfig;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class RuleRunner {
 
@@ -43,7 +43,11 @@ public class RuleRunner {
         public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
             final Rule rule = ruleType.create(ruleConfigs);
             if (shouldApply(rule, change) && rule.invalid(object, change)) {
-                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, rule.buildErrorMessage(object));
+                String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
+                if (rule instanceof WithFormattedErrorMessage) {
+                    errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
+                }
+                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
             }
             return this;
         }
