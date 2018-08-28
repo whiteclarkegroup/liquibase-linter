@@ -7,7 +7,7 @@
 
     <changeSet id="201808102132" author="luke.rogers">
         <sql>
-            SELECT 1 FROM DUAL
+            SELECT 1 FROM DUAL;
         </sql>
     </changeSet>
 
