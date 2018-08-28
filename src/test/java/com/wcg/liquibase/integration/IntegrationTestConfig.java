@@ -13,11 +13,11 @@ class IntegrationTestConfig {
         this.message = message;
     }
 
-    public static IntegrationTestConfig shouldPass(String displayName, String changeLogFile, String configFile) {
+    static IntegrationTestConfig shouldPass(String displayName, String changeLogFile, String configFile) {
         return new IntegrationTestConfig(displayName, changeLogFile, configFile, null);
     }
 
-    public static IntegrationTestConfig shouldFail(String displayName, String changeLogFile, String configFile, String message) {
+    static IntegrationTestConfig shouldFail(String displayName, String changeLogFile, String configFile, String message) {
         return new IntegrationTestConfig(displayName, changeLogFile, configFile, message);
     }
 

@@ -1,0 +1,7 @@
+{
+  "rules": {
+    "no-duplicate-includes": {
+      "enabled": true
+    }
+  }
+}
