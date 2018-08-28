@@ -10,13 +10,19 @@ import java.util.Set;
 public class ConfigLoader {
 
     public static final String LQLLINT_CONFIG = "/lqllint.json";
+    private static final String LQLLINT_DEFAULT_CONFIG = "/lqllint.default.json";
+    private final Config DEFAULT_CONFIG;
+
+    public ConfigLoader() {
+        DEFAULT_CONFIG = loadDefaults();
+    }
 
     public Config load(ResourceAccessor resourceAccessor) {
-        return loadDefaults().mixin(loadOverrides(resourceAccessor));
+        return DEFAULT_CONFIG.mixin(loadOverrides(resourceAccessor));
     }
 
     private Config loadDefaults() {
-        try (InputStream inputStream = getClass().getResourceAsStream("/lqllint.default.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream(LQLLINT_DEFAULT_CONFIG)) {
             return Config.fromInputStream(inputStream);
         } catch (IOException e) {
             throw new UnexpectedLiquibaseException("Failed to load lq lint default config file", e);

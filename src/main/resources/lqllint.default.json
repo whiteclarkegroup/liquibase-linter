@@ -3,7 +3,7 @@
   "rules": {
     "no-duplicate-includes": {
       "enabled": false,
-      "errorMessage": "Duplicate includes are not allowed"
+      "errorMessage": "Changelog file '%s' was included more than once"
     },
     "schema-name": {
       "enabled": false,
