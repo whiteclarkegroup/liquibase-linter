@@ -41,13 +41,16 @@ public class RuleRunner {
         }
 
         public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
-            final Rule rule = ruleType.create(ruleConfigs);
-            if (shouldApply(rule, change) && rule.invalid(object, change)) {
-                String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
-                if (rule instanceof WithFormattedErrorMessage) {
-                    errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
+            final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
+            if (optionalRule.isPresent()) {
+                Rule rule = optionalRule.get();
+                if (shouldApply(rule, change) && rule.invalid(object, change)) {
+                    String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
+                    if (rule instanceof WithFormattedErrorMessage) {
+                        errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
+                    }
+                    throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
                 }
-                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
             }
             return this;
         }
