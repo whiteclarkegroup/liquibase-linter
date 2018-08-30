@@ -1,40 +1,22 @@
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
-    "no-duplicate-includes": {
-      "enabled": true,
-      "errorMessage": "Changelog file '%s' was included more than once"
-    },
+    "no-duplicate-includes": null,
     "schema-name": {
       "enabled": true,
       "pattern": "^\\$\\{[a-z_]+\\}$",
       "errorMessage": "Must use schema name token, not %s"
     },
-    "file-name-no-spaces": {
-      "enabled": true,
-      "errorMessage": "Changelog filenames should not contain spaces"
-    },
-    "no-preconditions": {
-      "enabled": true,
-      "errorMessage": "Preconditions are not allowed in this project"
-    },
-    "has-comment": {
-      "enabled": true,
-      "errorMessage": "Change set must have a comment"
-    },
-    "has-context": {
-      "enabled": true,
-      "errorMessage": "Should have at least one context on the change set"
-    },
+    "file-name-no-spaces": {},
+    "no-preconditions": {},
+    "has-comment": {},
+    "has-context": {},
     "valid-context": {
       "enabled": true,
       "pattern": "^.*_test|.*_script$",
       "errorMessage": "Context is incorrect, should end with '_test' or '_script'"
     },
-    "isolate-ddl-changes": {
-      "enabled": true,
-      "errorMessage": "Should only have a single ddl change per change set"
-    },
+    "isolate-ddl-changes": {},
     "separate-ddl-context": {
       "enabled": true,
       "pattern": "^.*ddl_test|.*ddl_script$",
@@ -60,22 +42,10 @@
       "maxLength": 30,
       "errorMessage": "Object name '%s' must be less than %d characters"
     },
-    "create-table-remarks": {
-      "enabled": true,
-      "errorMessage": "Create table must contain remark attribute"
-    },
-    "create-column-remarks": {
-      "enabled": true,
-      "errorMessage": "Add column must contain remarks"
-    },
-    "create-column-nullable-constraint": {
-      "enabled": true,
-      "errorMessage": "Add column must specify nullable constraint"
-    },
-    "create-column-no-define-primary-key": {
-      "enabled": true,
-      "errorMessage": "Add column must not use primary key attribute. Instead use AddPrimaryKey change type"
-    },
+    "create-table-remarks": {},
+    "create-column-remarks": {},
+    "create-column-nullable-constraint": {},
+    "create-column-no-define-primary-key": {},
     "modify-data-enforce-where": {
       "enabled": true,
       "errorMessage": "Modify data on table '%s' must have a where condition",
@@ -125,9 +95,6 @@
       "condition": "(baseTableName + referencedTableName + '_FK').length() <= 30",
       "dynamicValue": "baseTableName + '_' + referencedTableName"
     },
-    "drop-not-null-require-column-data-type": {
-      "enabled": true,
-      "errorMessage": "Drop not null constraint column data type attribute must be populated"
-    }
+    "drop-not-null-require-column-data-type": null
   }
 }
