@@ -13,7 +13,7 @@ public class RuleConfig {
 
     private static final String DYNAMIC_VALUE = "{{value}}";
 
-    private final Boolean enabled;
+    private final boolean enabled;
     private final String condition;
     private final String patternString;
     private final String dynamicValue;
@@ -47,7 +47,7 @@ public class RuleConfig {
     }
 
     public boolean isEnabled() {
-        return enabled == null || enabled;
+        return enabled;
     }
 
     String getErrorMessage() {
@@ -96,7 +96,7 @@ public class RuleConfig {
     }
 
     public static class RuleConfigBuilder {
-        private Boolean enabled;
+        private boolean enabled = true;
         private String errorMessage;
         private String condition;
         private String pattern;
@@ -104,7 +104,7 @@ public class RuleConfig {
         private List<String> requireWhere;
         private Integer maxLength;
 
-        public RuleConfigBuilder withEnabled(Boolean enabled) {
+        public RuleConfigBuilder withEnabled(boolean enabled) {
             this.enabled = enabled;
             return this;
         }
