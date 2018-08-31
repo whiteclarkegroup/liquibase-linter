@@ -60,11 +60,11 @@ public class Config {
             final Map<String, RuleConfig> ruleConfigs = new HashMap<>();
             config.forEach((key, value) -> {
                 try {
-                    RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
-                    ruleConfigs.put(key, ruleConfig);
-                } catch (IllegalArgumentException e) {
                     boolean ruleEnabled = OBJECT_MAPPER.convertValue(value, boolean.class);
                     ruleConfigs.put(key, ruleEnabled ? RuleConfig.enabled() : RuleConfig.disabled());
+                } catch (IllegalArgumentException e) {
+                    RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
+                    ruleConfigs.put(key, ruleConfig);
                 }
             });
             return ruleConfigs;

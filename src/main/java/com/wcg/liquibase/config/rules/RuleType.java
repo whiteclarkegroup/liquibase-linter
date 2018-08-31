@@ -54,9 +54,6 @@ public enum RuleType {
         return defaultErrorMessage;
     }
 
-    /*
-      Allows supporting presence of just key to turn on rule, even with null rule config
-     */
     public Optional<Rule> create(Map<String, RuleConfig> ruleConfigs) {
         if (!ruleConfigs.containsKey(key)) {
             return Optional.empty();

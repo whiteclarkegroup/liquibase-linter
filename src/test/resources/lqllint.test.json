@@ -1,7 +1,7 @@
 {
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
-    "no-duplicate-includes": null,
+    "no-duplicate-includes": {},
     "schema-name": {
       "enabled": true,
       "pattern": "^\\$\\{[a-z_]+\\}$",
@@ -95,6 +95,6 @@
       "condition": "(baseTableName + referencedTableName + '_FK').length() <= 30",
       "dynamicValue": "baseTableName + '_' + referencedTableName"
     },
-    "drop-not-null-require-column-data-type": null
+    "drop-not-null-require-column-data-type": {}
   }
 }
