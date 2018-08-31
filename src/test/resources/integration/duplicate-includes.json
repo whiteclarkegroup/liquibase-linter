@@ -1,5 +1,5 @@
 {
   "rules": {
-    "no-duplicate-includes": {}
+    "no-duplicate-includes": true
   }
 }

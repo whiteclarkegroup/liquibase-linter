@@ -38,6 +38,10 @@ public class RuleConfig {
         return RuleConfig.builder().withEnabled(true).build();
     }
 
+    public static RuleConfig disabled() {
+        return RuleConfig.builder().withEnabled(false).build();
+    }
+
     public static RuleConfigBuilder builder() {
         return new RuleConfigBuilder();
     }

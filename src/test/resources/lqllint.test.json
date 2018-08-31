@@ -7,9 +7,9 @@
       "pattern": "^\\$\\{[a-z_]+\\}$",
       "errorMessage": "Must use schema name token, not %s"
     },
-    "file-name-no-spaces": {},
-    "no-preconditions": {},
-    "has-comment": {},
+    "file-name-no-spaces": true,
+    "no-preconditions": true,
+    "has-comment": true,
     "has-context": {},
     "valid-context": {
       "enabled": true,
