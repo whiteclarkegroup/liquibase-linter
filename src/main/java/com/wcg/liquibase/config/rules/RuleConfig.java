@@ -34,6 +34,10 @@ public class RuleConfig {
         this.maxLength = builder.maxLength;
     }
 
+    public static RuleConfig enabled() {
+        return RuleConfig.builder().withEnabled(true).build();
+    }
+
     public static RuleConfig disabled() {
         return RuleConfig.builder().withEnabled(false).build();
     }
@@ -96,7 +100,7 @@ public class RuleConfig {
     }
 
     public static class RuleConfigBuilder {
-        private boolean enabled;
+        private boolean enabled = true;
         private String errorMessage;
         private String condition;
         private String pattern;

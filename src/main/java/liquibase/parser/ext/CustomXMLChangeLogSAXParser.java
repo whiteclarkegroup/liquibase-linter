@@ -80,10 +80,10 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     }
 
     void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
-        final Rule rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
-        if (rule.getRuleConfig().isEnabled()) {
+        final Optional<Rule> rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
+        if (rule.isPresent() && rule.get().getRuleConfig().isEnabled()) {
             if (alreadyParsed.contains(physicalChangeLogLocation)) {
-                final String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(RuleType.NO_DUPLICATE_INCLUDES.getDefaultErrorMessage());
+                final String errorMessage = Optional.ofNullable(rule.get().getErrorMessage()).orElse(RuleType.NO_DUPLICATE_INCLUDES.getDefaultErrorMessage());
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
             alreadyParsed.add(physicalChangeLogLocation);

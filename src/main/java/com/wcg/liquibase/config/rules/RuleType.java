@@ -4,6 +4,7 @@ import com.wcg.liquibase.config.rules.generic.*;
 import com.wcg.liquibase.config.rules.specific.*;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public enum RuleType {
@@ -53,7 +54,14 @@ public enum RuleType {
         return defaultErrorMessage;
     }
 
-    public Rule create(Map<String, RuleConfig> ruleConfigs) {
-        return this.factory.apply(ruleConfigs.getOrDefault(key, RuleConfig.disabled()));
+    public Optional<Rule> create(Map<String, RuleConfig> ruleConfigs) {
+        if (!ruleConfigs.containsKey(key)) {
+            return Optional.empty();
+        }
+        final RuleConfig ruleConfig = ruleConfigs.get(key);
+        if (ruleConfig != null) {
+            return Optional.of(this.factory.apply(ruleConfig));
+        }
+        return Optional.of(this.factory.apply(RuleConfig.enabled()));
     }
 }
