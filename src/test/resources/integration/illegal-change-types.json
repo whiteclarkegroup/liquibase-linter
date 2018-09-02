@@ -1,6 +1,6 @@
 {
   "rules": {},
   "illegal-change-types": [
-    "LoadDataChange"
+    "liquibase.change.core.LoadDataChange"
   ]
 }

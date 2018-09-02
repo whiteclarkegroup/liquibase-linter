@@ -26,12 +26,12 @@ public class Config {
     private final Pattern ignoreContextPattern;
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final Map<String, RuleConfig> rules;
-    private final List<String> illegalChangeTypes;
+    private final List<Class> illegalChangeTypes;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
                   @JsonProperty("rules") Map<String, RuleConfig> rules,
-                  @JsonProperty("illegal-change-types") List<String> illegalChangeTypes) {
+                  @JsonProperty("illegal-change-types") List<Class> illegalChangeTypes) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.rules = rules;
         this.illegalChangeTypes = illegalChangeTypes;
@@ -49,7 +49,7 @@ public class Config {
         return rules;
     }
 
-    public List<String> getIllegalChangeTypes() {
+    public List<Class> getIllegalChangeTypes() {
         return illegalChangeTypes;
     }
 

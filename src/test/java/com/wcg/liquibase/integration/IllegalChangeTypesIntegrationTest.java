@@ -15,7 +15,7 @@ class IllegalChangeTypesIntegrationTest extends LinterIntegrationTest {
                 "Should not allow a illegal change type",
                 "illegal-change-types.xml",
                 "illegal-change-types.json",
-                "Change type 'LoadDataChange' is not allowed in this project");
+                "Change type 'liquibase.change.core.LoadDataChange' is not allowed in this project");
 
         return Collections.singletonList(test1);
     }

@@ -96,10 +96,9 @@ public class ChangeLogLinter {
 
     private void isIllegalChangeType(Config config, Change change) throws ChangeLogParseException {
         if (config.getIllegalChangeTypes() != null) {
-            final String changeType = change.getClass().getName();
-            for (String illegal : config.getIllegalChangeTypes()) {
-                if (changeType.endsWith(illegal)) {
-                    final String errorMessage = String.format("Change type '%s' is not allowed in this project", illegal);
+            for (Class illegal : config.getIllegalChangeTypes()) {
+                if (change.getClass() == illegal) {
+                    final String errorMessage = String.format("Change type '%s' is not allowed in this project", illegal.getCanonicalName());
                     throw ChangeLogParseExceptionHelper.build(change.getChangeSet().getChangeLog(), change, errorMessage);
                 }
             }
