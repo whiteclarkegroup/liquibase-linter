@@ -84,10 +84,10 @@ public class ChangeLogLinter {
                     .run(RuleType.ISOLATE_DDL_CHANGES, changes);
 
             for (Change change : changes) {
+                isIllegalChangeType(config, change);
                 ruleRunner.forChange(change)
                         .run(RuleType.VALID_CONTEXT, contexts)
                         .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
-                isIllegalChangeType(config, change);
                 lint(change, ruleRunner);
             }
 
