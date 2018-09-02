@@ -1,0 +1,6 @@
+{
+  "rules": {},
+  "illegal-change-types": [
+    "LoadDataChange"
+  ]
+}

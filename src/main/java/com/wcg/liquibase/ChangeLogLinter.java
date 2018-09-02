@@ -56,6 +56,8 @@ public class ChangeLogLinter {
                     .add(InsertDataChange.class)
                     .add(UpdateDataChange.class)
                     .add(DeleteDataChange.class)
+                    .add(LoadDataChange.class)
+                    .add(LoadUpdateDataChange.class)
                     .build();
     private static final Pattern LINT_IGNORE = Pattern.compile(".*lql-ignore.*");
 
@@ -85,9 +87,22 @@ public class ChangeLogLinter {
                 ruleRunner.forChange(change)
                         .run(RuleType.VALID_CONTEXT, contexts)
                         .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
+                isIllegalChangeType(config, change);
                 lint(change, ruleRunner);
             }
 
+        }
+    }
+
+    private void isIllegalChangeType(Config config, Change change) throws ChangeLogParseException {
+        if (config.getIllegalChangeTypes() != null) {
+            final String changeType = change.getClass().getName();
+            for (String illegal : config.getIllegalChangeTypes()) {
+                if (changeType.endsWith(illegal)) {
+                    final String errorMessage = String.format("Change type '%s' is not allowed in this project", illegal);
+                    throw ChangeLogParseExceptionHelper.build(change.getChangeSet().getChangeLog(), change, errorMessage);
+                }
+            }
         }
     }
 
