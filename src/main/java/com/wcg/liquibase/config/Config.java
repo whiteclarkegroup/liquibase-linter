@@ -16,6 +16,7 @@ import com.wcg.liquibase.config.rules.RuleRunner;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -25,11 +26,15 @@ public class Config {
     private final Pattern ignoreContextPattern;
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final Map<String, RuleConfig> rules;
+    private final List<Class> illegalChangeTypes;
 
     @JsonCreator
-    public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString, @JsonProperty("rules") Map<String, RuleConfig> rules) {
+    public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
+                  @JsonProperty("rules") Map<String, RuleConfig> rules,
+                  @JsonProperty("illegal-change-types") List<Class> illegalChangeTypes) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.rules = rules;
+        this.illegalChangeTypes = illegalChangeTypes;
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -42,6 +47,10 @@ public class Config {
 
     public Map<String, RuleConfig> getRules() {
         return rules;
+    }
+
+    public List<Class> getIllegalChangeTypes() {
+        return illegalChangeTypes;
     }
 
     public RuleRunner getRuleRunner() {
