@@ -12,6 +12,7 @@
         <connection>scm:git:https://github.com/whiteclarkegroup/liquibase-linter.git</connection>
         <developerConnection>scm:git:git@github.com:whiteclarkegroup/liquibase-linter.git</developerConnection>
         <url>https://github.com/whiteclarkegroup/liquibase-linter</url>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
