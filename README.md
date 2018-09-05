@@ -16,9 +16,9 @@ The extension will automatically be picked up by liquibase and the rules applied
     </configuration>
     <dependencies>
         <dependency>
-            <groupId>com.wcg.liquibase</groupId>
+            <groupId>com.whiteclarkegroup</groupId>
             <artifactId>liquibase-linter</artifactId>
-            <version>0.3.0</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
     <executions>
