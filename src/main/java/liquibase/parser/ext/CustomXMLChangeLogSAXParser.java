@@ -1,12 +1,12 @@
 package liquibase.parser.ext;
 
 import com.google.common.collect.Sets;
-import com.wcg.liquibase.ChangeLogLinter;
-import com.wcg.liquibase.config.Config;
-import com.wcg.liquibase.config.ConfigLoader;
-import com.wcg.liquibase.config.rules.Rule;
-import com.wcg.liquibase.config.rules.RuleRunner;
-import com.wcg.liquibase.config.rules.RuleType;
+import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
+import com.whiteclarkegroup.liquibaselinter.config.Config;
+import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
+import com.whiteclarkegroup.liquibaselinter.config.rules.Rule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;

@@ -1,9 +1,9 @@
 package liquibase.parser.ext;
 
-import com.wcg.liquibase.config.Config;
-import com.wcg.liquibase.config.rules.RuleRunner;
-import com.wcg.liquibase.resolvers.DefaultConfigParameterResolver;
-import com.wcg.liquibase.resolvers.RuleRunnerParameterResolver;
+import com.whiteclarkegroup.liquibaselinter.config.Config;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
+import com.whiteclarkegroup.liquibaselinter.resolvers.DefaultConfigParameterResolver;
+import com.whiteclarkegroup.liquibaselinter.resolvers.RuleRunnerParameterResolver;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.core.ParsedNode;
 import org.junit.jupiter.api.Test;
