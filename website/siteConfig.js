@@ -41,6 +41,7 @@ const siteConfig = {
     {doc: 'install', label: 'Install'},
     {doc: 'configure', label: 'Configure'},
     {blog: true, label: 'Blog'},
+    {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
   ],
 
   // If you have users set above, you add it here:
