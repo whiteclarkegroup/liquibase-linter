@@ -50,10 +50,7 @@ This will be picked up by the linter and override any default rules.
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
   
-  },
-  "illegal-change-types": [
-      "liquibase.change.core.LoadDataChange"
-  ]
+  }
 }
 ```
 
@@ -102,6 +99,7 @@ Note: all rules are disabled by default
 | foreign-key-must-be-named | Pattern foreign key name must follow      | <ul><li>pattern</li></ul> |
 | foreign-key-must-use-base-and-referenced-table-name | Foreign key must incorporate base and referenced table name       | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | drop-not-null-require-column-data-type | Drop not null constraint column data type attribute must be populated | |
+| illegal-change-types | Change types banned in the project. Specify an array of fully qualified classes. | <ul><li>values</li></ul> |
 
 #### Example config file
 ```json
@@ -235,16 +233,20 @@ Note: all rules are disabled by default
     "drop-not-null-require-column-data-type": {
       "enabled": true,
       "errorMessage": "Drop not null constraint column data type attribute must be populated"
-    }
+    },
+     "illegal-change-types": {
+       "enabled": true,
+       "values": [
+          "liquibase.change.core.LoadDataChange"
+       ],
+       "errorMessage": "Change type '%s' is not allowed in this project"
+     }
   }
 }
 ```
 
 #### Context ignore pattern
 If there is a set of changes that you always want ignored based on their context you can configure this using `ignore-context-pattern`.
-
-#### Illegal change types
-If there are a set of changes types that you don't want to allow in your project then you can specify an array of fully qualified classes using `illegal-change-types`. An error will be thrown if any of these change types are used. 
 
 #### Skipping a changeSet
 Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lqlint-ignore", then the linter will not enforce any rules on that changeSet.
