@@ -1,0 +1,8 @@
+{
+  "rules": {
+    "table-name-length": {
+      "enabled": true,
+      "maxLength": 10
+    }
+  }
+}
