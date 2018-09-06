@@ -6,11 +6,14 @@
     "tagline": "Quality control for your Liquibase scripts",
     "configure": "Configure",
     "install": "Install",
+    "rules/index": "Working with Rules",
+    "rules/no-duplicate-includes": "no-duplicate-includes",
     "Install": "Install",
     "Configure": "Configure",
     "Blog": "Blog",
     "GitHub": "GitHub",
-    "Setup": "Setup"
+    "Setup": "Setup",
+    "Rules": "Rules"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

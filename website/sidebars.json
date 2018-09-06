@@ -1,5 +1,9 @@
 {
   "docs": {
-      "Setup": ["install", "configure"]
+      "Setup": ["install", "configure"],
+      "Rules": [
+          "rules/index",
+          "rules/no-duplicate-includes"
+      ]
   }
 }
