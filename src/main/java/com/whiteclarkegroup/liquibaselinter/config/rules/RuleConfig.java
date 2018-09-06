@@ -17,7 +17,7 @@ public class RuleConfig {
     private final String condition;
     private final String patternString;
     private final String dynamicValue;
-    private final List<String> requireWhere;
+    private final List<String> values;
     private final Integer maxLength;
     private final String errorMessage;
     private Pattern pattern;
@@ -30,7 +30,7 @@ public class RuleConfig {
         this.condition = builder.condition;
         this.patternString = builder.pattern;
         this.dynamicValue = builder.dynamicValue;
-        this.requireWhere = builder.requireWhere;
+        this.values = builder.values;
         this.maxLength = builder.maxLength;
     }
 
@@ -58,8 +58,8 @@ public class RuleConfig {
         return errorMessage;
     }
 
-    public List<String> getRequireWhere() {
-        return requireWhere;
+    public List<String> getValues() {
+        return values;
     }
 
     public Integer getMaxLength() {
@@ -105,7 +105,7 @@ public class RuleConfig {
         private String condition;
         private String pattern;
         private String dynamicValue;
-        private List<String> requireWhere;
+        private List<String> values;
         private Integer maxLength;
 
         public RuleConfigBuilder withEnabled(boolean enabled) {
@@ -133,8 +133,8 @@ public class RuleConfig {
             return this;
         }
 
-        public RuleConfigBuilder withRequireWhere(List<String> requireWhere) {
-            this.requireWhere = requireWhere;
+        public RuleConfigBuilder withValues(List<String> values) {
+            this.values = values;
             return this;
         }
 
