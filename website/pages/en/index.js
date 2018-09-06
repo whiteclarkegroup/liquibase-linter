@@ -8,208 +8,154 @@
 const React = require('react');
 
 const CompLibrary = require('../../core/CompLibrary.js');
+const Remarkable = require('../../core/Remarkable.js');
 
-const MarkdownBlock = CompLibrary.MarkdownBlock; /* Used to read markdown */
+const MarkdownBlock = CompLibrary.MarkdownBlock;
+/* Used to read markdown */
 const Container = CompLibrary.Container;
 const GridBlock = CompLibrary.GridBlock;
 
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
 
+const startXml = require('fs').readFileSync('./start.xml', 'utf8');
+
 function imgUrl(img) {
-  return `${siteConfig.baseUrl}img/${img}`;
+    return `${siteConfig.baseUrl}img/${img}`;
 }
 
 function docUrl(doc, language) {
-  return `${siteConfig.baseUrl}docs/${language ? `${language}/` : ''}${doc}`;
+    return `${siteConfig.baseUrl}docs/${language ? `${language}/` : ''}${doc}`;
 }
 
 function pageUrl(page, language) {
-  return siteConfig.baseUrl + (language ? `${language}/` : '') + page;
+    return siteConfig.baseUrl + (language ? `${language}/` : '') + page;
 }
 
 class Button extends React.Component {
-  render() {
-    return (
-      <div className="pluginWrapper buttonWrapper">
-        <a className="button" href={this.props.href} target={this.props.target}>
-          {this.props.children}
-        </a>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="pluginWrapper buttonWrapper">
+                <a className="button" href={this.props.href} target={this.props.target}>
+                    {this.props.children}
+                </a>
+            </div>
+        );
+    }
 }
 
 Button.defaultProps = {
-  target: '_self',
+    target: '_self',
 };
 
 const SplashContainer = props => (
-  <div className="homeContainer">
-    <div className="homeSplashFade">
-      <div className="wrapper homeWrapper">{props.children}</div>
+    <div className="homeContainer">
+        <div className="homeSplashFade">
+            <div className="wrapper homeWrapper">{props.children}</div>
+        </div>
     </div>
-  </div>
 );
 
 const Logo = props => (
-  <div className="projectLogo">
-    <img src={props.img_src} alt="Project Logo" />
-  </div>
+    <div className="projectLogo">
+        <img src={props.img_src} alt="Project Logo"/>
+    </div>
 );
 
 const ProjectTitle = () => (
-  <h2 className="projectTitle">
-    {siteConfig.title}
-    <small>{siteConfig.tagline}</small>
-  </h2>
+    <h2 className="projectTitle">
+        {siteConfig.title}
+        <small>{siteConfig.tagline}</small>
+    </h2>
 );
 
 const PromoSection = props => (
-  <div className="section promoSection">
-    <div className="promoRow">
-      <div className="pluginRowBlock">{props.children}</div>
+    <div className="section promoSection">
+        <div className="promoRow">
+            <div className="pluginRowBlock">{props.children}</div>
+        </div>
     </div>
-  </div>
 );
 
 class HomeSplash extends React.Component {
-  render() {
-    const language = this.props.language || '';
-    return (
-      <SplashContainer>
-        <Logo img_src={imgUrl('docusaurus.svg')} />
-        <div className="inner">
-          <ProjectTitle />
-          <PromoSection>
-            <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html', language)}>Example Link</Button>
-            <Button href={docUrl('doc2.html', language)}>Example Link 2</Button>
-          </PromoSection>
-        </div>
-      </SplashContainer>
-    );
-  }
+    render() {
+        return (
+            <SplashContainer>
+                <div className="inner">
+                    <ProjectTitle/>
+                    <PromoSection>
+                        <Button href="#start">Get Started</Button>
+                    </PromoSection>
+                </div>
+            </SplashContainer>
+        );
+    }
 }
 
 const Block = props => (
-  <Container
-    padding={['bottom', 'top']}
-    id={props.id}
-    background={props.background}>
-    <GridBlock align="center" contents={props.children} layout={props.layout} />
-  </Container>
+    <Container
+        padding={['bottom', 'top']}
+        id={props.id}
+        background={props.background}>
+        <GridBlock align="center" contents={props.children} layout={props.layout}/>
+    </Container>
 );
 
 const Features = () => (
-  <Block layout="fourColumn">
-    {[
-      {
-        content: 'This is the content of my feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature One',
-      },
-      {
-        content: 'The content of my second feature',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'top',
-        title: 'Feature Two',
-      },
-    ]}
-  </Block>
+    <Block layout="threeColumn" background="light">
+        {[
+            {
+                content: 'Prevent changes that will cause issues at the source, before they make it into any of your databases',
+                image: imgUrl('prevent-icon.svg'),
+                imageAlign: 'top',
+                title: 'Prevent Issues',
+            },
+            {
+                content: 'Get more consistency and higher quality in your scripts, while educating your developers about best practises',
+                image: imgUrl('improve-icon.svg'),
+                imageAlign: 'top',
+                title: 'Improve Quality',
+            },
+            {
+                content: 'Choose which rules you enable and how they are applied, so your checks are aligned with your project\'s needs',
+                image: imgUrl('configure-icon.svg'),
+                imageAlign: 'top',
+                title: 'Configure & Customise',
+            }
+        ]}
+    </Block>
 );
 
-const FeatureCallout = () => (
-  <div
-    className="productShowcaseSection paddingBottom"
-    style={{textAlign: 'center'}}>
-    <h2>Feature Callout</h2>
-    <MarkdownBlock>These are features of this project</MarkdownBlock>
-  </div>
+const Start = () => (
+    <Container
+        id="start"
+        padding={['bottom', 'top']}>
+        <h2>Get Started</h2>
+        <Remarkable>
+            **1** Add `liquibase-linter` to your pom as a dependency of `liquibase-maven-plugin`:
+
+            <pre>
+                <code>
+                    {startXml}
+                </code>
+            </pre>
+
+            **2** Add the [config file](examples/lqlint.json) to your project root, and start turning on rules.
+        </Remarkable>
+    </Container>
 );
-
-const LearnHow = () => (
-  <Block background="light">
-    {[
-      {
-        content: 'Talk about learning how to use this',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Learn How',
-      },
-    ]}
-  </Block>
-);
-
-const TryOut = () => (
-  <Block id="try">
-    {[
-      {
-        content: 'Talk about trying this out',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'left',
-        title: 'Try it Out',
-      },
-    ]}
-  </Block>
-);
-
-const Description = () => (
-  <Block background="dark">
-    {[
-      {
-        content: 'This is another description of how this project is useful',
-        image: imgUrl('docusaurus.svg'),
-        imageAlign: 'right',
-        title: 'Description',
-      },
-    ]}
-  </Block>
-);
-
-const Showcase = props => {
-  if ((siteConfig.users || []).length === 0) {
-    return null;
-  }
-
-  const showcase = siteConfig.users.filter(user => user.pinned).map(user => (
-    <a href={user.infoLink} key={user.infoLink}>
-      <img src={user.image} alt={user.caption} title={user.caption} />
-    </a>
-  ));
-
-  return (
-    <div className="productShowcaseSection paddingBottom">
-      <h2>Who is Using This?</h2>
-      <p>This project is used by all these people</p>
-      <div className="logos">{showcase}</div>
-      <div className="more-users">
-        <a className="button" href={pageUrl('users.html', props.language)}>
-          More {siteConfig.title} Users
-        </a>
-      </div>
-    </div>
-  );
-};
 
 class Index extends React.Component {
-  render() {
-    const language = this.props.language || '';
-
-    return (
-      <div>
-        <HomeSplash language={language} />
-        <div className="mainContainer">
-          <Features />
-          <FeatureCallout />
-          <LearnHow />
-          <TryOut />
-          <Description />
-          <Showcase language={language} />
-        </div>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                <HomeSplash/>
+                <div className="mainContainer">
+                    <Features/>
+                    <Start/>
+                </div>
+            </div>
+        );
+    }
 }
 
 module.exports = Index;
