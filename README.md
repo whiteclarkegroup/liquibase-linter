@@ -241,4 +241,4 @@ Note: all rules are disabled by default
 If there is a set of changes that you always want ignored based on their context you can configure this using `ignore-context-pattern`.
 
 #### Skipping a changeSet
-Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lqlint-ignore", then the linter will not enforce any rules on that changeSet.
+Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lql-ignore", then the linter will not enforce any rules on that changeSet.
