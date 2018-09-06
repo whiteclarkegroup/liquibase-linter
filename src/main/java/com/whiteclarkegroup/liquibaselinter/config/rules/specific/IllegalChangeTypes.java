@@ -16,7 +16,7 @@ public class IllegalChangeTypes extends Rule<Change> implements WithFormattedErr
     public boolean invalid(Change change, Change sameChange) {
         if (getRuleConfig().getValues() != null) {
             return getRuleConfig().getValues().stream()
-                    .anyMatch(illegal -> getChangeClassName(change).equals(illegal) || getChangeName(change).equals(illegal));
+                    .anyMatch(illegal -> getChangeName(change).equals(illegal) || getChangeClassName(change).equals(illegal));
         }
         return false;
     }
