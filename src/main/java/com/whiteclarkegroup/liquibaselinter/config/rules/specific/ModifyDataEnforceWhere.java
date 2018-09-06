@@ -14,7 +14,7 @@ public class ModifyDataEnforceWhere extends Rule<AbstractModifyDataChange> imple
 
     @Override
     public boolean invalid(AbstractModifyDataChange modifyDataChange, Change change) {
-        return getRuleConfig().getRequireWhere().contains(modifyDataChange.getTableName()) && (modifyDataChange.getWhere() == null || modifyDataChange.getWhere().isEmpty());
+        return getRuleConfig().getValues().contains(modifyDataChange.getTableName()) && (modifyDataChange.getWhere() == null || modifyDataChange.getWhere().isEmpty());
     }
 
     @Override

@@ -69,7 +69,7 @@ Specific rules have additional attributes of:
     <li>pattern - Regex pattern</li>
     <li>dynamicValue - Spring el expression to resolve the dynamic value from the change to replace {{value}} in the pattern</li>
     <li>maxLength - Max length of a specific value</li>
-    <li>requireWhere - Array of values</li>
+    <li>values - Array of values</li>
 </ul>
 
 Note: all rules are disabled by default
@@ -93,7 +93,7 @@ Note: all rules are disabled by default
 | create-column-remarks | Remarks attribute must be populated      | |
 | create-column-nullable-constraint | Create column must specify if the column is nullable      |  |
 | create-column-no-define-primary-key | Create column cannot specify primary key, force use of add primary key instead       | |
-| modify-data-enforce-where | List of tables that must have a where clause when updating      | <ul><li>requireWhere</li></ul> |
+| modify-data-enforce-where | List of tables that must have a where clause when updating      | <ul><li>values</li></ul> |
 | modify-data-starts-with-where | Modify data clause cannot start with 'where' | |
 | create-index-name | Pattern index name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | unique-constraint-name | Pattern unique constraint name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
@@ -186,7 +186,7 @@ Note: all rules are disabled by default
     "modify-data-enforce-where": {
       "enabled": true,
       "errorMessage": "Modify data on table '%s' must have a where condition",
-      "requireWhere": [
+      "values": [
         "MUST_HAVE_WHERE"
       ]
     },

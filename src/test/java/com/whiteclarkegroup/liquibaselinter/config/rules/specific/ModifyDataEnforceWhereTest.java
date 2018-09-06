@@ -18,7 +18,7 @@ class ModifyDataEnforceWhereTest {
 
     @BeforeEach
     void setUp() {
-        RuleConfig ruleConfig = RuleConfig.builder().withRequireWhere(Collections.singletonList("TESTING_TABLE")).build();
+        RuleConfig ruleConfig = RuleConfig.builder().withValues(Collections.singletonList("TESTING_TABLE")).build();
         modifyDataEnforceWhere = new ModifyDataEnforceWhere(ruleConfig);
     }
 
