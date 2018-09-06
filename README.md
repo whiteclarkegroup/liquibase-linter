@@ -1,7 +1,7 @@
 # Liquibase Linter
 Liquibase extension to add configurable script linting.
 
-[![Build Status](https://travis-ci.org/whiteclarkegroup/liquibase-linter.svg?branch=master)](https://travis-ci.org/whiteclarkegroup/liquibase-linter)
+[![Build Status](https://travis-ci.org/whiteclarkegroup/liquibase-linter.svg?branch=master)](https://travis-ci.org/whiteclarkegroup/liquibase-linter) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/320a8a4be4fd44feb9d6102ccdc7e240)](https://www.codacy.com/project/whiteclarkegroup/liquibase-linter/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=whiteclarkegroup/liquibase-linter&amp;utm_campaign=Badge_Grade_Dashboard)
 
 ## Setup
 To add `liquibase-linter` into your project just add the artifact as a dependency to the `liquibase-maven-plugin`
@@ -16,9 +16,9 @@ The extension will automatically be picked up by liquibase and the rules applied
     </configuration>
     <dependencies>
         <dependency>
-            <groupId>com.wcg.liquibase</groupId>
+            <groupId>com.whiteclarkegroup</groupId>
             <artifactId>liquibase-linter</artifactId>
-            <version>0.3.0</version>
+            <version>0.1.0</version>
         </dependency>
     </dependencies>
     <executions>
@@ -50,7 +50,10 @@ This will be picked up by the linter and override any default rules.
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
   
-  }
+  },
+  "illegal-change-types": [
+      "liquibase.change.core.LoadDataChange"
+  ]
 }
 ```
 
@@ -239,6 +242,9 @@ Note: all rules are disabled by default
 
 #### Context ignore pattern
 If there is a set of changes that you always want ignored based on their context you can configure this using `ignore-context-pattern`.
+
+#### Illegal change types
+If there are a set of changes types that you don't want to allow in your project then you can specify an array of fully qualified classes using `illegal-change-types`. An error will be thrown if any of these change types are used. 
 
 #### Skipping a changeSet
 Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lql-ignore", then the linter will not enforce any rules on that changeSet.
