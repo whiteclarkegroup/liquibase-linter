@@ -22,8 +22,8 @@ import java.util.Set;
 public class LiquibaseIntegrationTestResolver implements ParameterResolver {
 
     public static Liquibase buildLiquibase(String changeLogFile, String configFile) throws LiquibaseException {
-        DatabaseConnection conn = new OfflineConnection("offline:h2");
         ResourceAccessor resourceAccessor = new LiquibaseIntegrationTestResolver.ConfigAwareFileSystemResourceAccessor("/integration/" + configFile);
+        DatabaseConnection conn = new OfflineConnection("offline:h2", resourceAccessor);
         return new Liquibase("src/test/resources/integration/" + changeLogFile, resourceAccessor, conn);
     }
 

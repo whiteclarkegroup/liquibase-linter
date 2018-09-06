@@ -1,9 +1,8 @@
 {
   "rules": {
     "illegal-change-types": {
-      "enabled": true,
       "values": [
-        "liquibase.change.core.LoadDataChange"
+        "loadData"
       ]
     }
   }

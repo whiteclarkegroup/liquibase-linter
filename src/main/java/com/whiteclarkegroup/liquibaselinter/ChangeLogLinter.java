@@ -82,24 +82,13 @@ public class ChangeLogLinter {
                     .run(RuleType.ISOLATE_DDL_CHANGES, changes);
 
             for (Change change : changes) {
-                isIllegalChangeType(config, change);
                 ruleRunner.forChange(change)
+                        .run(RuleType.ILLEGAL_CHANGE_TYPES, change)
                         .run(RuleType.VALID_CONTEXT, contexts)
                         .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
                 lint(change, ruleRunner);
             }
 
-        }
-    }
-
-    private void isIllegalChangeType(Config config, Change change) throws ChangeLogParseException {
-        if (config.getIllegalChangeTypes() != null) {
-            for (Class illegal : config.getIllegalChangeTypes()) {
-                if (change.getClass() == illegal) {
-                    final String errorMessage = String.format("Change type '%s' is not allowed in this project", illegal.getCanonicalName());
-                    throw ChangeLogParseExceptionHelper.build(change.getChangeSet().getChangeLog(), change, errorMessage);
-                }
-            }
         }
     }
 

@@ -28,7 +28,7 @@ class ModifyDataChangeLinterTest {
 
     @Test
     void shouldEnforceWhereConditionOnCertainTables(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
-        for (String table : RuleType.MODIFY_DATA_ENFORCE_WHERE.create(config.getRules()).get().getRuleConfig().getRequireWhere()) {
+        for (String table : RuleType.MODIFY_DATA_ENFORCE_WHERE.create(config.getRules()).get().getRuleConfig().getValues()) {
             UpdateDataChange updateDataChange = new UpdateDataChange();
             updateDataChange.setTableName(table);
             updateDataChange.setChangeSet(changeSet);
