@@ -2,10 +2,10 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import liquibase.change.Change;
-import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
@@ -71,14 +71,9 @@ public class RuleRunner {
                 return false;
             }
             final String comments = change.getChangeSet().getComments();
-            final String toIgnore = comments.substring(comments.indexOf("lql-ignore:"));
+            final String toIgnore = comments.substring(comments.indexOf("lql-ignore:") + 11);
             final String[] split = toIgnore.split(",");
-            for (String key : split) {
-                if (ruleType.getKey().equalsIgnoreCase(key)) {
-                    return true;
-                }
-            }
-            return false;
+            return Arrays.stream(split).anyMatch(key -> ruleType.getKey().equalsIgnoreCase(key));
         }
 
     }
