@@ -2,7 +2,6 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import liquibase.change.Change;
-import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
@@ -45,7 +44,7 @@ public class RuleRunner {
             final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
             if (optionalRule.isPresent()) {
                 Rule rule = optionalRule.get();
-                if (shouldApply(ruleType, rule, change) && rule.invalid(object, change)) {
+                if (shouldApply(rule, change) && rule.invalid(object, change)) {
                     String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
                     if (rule instanceof WithFormattedErrorMessage) {
                         errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
@@ -56,29 +55,14 @@ public class RuleRunner {
             return this;
         }
 
-        private boolean shouldApply(RuleType ruleType, Rule rule, Change change) {
-            return rule.getRuleConfig().isEnabled() && evaluateCondition(rule, change) && !isIgnored(ruleType);
+        private boolean shouldApply(Rule rule, Change change) {
+            return rule.getRuleConfig().isEnabled() && evaluateCondition(rule, change);
         }
 
         private boolean evaluateCondition(Rule rule, Change change) {
             return rule.getRuleConfig().getConditionalExpression()
                     .map(expression -> expression.getValue(change, boolean.class))
                     .orElse(true);
-        }
-
-        private boolean isIgnored(RuleType ruleType) {
-            if (change == null || change.getChangeSet().getComments() == null || !change.getChangeSet().getComments().contains("lql-ignore:")) {
-                return false;
-            }
-            final String comments = change.getChangeSet().getComments();
-            final String toIgnore = comments.substring(comments.indexOf("lql-ignore:"));
-            final String[] split = toIgnore.split(",");
-            for (String key : split) {
-                if (ruleType.getKey().equalsIgnoreCase(key)) {
-                    return true;
-                }
-            }
-            return false;
         }
 
     }
