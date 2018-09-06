@@ -34,7 +34,8 @@ public enum RuleType {
     VALID_CONTEXT("valid-context", ValidContext::new, "Context does not follow pattern"),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts"),
     MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new, "Modify data where starts with where clause, that's probably a mistake"),
-    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated");
+    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated"),
+    ILLEGAL_CHANGE_TYPES("illegal-change-types", IllegalChangeTypes::new, "Change type '%s' is not allowed in this project");
 
     private String key;
     private Function<RuleConfig, Rule> factory;

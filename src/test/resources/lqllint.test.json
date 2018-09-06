@@ -49,7 +49,7 @@
     "modify-data-enforce-where": {
       "enabled": true,
       "errorMessage": "Modify data on table '%s' must have a where condition",
-      "requireWhere": [
+      "values": [
         "MUST_HAVE_WHERE"
       ]
     },

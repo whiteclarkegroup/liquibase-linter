@@ -50,10 +50,7 @@ This will be picked up by the linter and override any default rules.
   "ignore-context-pattern": "^baseline.*$",
   "rules": {
   
-  },
-  "illegal-change-types": [
-      "liquibase.change.core.LoadDataChange"
-  ]
+  }
 }
 ```
 
@@ -69,7 +66,7 @@ Specific rules have additional attributes of:
     <li>pattern - Regex pattern</li>
     <li>dynamicValue - Spring el expression to resolve the dynamic value from the change to replace {{value}} in the pattern</li>
     <li>maxLength - Max length of a specific value</li>
-    <li>requireWhere - Array of values</li>
+    <li>values - Array of values</li>
 </ul>
 
 Note: all rules are disabled by default
@@ -93,7 +90,7 @@ Note: all rules are disabled by default
 | create-column-remarks | Remarks attribute must be populated      | |
 | create-column-nullable-constraint | Create column must specify if the column is nullable      |  |
 | create-column-no-define-primary-key | Create column cannot specify primary key, force use of add primary key instead       | |
-| modify-data-enforce-where | List of tables that must have a where clause when updating      | <ul><li>requireWhere</li></ul> |
+| modify-data-enforce-where | List of tables that must have a where clause when updating      | <ul><li>values</li></ul> |
 | modify-data-starts-with-where | Modify data clause cannot start with 'where' | |
 | create-index-name | Pattern index name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | unique-constraint-name | Pattern unique constraint name must follow      | <ul><li>pattern</li><li>dynamicValue</li></ul> |
@@ -102,6 +99,7 @@ Note: all rules are disabled by default
 | foreign-key-must-be-named | Pattern foreign key name must follow      | <ul><li>pattern</li></ul> |
 | foreign-key-must-use-base-and-referenced-table-name | Foreign key must incorporate base and referenced table name       | <ul><li>pattern</li><li>dynamicValue</li></ul> |
 | drop-not-null-require-column-data-type | Drop not null constraint column data type attribute must be populated | |
+| illegal-change-types | Change types banned in the project. Specify an array of fully qualified classes. | <ul><li>values</li></ul> |
 
 #### Example config file
 ```json
@@ -186,7 +184,7 @@ Note: all rules are disabled by default
     "modify-data-enforce-where": {
       "enabled": true,
       "errorMessage": "Modify data on table '%s' must have a where condition",
-      "requireWhere": [
+      "values": [
         "MUST_HAVE_WHERE"
       ]
     },
@@ -235,16 +233,20 @@ Note: all rules are disabled by default
     "drop-not-null-require-column-data-type": {
       "enabled": true,
       "errorMessage": "Drop not null constraint column data type attribute must be populated"
-    }
+    },
+     "illegal-change-types": {
+       "enabled": true,
+       "values": [
+          "liquibase.change.core.LoadDataChange"
+       ],
+       "errorMessage": "Change type '%s' is not allowed in this project"
+     }
   }
 }
 ```
 
 #### Context ignore pattern
 If there is a set of changes that you always want ignored based on their context you can configure this using `ignore-context-pattern`.
-
-#### Illegal change types
-If there are a set of changes types that you don't want to allow in your project then you can specify an array of fully qualified classes using `illegal-change-types`. An error will be thrown if any of these change types are used. 
 
 #### Skipping a changeSet
 Sometimes you might have to do some less-than-ideal stuff to solve a particular problem, in a way that might contravene your normal lint rules. In these cases, if your `<comment>` includes the string "lqlint-ignore", then the linter will not enforce any rules on that changeSet.

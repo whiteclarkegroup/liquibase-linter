@@ -1,6 +1,10 @@
 {
-  "rules": {},
-  "illegal-change-types": [
-    "liquibase.change.core.LoadDataChange"
-  ]
+  "rules": {
+    "illegal-change-types": {
+      "enabled": true,
+      "values": [
+        "liquibase.change.core.LoadDataChange"
+      ]
+    }
+  }
 }
