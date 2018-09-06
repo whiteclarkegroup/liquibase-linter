@@ -3,7 +3,7 @@ package com.whiteclarkegroup.liquibaselinter.integration;
 import com.whiteclarkegroup.liquibaselinter.resolvers.LiquibaseIntegrationTestResolver;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
@@ -17,7 +17,13 @@ class IllegalChangeTypesIntegrationTest extends LinterIntegrationTest {
                 "illegal-change-types.json",
                 "Change type 'liquibase.change.core.LoadDataChange' is not allowed in this project");
 
-        return Collections.singletonList(test1);
+        IntegrationTestConfig test2 = IntegrationTestConfig.shouldFail(
+                "Should not allow a illegal change type simple",
+                "illegal-change-types.xml",
+                "illegal-change-types-simple.json",
+                "Change type 'liquibase.change.core.LoadDataChange' is not allowed in this project");
+
+        return Arrays.asList(test1, test2);
     }
 
 }
