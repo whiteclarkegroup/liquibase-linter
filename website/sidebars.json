@@ -3,7 +3,15 @@
       "Setup": ["install", "configure"],
       "Rules": [
           "rules/index",
-          "rules/no-duplicate-includes"
+          "rules/file-name-no-spaces",
+          "rules/has-comment",
+          "rules/has-context",
+          "rules/isolate-ddl-changes",
+          "rules/no-duplicate-includes",
+          "rules/no-preconditions",
+          "rules/schema-name",
+          "rules/separate-ddl-context",
+          "rules/valid-context"
       ]
   }
 }
