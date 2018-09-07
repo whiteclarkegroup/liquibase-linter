@@ -6,3 +6,4 @@ pom.xml.versionsBackup
 **/.mvm/*
 **/node_modules/*
 databasechangelog.csv
+databasechangelog.csv.new
