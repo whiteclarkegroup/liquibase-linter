@@ -27,7 +27,8 @@ Example usage:
 
 ```json
 {
-    "ignore-context-pattern": "^baseline.*$"
+    "ignore-context-pattern": "^baseline.*$",
+    "rules": {}
 }
 ```
 
