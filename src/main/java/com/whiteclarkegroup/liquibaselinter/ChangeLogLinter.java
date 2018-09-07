@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 public class ChangeLogLinter {
 
@@ -59,7 +58,6 @@ public class ChangeLogLinter {
                     .add(LoadDataChange.class)
                     .add(LoadUpdateDataChange.class)
                     .build();
-    private static final Pattern LINT_IGNORE = Pattern.compile(".*lql-ignore.*");
 
     @SuppressWarnings("unchecked")
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
@@ -107,7 +105,7 @@ public class ChangeLogLinter {
     }
 
     private boolean hasIgnoreComment(ChangeSet changeSet) {
-        return changeSet.getComments() != null && LINT_IGNORE.matcher(changeSet.getComments()).matches();
+        return changeSet.getComments() != null && changeSet.getComments().endsWith("lql-ignore");
     }
 
     @SuppressWarnings("unchecked")

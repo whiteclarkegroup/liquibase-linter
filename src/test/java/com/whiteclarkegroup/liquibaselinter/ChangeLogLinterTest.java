@@ -60,7 +60,7 @@ class ChangeLogLinterTest {
     @Test
     void shouldNotLintChangeSetsWithLintDisabledComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
-        ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "comment includes lql-ignore foo");
+        ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "comment includes lql-ignore");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
         verify(changeSet, never()).getChanges();
     }

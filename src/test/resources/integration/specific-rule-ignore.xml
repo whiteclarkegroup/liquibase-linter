@@ -1,0 +1,13 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="201809061558" author="luke.rogers">
+        <comment>lql-ignore:table-name-length</comment>
+        <createTable tableName="THIS_NAME_SHOULD_BE_TOO_LONG">
+            <column name="TEST" type="VARCHAR(10)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
