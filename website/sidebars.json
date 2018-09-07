@@ -3,6 +3,7 @@
       "Setup": ["install", "configure"],
       "Rules": [
           "rules/index",
+          "rules/create-column-no-define-primary-key",
           "rules/create-column-nullable-constraint",
           "rules/create-column-remarks",
           "rules/create-table-remarks",

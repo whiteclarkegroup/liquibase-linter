@@ -6,6 +6,7 @@
     "tagline": "Quality control for your Liquibase scripts",
     "configure": "Configure",
     "install": "Install",
+    "rules/create-column-no-define-primary-key": "create-column-no-define-primary-key",
     "rules/create-column-nullable-constraint": "create-column-nullable-constraint",
     "rules/create-column-remarks": "create-column-remarks",
     "rules/create-table-remarks": "create-table-remarks",
