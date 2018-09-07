@@ -40,6 +40,9 @@ class Footer extends React.Component {
             <a href={this.docUrl('configure', this.props.language)}>
               Configure
             </a>
+            <a href={this.docUrl('rules/index', this.props.language)}>
+              Rules
+            </a>
           </div>
           <div>
             <h5>Code</h5>

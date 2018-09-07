@@ -40,6 +40,7 @@ const siteConfig = {
   headerLinks: [
     {doc: 'install', label: 'Install'},
     {doc: 'configure', label: 'Configure'},
+    {doc: 'rules/index', label: 'Rules'},
     {blog: true, label: 'Blog'},
     {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
   ],
