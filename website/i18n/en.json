@@ -10,6 +10,7 @@
     "rules/create-column-nullable-constraint": "create-column-nullable-constraint",
     "rules/create-column-remarks": "create-column-remarks",
     "rules/create-table-remarks": "create-table-remarks",
+    "rules/drop-not-null-require-column-data-type": "drop-not-null-require-column-data-type",
     "rules/file-name-no-spaces": "file-name-no-spaces",
     "rules/has-comment": "has-comment",
     "rules/has-context": "has-context",
