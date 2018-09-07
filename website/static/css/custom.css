@@ -1,5 +1,9 @@
 /* your custom css */
 
+article a {
+    text-decoration: underline;
+}
+
 .nav-footer .fbOpenSource {
     width: 100px;
 }
