@@ -9,8 +9,12 @@
           "rules/isolate-ddl-changes",
           "rules/no-duplicate-includes",
           "rules/no-preconditions",
+          "rules/object-name",
+          "rules/object-name-length",
           "rules/schema-name",
           "rules/separate-ddl-context",
+          "rules/table-name",
+          "rules/table-name-length",
           "rules/valid-context"
       ]
   }

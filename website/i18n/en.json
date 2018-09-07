@@ -13,15 +13,19 @@
     "rules/isolate-ddl-changes": "isolate-ddl-changes",
     "rules/no-duplicate-includes": "no-duplicate-includes",
     "rules/no-preconditions": "no-preconditions",
+    "rules/object-name-length": "object-name-length",
+    "rules/object-name": "object-name",
     "rules/schema-name": "schema-name",
     "rules/separate-ddl-context": "separate-ddl-context",
+    "rules/table-name-length": "table-name-length",
+    "rules/table-name": "table-name",
     "rules/valid-context": "valid-context",
     "Install": "Install",
     "Configure": "Configure",
+    "Rules": "Rules",
     "Blog": "Blog",
     "GitHub": "GitHub",
-    "Setup": "Setup",
-    "Rules": "Rules"
+    "Setup": "Setup"
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",
