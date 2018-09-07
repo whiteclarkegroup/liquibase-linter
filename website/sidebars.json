@@ -11,6 +11,8 @@
           "rules/has-comment",
           "rules/has-context",
           "rules/isolate-ddl-changes",
+          "rules/modify-data-enforce-where",
+          "rules/modify-data-starts-with-where",
           "rules/no-duplicate-includes",
           "rules/no-preconditions",
           "rules/object-name",
