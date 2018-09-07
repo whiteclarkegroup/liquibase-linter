@@ -11,7 +11,6 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
 ```json
 {
     "ignore-context-pattern": null,
-    "illegal-change-types": [],
     "rules": {}
 }
 ```
