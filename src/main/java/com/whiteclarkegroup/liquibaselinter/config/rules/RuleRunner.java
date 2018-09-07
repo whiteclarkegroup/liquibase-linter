@@ -31,6 +31,7 @@ public class RuleRunner {
 
     public static class RunningContext {
 
+        private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
         private final Map<String, RuleConfig> ruleConfigs;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
@@ -67,11 +68,11 @@ public class RuleRunner {
         }
 
         private boolean isIgnored(RuleType ruleType) {
-            if (change == null || change.getChangeSet().getComments() == null || !change.getChangeSet().getComments().contains("lql-ignore:")) {
+            if (change == null || change.getChangeSet().getComments() == null || !change.getChangeSet().getComments().contains(LQL_IGNORE_TOKEN)) {
                 return false;
             }
             final String comments = change.getChangeSet().getComments();
-            final String toIgnore = comments.substring(comments.indexOf("lql-ignore:") + 11);
+            final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
             return Arrays.stream(split).anyMatch(key -> ruleType.getKey().equalsIgnoreCase(key));
         }
