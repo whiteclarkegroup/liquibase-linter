@@ -35,8 +35,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/whiteclarkegroup/liquibase-linter.git</connection>
-        <developerConnection>scm:git:git@github.com:whiteclarkegroup/liquibase-linter.git</developerConnection>
+        <connection>scm:git:git://github.com/whiteclarkegroup/liquibase-linter.git</connection>
+        <developerConnection>scm:git:ssh://github.com:whiteclarkegroup/liquibase-linter.git</developerConnection>
         <url>https://github.com/whiteclarkegroup/liquibase-linter/tree/master</url>
     </scm>
 
