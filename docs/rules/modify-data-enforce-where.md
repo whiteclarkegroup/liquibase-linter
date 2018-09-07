@@ -13,3 +13,16 @@ This rule will fail if an update or delete change on any of the given tables doe
 ## Options
 
 `values` - (array of strings) list of table names that cannot have unqualified modifications
+
+## Exmple Usage
+
+```json
+{
+    "rules": {
+        "modify-data-enforce-where": {
+            "values": ["SETTINGS"],
+            "errorMessage": "Updates and deletes to settings table must have a where condition"
+        }
+    }
+}
+```
