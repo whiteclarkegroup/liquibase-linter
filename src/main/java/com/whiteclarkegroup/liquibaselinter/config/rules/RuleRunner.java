@@ -42,6 +42,7 @@ public class RuleRunner {
             this.databaseChangeLog = databaseChangeLog;
         }
 
+        @SuppressWarnings("unchecked")
         public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
             final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
             if (optionalRule.isPresent()) {
