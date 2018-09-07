@@ -3,6 +3,9 @@
       "Setup": ["install", "configure"],
       "Rules": [
           "rules/index",
+          "rules/create-column-nullable-constraint",
+          "rules/create-column-remarks",
+          "rules/create-table-remarks",
           "rules/file-name-no-spaces",
           "rules/has-comment",
           "rules/has-context",
