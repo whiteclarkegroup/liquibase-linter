@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.specific;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import liquibase.change.DatabaseChange;
 import liquibase.change.core.LoadDataChange;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,13 @@ class IllegalChangeTypesTest {
     @Test
     void illegalChangeTypeShouldBeInvalid() {
         IllegalChangeTypes illegalChangeTypes = new IllegalChangeTypes(RuleConfig.builder().withValues(Collections.singletonList("liquibase.change.core.LoadDataChange")).build());
+        assertTrue(illegalChangeTypes.invalid(new LoadDataChange(), null));
+    }
+
+    @DisplayName("Illegal change type from database change annotation name")
+    @Test
+    void illegalChangeTypeFromDatabaseChangeAnnotationName() {
+        IllegalChangeTypes illegalChangeTypes = new IllegalChangeTypes(RuleConfig.builder().withValues(Collections.singletonList(LoadDataChange.class.getAnnotation(DatabaseChange.class).name())).build());
         assertTrue(illegalChangeTypes.invalid(new LoadDataChange(), null));
     }
 

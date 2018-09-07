@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "illegal-change-types": {
+      "values": [
+        "loadData"
+      ]
+    }
+  }
+}
