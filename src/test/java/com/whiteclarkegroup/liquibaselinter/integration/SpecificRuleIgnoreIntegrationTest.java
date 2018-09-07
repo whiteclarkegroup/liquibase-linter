@@ -8,7 +8,8 @@ import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
 class SpecificRuleIgnoreIntegrationTest extends LinterIntegrationTest {
-
+    // TODO test in more detail, proving that it still fails on other non-ignored rules, once #20 is fixed
+    
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldPass(
