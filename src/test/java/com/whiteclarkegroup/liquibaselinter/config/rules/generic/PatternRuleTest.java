@@ -51,4 +51,11 @@ class PatternRuleTest {
         assertFalse(patternRule.invalid("123", null));
     }
 
+    @DisplayName("Null value should be invalid")
+    @Test
+    void nullValueShouldBeInvalid() {
+        PatternRule patternRule = new PatternRule(RuleConfig.builder().withPattern("^.+$").build());
+        assertTrue(patternRule.invalid(null, null));
+    }
+
 }
