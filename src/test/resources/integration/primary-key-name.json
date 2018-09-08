@@ -1,6 +1,6 @@
 {
     "rules": {
-        "primary-key-must-use-table-name": {
+        "primary-key-name": {
             "errorMessage": "Primary key constraint '%s' must end with '_PK', and start with table name (unless too long)",
             "pattern": "^{{value}}_PK$",
             "dynamicValue": "(tableName + '_PK').length() <= 10 ? tableName : '[A-Z_]+'"
