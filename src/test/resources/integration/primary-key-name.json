@@ -1,0 +1,14 @@
+{
+    "rules": {
+        "primary-key-must-be-named": {
+            "errorMessage": "Primary key constraint '%s' must end with '_PK'",
+            "pattern": "^[A-Z_]+_PK$"
+        },
+        "primary-key-must-use-table-name": {
+            "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK'",
+            "pattern": "^{{value}}_PK$",
+            "condition": "(tableName + '_PK').length() <= 10",
+            "dynamicValue": "tableName"
+        }
+    }
+}
