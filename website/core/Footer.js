@@ -51,10 +51,10 @@ class Footer extends React.Component {
                   <img alt="Codacy Quality" src="//api.codacy.com/project/badge/Grade/320a8a4be4fd44feb9d6102ccdc7e240" />
               </a>
           </div>
-          <div>
-            <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
-          </div>
+          {/*<div>*/}
+            {/*<h5>More</h5>*/}
+            {/*<a href={`${this.props.config.baseUrl}blog`}>Blog</a>*/}
+          {/*</div>*/}
         </section>
 
         <a
