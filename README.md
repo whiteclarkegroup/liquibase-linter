@@ -17,7 +17,7 @@
     </configuration>
     <dependencies>
         <dependency>
-            <groupId>com.whiteclarkegroup.liquibase</groupId>
+            <groupId>com.whiteclarkegroup</groupId>
             <artifactId>liquibase-linter</artifactId>
             <version>0.1.0</version>
         </dependency>
