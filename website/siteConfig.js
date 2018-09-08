@@ -38,8 +38,7 @@ const siteConfig = {
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
-    {doc: 'install', label: 'Install'},
-    {doc: 'configure', label: 'Configure'},
+    {doc: 'install', label: 'Setup'},
     {doc: 'rules/index', label: 'Rules'},
     {blog: true, label: 'Blog'},
     {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
