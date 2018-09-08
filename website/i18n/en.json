@@ -14,6 +14,7 @@
     "rules/file-name-no-spaces": "file-name-no-spaces",
     "rules/has-comment": "has-comment",
     "rules/has-context": "has-context",
+    "rules/illegal-change-types": "illegal-change-types",
     "rules/index": "Working with Rules",
     "rules/isolate-ddl-changes": "isolate-ddl-changes",
     "rules/modify-data-enforce-where": "modify-data-enforce-where",

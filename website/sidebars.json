@@ -11,6 +11,7 @@
           "rules/file-name-no-spaces",
           "rules/has-comment",
           "rules/has-context",
+          "rules/illegal-change-types",
           "rules/isolate-ddl-changes",
           "rules/modify-data-enforce-where",
           "rules/modify-data-starts-with-where",
