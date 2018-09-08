@@ -36,7 +36,7 @@ Example usage:
 
 ### "lql-ignore" comments
 
-Sometimes you might have to do something less than perfect to get you out of a jam, and it might break some of your usual quality rules. In these cases, you can include the text "lql-ignore" anywhere in the changeSet's `<comment>` tag and it will be skipped by the linter:
+Sometimes you might have to do something less than perfect to get you out of a jam, and it might break some of your usual quality rules. In these cases, you can include the text "lql-ignore" at the end of the changeSet's `<comment>` tag and it will be skipped by the linter:
 
 ```xml
 <changeSet id="201809061514dg" author="dgoss">
@@ -46,4 +46,12 @@ Sometimes you might have to do something less than perfect to get you out of a j
 </changeSet>
 ```
 
-<small>(Right now this turns off _all_ rules for that changeSet - we'll be [adding support](https://github.com/whiteclarkegroup/liquibase-linter/issues/16) to turn off individual rules soon.)</small>
+You can also disable an individual rule while leaving all others on, if that's all you need:
+
+```xml
+<changeSet id="201809061514dg" author="dgoss">
+    <comment>Empty this whole table lql-ignore:modify-data-enforce-where</comment>
+    
+    <delete tableName="FOO"/>
+</changeSet>
+```
