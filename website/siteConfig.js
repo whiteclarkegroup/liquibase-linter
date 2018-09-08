@@ -58,20 +58,6 @@ const siteConfig = {
     secondaryColor: '#7d478d',
   },
 
-  /* Custom fonts for website */
-  /*
-  fonts: {
-    myFont: [
-      "Times New Roman",
-      "Serif"
-    ],
-    myOtherFont: [
-      "-apple-system",
-      "system-ui"
-    ]
-  },
-  */
-
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
   copyright: `Copyright © ${new Date().getFullYear()} White Clarke Group`,
 
@@ -82,6 +68,7 @@ const siteConfig = {
 
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['//buttons.github.io/buttons.js'],
+  stylesheets: ['//fonts.googleapis.com/css?family=Lato'],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
