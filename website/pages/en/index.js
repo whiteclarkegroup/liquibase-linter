@@ -129,18 +129,20 @@ const Start = () => (
     <Container
         id="start"
         padding={['bottom', 'top']}>
-        <h2>Get Started</h2>
-        <Remarkable>
-            **1** Add `liquibase-linter` to your pom as a dependency of `liquibase-maven-plugin`:
+        <article>
+            <h2>Get Started</h2>
+            <Remarkable>
+                **1** Add `liquibase-linter` to your pom as a dependency of `liquibase-maven-plugin`:
 
-            <pre>
-                <code>
-                    {startXml}
-                </code>
-            </pre>
+                <pre>
+                    <code>
+                        {startXml}
+                    </code>
+                </pre>
 
-            **2** Add the [config file](examples/lqlint.json) to your project root, and start turning on rules.
-        </Remarkable>
+                **2** Add the [config file](examples/lqlint.json) to your project root, and start [turning on rules](docs/rules).
+            </Remarkable>
+        </article>
     </Container>
 );
 
