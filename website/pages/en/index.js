@@ -8,7 +8,6 @@
 const React = require('react');
 
 const CompLibrary = require('../../core/CompLibrary.js');
-const Remarkable = require('../../core/Remarkable.js');
 
 const MarkdownBlock = CompLibrary.MarkdownBlock;
 /* Used to read markdown */
@@ -16,8 +15,6 @@ const Container = CompLibrary.Container;
 const GridBlock = CompLibrary.GridBlock;
 
 const siteConfig = require(`${process.cwd()}/siteConfig.js`);
-
-const startXml = require('fs').readFileSync('./start.xml', 'utf8');
 
 function imgUrl(img) {
     return `${siteConfig.baseUrl}img/${img}`;
@@ -131,17 +128,31 @@ const Start = () => (
         padding={['bottom', 'top']}>
         <article>
             <h2>Get Started</h2>
-            <Remarkable>
-                **1** Add `liquibase-linter` to your pom as a dependency of `liquibase-maven-plugin`:
-
-                <pre>
-                    <code>
-                        {startXml}
-                    </code>
-                </pre>
-
-                **2** Add the [config file](examples/lqlint.json) to your project root, and start [turning on rules](docs/rules).
-            </Remarkable>
+<MarkdownBlock>
+**1** Add `liquibase-linter` to your pom as a dependency of `liquibase-maven-plugin`:
+</MarkdownBlock>
+<MarkdownBlock>{`\`\`\`xml
+<plugin>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <configuration>
+        ...
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>com.whiteclarkegroup.liquibase</groupId>
+            <artifactId>liquibase-linter</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+    </dependencies>
+    <executions>
+        ...
+    </executions>
+</plugin>
+\`\`\``}</MarkdownBlock>
+<MarkdownBlock>
+**2** Add the [config file](examples/lqlint.json) to your project root, and start [turning on rules](docs/rules).
+</MarkdownBlock>
         </article>
     </Container>
 );
