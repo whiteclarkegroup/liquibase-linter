@@ -7,3 +7,4 @@ pom.xml.versionsBackup
 **/node_modules/*
 databasechangelog.csv
 databasechangelog.csv.new
+website/build
