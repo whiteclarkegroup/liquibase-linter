@@ -14,8 +14,7 @@ public class AddForeignKeyConstraintChangeLinter implements Linter<AddForeignKey
     public void lint(AddForeignKeyConstraintChange change, RuleRunner ruleRunner) throws ChangeLogParseException {
         getObjectNameLinter().lintObjectNameLength(change.getConstraintName(), change, ruleRunner);
         ruleRunner.forChange(change)
-                .run(RuleType.FOREIGN_KEY_MUST_BE_NAMED, change.getConstraintName())
-                .run(RuleType.FOREIGN_KEY_MUST_USE_BASE_AND_REFERENCE_TABLE_NAME, change.getConstraintName());
+                .run(RuleType.FOREIGN_KEY_NAME, change.getConstraintName());
     }
 
     ObjectNameLinter getObjectNameLinter() {

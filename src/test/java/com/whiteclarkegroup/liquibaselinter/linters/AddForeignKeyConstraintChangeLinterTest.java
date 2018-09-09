@@ -51,7 +51,7 @@ class AddForeignKeyConstraintChangeLinterTest {
         addForeignKeyConstraintChange.setConstraintName("TEST_PK_ABC");
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint 'TEST_PK_ABC' must end with '_FK'. e.g. ORDER_CUSTOMER_FK"));
+        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint 'TEST_PK_ABC' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK"));
     }
 
     @DisplayName("Should validate name in correct format")
@@ -96,7 +96,7 @@ class AddForeignKeyConstraintChangeLinterTest {
         addForeignKeyConstraintChange.setConstraintName("TEST_PK_ABC");
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint '" + addForeignKeyConstraintChange.getConstraintName() + "' must " +
-                "end with '_FK'. e.g. ORDER_CUSTOMER_FK"));
+        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint '" + addForeignKeyConstraintChange.getConstraintName() +
+                "' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK"));
     }
 }
