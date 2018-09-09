@@ -6,9 +6,11 @@
           "rules/create-column-no-define-primary-key",
           "rules/create-column-nullable-constraint",
           "rules/create-column-remarks",
+          "rules/create-index-name",
           "rules/create-table-remarks",
           "rules/drop-not-null-require-column-data-type",
           "rules/file-name-no-spaces",
+          "rules/foreign-key-name",
           "rules/has-comment",
           "rules/has-context",
           "rules/illegal-change-types",
@@ -19,10 +21,12 @@
           "rules/no-preconditions",
           "rules/object-name",
           "rules/object-name-length",
+          "rules/primary-key-name",
           "rules/schema-name",
           "rules/separate-ddl-context",
           "rules/table-name",
           "rules/table-name-length",
+          "rules/unique-constraint-name",
           "rules/valid-context"
       ]
   }
