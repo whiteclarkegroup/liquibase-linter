@@ -30,7 +30,7 @@ public class PatternRule extends Rule implements WithFormattedErrorMessage {
     public boolean invalid(Object object, Change change) {
         final String value = (String) object;
         if (value == null) {
-            return true;
+            return false;
         }
         if (getRuleConfig().getPatternString() != null) {
             if (getRuleConfig().getPatternString().contains(DYNAMIC_VALUE)) {
