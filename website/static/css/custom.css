@@ -4,7 +4,8 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-article a {
+article a,
+.lonePost .postHeader + * a {
     text-decoration: underline;
 }
 
