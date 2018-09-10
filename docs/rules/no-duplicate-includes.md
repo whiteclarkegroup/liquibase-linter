@@ -10,6 +10,8 @@ Also, if you are running Liquibase with contexts that don't match those in the f
 
 The `no-duplicate-includes` rule will explicitly fail because of the duplicated `<include>`.
 
+There is an exception to this rule: the linter will *not* fail on duplicated includes where the included changelog doesn't contain any changeSets. This is to allow files that just contain properties to be harmlessly included more than once in situations where the overall changelog is composed of others that might all have the same basic setup included.
+
 ## Options
 
 No extra options.
