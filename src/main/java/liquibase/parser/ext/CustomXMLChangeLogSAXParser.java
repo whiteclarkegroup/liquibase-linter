@@ -49,6 +49,11 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         }
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
+
+        if (changeLog.getRootChangeLog() == changeLog && !config.isFailFast()) {
+            checkErrors(ruleRunner);
+        }
+
         return changeLog;
     }
 
@@ -89,4 +94,9 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
             alreadyParsed.add(physicalChangeLogLocation);
         }
     }
+
+    private void checkErrors(RuleRunner ruleRunner) {
+
+    }
+
 }

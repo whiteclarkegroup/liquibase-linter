@@ -25,12 +25,15 @@ public class Config {
     private final Pattern ignoreContextPattern;
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final Map<String, RuleConfig> rules;
+    private final boolean failFast;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
-                  @JsonProperty("rules") Map<String, RuleConfig> rules) {
+                  @JsonProperty("rules") Map<String, RuleConfig> rules,
+                  @JsonProperty("failFast") boolean failFast) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.rules = rules;
+        this.failFast = failFast;
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -47,6 +50,10 @@ public class Config {
 
     public RuleRunner getRuleRunner() {
         return new RuleRunner(this.rules);
+    }
+
+    public boolean isFailFast() {
+        return failFast;
     }
 
     static class RuleConfigDeserializer extends JsonDeserializer<Object> {
