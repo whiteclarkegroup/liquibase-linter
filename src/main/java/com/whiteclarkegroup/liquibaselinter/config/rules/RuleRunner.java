@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
+import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -8,25 +9,27 @@ import liquibase.exception.ChangeLogParseException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
+import java.util.*;
 
 public class RuleRunner {
+    private final Config config;
 
-    private final Map<String, RuleConfig> ruleConfigs;
+    public RuleRunner(Config config) {
+        this.config = config;
+    }
 
-    public RuleRunner(Map<String, RuleConfig> ruleConfigs) {
-        this.ruleConfigs = ruleConfigs;
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(this.ruleConfigs, change, null);
+        return new RunningContext(config.getRules(), change, null);
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(ruleConfigs, null, databaseChangeLog);
+        return new RunningContext(config.getRules(), null, databaseChangeLog);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(ruleConfigs, null, null);
+        return new RunningContext(config.getRules(), null, null);
     }
 
     public static class RunningContext {
