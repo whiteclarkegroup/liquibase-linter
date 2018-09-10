@@ -5,13 +5,16 @@ import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.type.filter.AssignableTypeFilter;
+import liquibase.servicelocator.DefaultPackageScanClassResolver;
+import liquibase.servicelocator.PackageScanClassResolver;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
+    private static final String CORE_RULES_PACKAGE = "com/whiteclarkegroup/liquibaselinter/config/rules/core";
+    private final PackageScanClassResolver packageScanner = new DefaultPackageScanClassResolver();
+
     private final Config config;
     private final List<ChangeRule> changeRules;
 
@@ -21,14 +24,12 @@ public class RuleRunner {
     }
 
     private List<ChangeRule> discoverChangeRules() {
-        final ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
-        provider.addIncludeFilter(new AssignableTypeFilter(ChangeRule.class));
-        return provider.findCandidateComponents("com/whiteclarkegroup/liquibaselinter/config/rules/core").stream()
-            .map(component -> {
+        return packageScanner.findImplementations(ChangeRule.class, CORE_RULES_PACKAGE).stream()
+            .map(found -> {
                 try {
-                    Class<? extends ChangeRule> clazz = (Class<? extends ChangeRule>) Class.forName(component.getBeanClassName());
+                    Class<? extends ChangeRule> clazz = (Class<? extends ChangeRule>) found;
                     return clazz.newInstance();
-                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                } catch (InstantiationException | IllegalAccessException ex) {
                     return null;
                 }
             })
