@@ -1,11 +1,9 @@
 package com.whiteclarkegroup.liquibaselinter.linters;
 
-import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import liquibase.change.AbstractChange;
 import liquibase.exception.ChangeLogParseException;
-import liquibase.util.StringUtils;
 
 public class ObjectNameLinter {
 

@@ -2,12 +2,10 @@ package com.whiteclarkegroup.liquibaselinter.config.rules.generic;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.resolvers.AddColumnChangeParameterResolver;
-import liquibase.change.core.AddColumnChange;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(AddColumnChangeParameterResolver.class)
