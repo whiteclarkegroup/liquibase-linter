@@ -5,44 +5,80 @@ import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.AssignableTypeFilter;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Optional;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RuleRunner {
     private final Config config;
+    private final List<ChangeRule> changeRules;
 
     public RuleRunner(Config config) {
         this.config = config;
+        this.changeRules = discoverChangeRules();
     }
 
+    private List<ChangeRule> discoverChangeRules() {
+        final ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new AssignableTypeFilter(ChangeRule.class));
+        return provider.findCandidateComponents("com/whiteclarkegroup/liquibaselinter/config/rules/core").stream()
+            .map(component -> {
+                try {
+                    Class<? extends ChangeRule> clazz = (Class<? extends ChangeRule>) Class.forName(component.getBeanClassName());
+                    return clazz.newInstance();
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                    return null;
+                }
+            })
+            .filter(Objects::nonNull)
+            .filter(changeRule -> config.isRuleEnabled(changeRule.getName()))
+            .map(changeRule -> changeRule.configure(config.getRules().get(changeRule.getName())))
+            .collect(Collectors.toList());
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config.getRules(), change, null);
+        return new RunningContext(config.getRules(), changeRules, change, null);
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config.getRules(), null, databaseChangeLog);
+        return new RunningContext(config.getRules(), null, null, databaseChangeLog);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config.getRules(), null, null);
+        return new RunningContext(config.getRules(), null, null, null);
     }
 
     public static class RunningContext {
 
         private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
         private final Map<String, RuleConfig> ruleConfigs;
+        private final List<ChangeRule> changeRules;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
 
-        private RunningContext(Map<String, RuleConfig> ruleConfigs, Change change, DatabaseChangeLog databaseChangeLog) {
+        private RunningContext(Map<String, RuleConfig> ruleConfigs, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog) {
             this.ruleConfigs = ruleConfigs;
+            this.changeRules = changeRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
+        }
+
+        public RunningContext checkChange() throws ChangeLogParseException {
+            for (ChangeRule changeRule : changeRules) {
+                checkChangeRule(changeRule);
+            }
+            return this;
+        }
+
+        private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
+            if (change.getClass().isAssignableFrom(changeRule.getChangeType())
+                && changeRule.supports(change)
+                && changeRule.invalid(change)
+                && shouldApply(changeRule)) {
+                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, changeRule.getMessage(change));
+            }
         }
 
         @SuppressWarnings("unchecked")
@@ -61,26 +97,29 @@ public class RuleRunner {
             return this;
         }
 
-        private boolean shouldApply(RuleType ruleType, Rule rule, Change change) {
-            return rule.getRuleConfig().isEnabled() && evaluateCondition(rule, change) && !isIgnored(ruleType);
+        private boolean shouldApply(ChangeRule changeRule) {
+            return evaluateCondition(changeRule.getConfig(), change) && !isIgnored(changeRule.getName());
         }
 
-        private boolean evaluateCondition(Rule rule, Change change) {
-            return rule.getRuleConfig().getConditionalExpression()
+        private boolean shouldApply(RuleType ruleType, Rule rule, Change change) {
+            return rule.getRuleConfig().isEnabled() && evaluateCondition(rule.getRuleConfig(), change) && !isIgnored(ruleType.getKey());
+        }
+
+        private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
+            return ruleConfig.getConditionalExpression()
                     .map(expression -> expression.getValue(change, boolean.class))
                     .orElse(true);
         }
 
-        private boolean isIgnored(RuleType ruleType) {
+        private boolean isIgnored(String ruleName) {
             if (change == null || change.getChangeSet().getComments() == null || !change.getChangeSet().getComments().contains(LQL_IGNORE_TOKEN)) {
                 return false;
             }
             final String comments = change.getChangeSet().getComments();
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
-            return Arrays.stream(split).anyMatch(key -> ruleType.getKey().equalsIgnoreCase(key));
+            return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
         }
-
     }
 
 }

@@ -54,7 +54,7 @@ public class RuleConfig {
         return enabled;
     }
 
-    String getErrorMessage() {
+    public String getErrorMessage() {
         return errorMessage;
     }
 
@@ -97,6 +97,10 @@ public class RuleConfig {
             pattern = Pattern.compile(patternString);
         }
         return Optional.ofNullable(pattern);
+    }
+
+    public boolean hasPattern() {
+        return patternString != null && !patternString.equals("");
     }
 
     public static class RuleConfigBuilder {

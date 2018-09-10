@@ -102,6 +102,11 @@
             <version>${commons-beanutils.version}</version>
         </dependency>
         <dependency>
+            <artifactId>spring-context</artifactId>
+            <groupId>org.springframework</groupId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
             <artifactId>spring-expression</artifactId>
             <groupId>org.springframework</groupId>
             <version>${spring.version}</version>
