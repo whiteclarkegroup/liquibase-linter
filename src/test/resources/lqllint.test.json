@@ -71,29 +71,17 @@
       "condition": "(tableName + '_U').length() <= 28",
       "dynamicValue": "tableName"
     },
-    "primary-key-must-be-named": {
-      "enabled": true,
-      "errorMessage": "Primary key constraint '%s' must end with '_PK' e.g. TABLE_PK",
-      "pattern": "^[A-Z_]+_PK$"
-    },
-    "primary-key-must-use-table-name": {
+    "primary-key-name": {
       "enabled": true,
       "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK' e.g. TABLE_PK",
       "pattern": "^{{value}}_PK$",
-      "condition": "(tableName + '_PK').length() <= 30",
-      "dynamicValue": "tableName"
+      "dynamicValue": "(tableName + '_PK').length() <= 30 ? tableName : '[A-Z_]+'"
     },
-    "foreign-key-must-be-named": {
-      "enabled": true,
-      "errorMessage": "Foreign key constraint '%s' must end with '_FK'. e.g. ORDER_CUSTOMER_FK",
-      "pattern": "^[A-Z_]+_FK$"
-    },
-    "foreign-key-must-use-base-and-referenced-table-name": {
+    "foreign-key-name": {
       "enabled": true,
       "errorMessage": "Foreign key constraint '%s' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK",
       "pattern": "^{{value}}_FK$",
-      "condition": "(baseTableName + referencedTableName + '_FK').length() <= 30",
-      "dynamicValue": "baseTableName + '_' + referencedTableName"
+      "dynamicValue": "(baseTableName + referencedTableName + '_FK').length() <= 30 ? baseTableName + '_' + referencedTableName : '[A-Z_]+'"
     },
     "drop-not-null-require-column-data-type": {}
   }

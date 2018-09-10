@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -38,18 +38,6 @@ class AddPrimaryKeyChangeLinterTest {
         addPrimaryKeyChange.setConstraintName("TEST_PK");
         addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner);
         verify(objectNameLinter, times(1)).lintObjectNameLength("TEST_PK", addPrimaryKeyChange, ruleRunner);
-    }
-
-    @DisplayName("Should validate name in incorrect format")
-    @Test
-    void shouldValidateNameInIncorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
-        AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
-        addPrimaryKeyChange.setChangeSet(changeSet);
-        addPrimaryKeyChange.setTableName("TEST");
-        addPrimaryKeyChange.setConstraintName("TEST_PK_ABC");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Primary key constraint '" + addPrimaryKeyChange.getConstraintName() + "' must end with '_PK' e.g. TABLE_PK"));
     }
 
     @DisplayName("Should validate name in correct format")
@@ -81,20 +69,6 @@ class AddPrimaryKeyChangeLinterTest {
         } catch (ChangeLogParseException e) {
             fail(e);
         }
-    }
-
-    @DisplayName("Should not validate if name in format but validate ending when longer than max length")
-    @Test
-    void shouldNotValidateNameInFormatButValidateEndingWhenMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
-        AddPrimaryKeyChange addPrimaryKeyChange = new AddPrimaryKeyChange();
-        addPrimaryKeyChange.setChangeSet(changeSet);
-        addPrimaryKeyChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
-        addPrimaryKeyChange.setConstraintName("INVALID_NAME");
-        changeSet.addChange(addPrimaryKeyChange);
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> addPrimaryKeyChangeLinter.lint(addPrimaryKeyChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Primary key constraint '" + addPrimaryKeyChange.getConstraintName() + "' must " +
-                "end with '_PK' e.g. TABLE_PK"));
     }
 
 }

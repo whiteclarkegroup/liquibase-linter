@@ -5,6 +5,7 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.WithFormattedErrorMessage;
 import liquibase.change.Change;
 
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class PatternRule extends Rule implements WithFormattedErrorMessage {
@@ -28,6 +29,9 @@ public class PatternRule extends Rule implements WithFormattedErrorMessage {
     @Override
     public boolean invalid(Object object, Change change) {
         final String value = (String) object;
+        if (value == null) {
+            return false;
+        }
         if (getRuleConfig().getPatternString() != null) {
             if (getRuleConfig().getPatternString().contains(DYNAMIC_VALUE)) {
                 return !getDynamicPattern(getDynamicValue(change)).matcher(value).matches();
@@ -40,6 +44,6 @@ public class PatternRule extends Rule implements WithFormattedErrorMessage {
 
     @Override
     public String formatErrorMessage(String errorMessage, Object object) {
-        return String.format(errorMessage, object);
+        return String.format(errorMessage, Optional.ofNullable(object).orElse(""));
     }
 }

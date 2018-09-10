@@ -1,0 +1,9 @@
+{
+    "rules": {
+        "foreign-key-name": {
+            "errorMessage": "Foreign key constraint '%s' must be named, ending in _FK, and follow pattern '{base_table_name}_{parent_table_name}_FK' where space permits",
+            "pattern": "^{{value}}_FK$",
+            "dynamicValue": "(baseTableName + referencedTableName + '_FK').length() <= 15 ? baseTableName + '_' + referencedTableName : '[A-Z_]+'"
+        }
+    }
+}
