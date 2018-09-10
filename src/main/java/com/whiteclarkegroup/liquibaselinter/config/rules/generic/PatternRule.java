@@ -7,7 +7,6 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.checker.PatternChecker;
 import liquibase.change.Change;
 
 import java.util.Optional;
-import java.util.regex.Pattern;
 
 public class PatternRule extends Rule implements WithFormattedErrorMessage {
     private final PatternChecker patternChecker;

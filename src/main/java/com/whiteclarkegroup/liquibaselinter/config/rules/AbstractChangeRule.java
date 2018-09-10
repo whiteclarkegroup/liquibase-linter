@@ -2,7 +2,6 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.checker.PatternChecker;
 import liquibase.change.Change;
-import liquibase.change.core.AddPrimaryKeyChange;
 
 import java.util.Arrays;
 import java.util.Optional;

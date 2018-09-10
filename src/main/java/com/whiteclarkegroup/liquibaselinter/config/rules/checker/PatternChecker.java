@@ -1,7 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.checker;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
-import liquibase.change.Change;
 
 import java.util.regex.Pattern;
 
