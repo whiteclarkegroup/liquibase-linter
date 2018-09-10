@@ -17,7 +17,7 @@
     "rules/has-comment": "has-comment",
     "rules/has-context": "has-context",
     "rules/illegal-change-types": "illegal-change-types",
-    "rules/index": "Working with Rules",
+    "rules/index": "Using Rules",
     "rules/isolate-ddl-changes": "isolate-ddl-changes",
     "rules/modify-data-enforce-where": "modify-data-enforce-where",
     "rules/modify-data-starts-with-where": "modify-data-starts-with-where",
