@@ -7,6 +7,8 @@ import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
 import com.whiteclarkegroup.liquibaselinter.config.rules.Rule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
+import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
+import com.whiteclarkegroup.liquibaselinter.report.Reporter;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -15,16 +17,19 @@ import liquibase.parser.core.ParsedNode;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.resource.ResourceAccessor;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implements ChangeLogParser {
-
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
+
+    private static final Collection<Reporter> REPORTERS = Collections.singletonList(new ConsoleReporter());
 
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
@@ -51,7 +56,7 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
         if (changeLog.getRootChangeLog() == changeLog && !config.isFailFast()) {
-            checkErrors(ruleRunner);
+            REPORTERS.forEach(Reporter::report);
         }
 
         return changeLog;
@@ -93,10 +98,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
             }
             alreadyParsed.add(physicalChangeLogLocation);
         }
-    }
-
-    private void checkErrors(RuleRunner ruleRunner) {
-
     }
 
 }
