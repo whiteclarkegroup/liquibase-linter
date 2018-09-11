@@ -5,6 +5,7 @@ import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import liquibase.change.Change;
+import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.servicelocator.DefaultPackageScanClassResolver;
@@ -47,15 +48,19 @@ public class RuleRunner {
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, change, null, report.getReportItems());
+        return new RunningContext(config, changeRules, change, null, report.getReportItems(), change.getChangeSet());
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, databaseChangeLog, report.getReportItems());
+        return new RunningContext(config, null, null, databaseChangeLog, report.getReportItems(), null);
+    }
+
+    public RunningContext forChangeSet(ChangeSet changeSet) {
+        return new RunningContext(config, null, null, null, report.getReportItems(), changeSet);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config, null, null, null, report.getReportItems());
+        return new RunningContext(config, null, null, null, report.getReportItems(), null);
     }
 
     @SuppressWarnings("unchecked")
@@ -68,14 +73,16 @@ public class RuleRunner {
         private final DatabaseChangeLog databaseChangeLog;
         private final Config config;
         private final Collection<ReportItem> reportItems;
+        private final ChangeSet changeSet;
 
-        private RunningContext(Config config, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems) {
+        private RunningContext(Config config, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
             this.config = config;
             this.ruleConfigs = config.getRules();
             this.changeRules = changeRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
             this.reportItems = reportItems;
+            this.changeSet = changeSet;
         }
 
         public RunningContext checkChange() throws ChangeLogParseException {
@@ -89,7 +96,7 @@ public class RuleRunner {
             if (change.getClass().isAssignableFrom(changeRule.getChangeType())
                 && changeRule.supports(change)
                 && changeRule.invalid(change)
-                && shouldApply(changeRule.getConfig(), changeRule.getName())) {
+                && shouldApply(changeRule.getConfig(), changeRule.getName(), changeRule.getMessage(change))) {
                 handleError(changeRule.getMessage(change), changeRule.getName());
             }
         }
@@ -99,8 +106,9 @@ public class RuleRunner {
             final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
             if (optionalRule.isPresent()) {
                 Rule rule = optionalRule.get();
-                if (rule.getRuleConfig().isEnabled() && shouldApply(rule.getRuleConfig(), ruleType.getKey()) && rule.invalid(object, change)) {
-                    handleError(getErrorMessage(ruleType, object, rule), ruleType.getKey());
+                final String errorMessage = getErrorMessage(ruleType, object, rule);
+                if (rule.getRuleConfig().isEnabled() && shouldApply(rule.getRuleConfig(), ruleType.getKey(), errorMessage) && rule.invalid(object, change)) {
+                    handleError(errorMessage, ruleType.getKey());
                 }
             }
             return this;
@@ -108,9 +116,9 @@ public class RuleRunner {
 
         private void handleError(String errorMessage, String rule) throws ChangeLogParseException {
             if (config.isFailFast()) {
-                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
+                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
             } else {
-                reportItems.add(ReportItem.error(databaseChangeLog, change, rule, errorMessage));
+                reportItems.add(ReportItem.error(databaseChangeLog, changeSet, rule, errorMessage));
             }
         }
 
@@ -122,8 +130,12 @@ public class RuleRunner {
             return errorMessage;
         }
 
-        private boolean shouldApply(RuleConfig ruleConfig, String ruleKey) {
-            return evaluateCondition(ruleConfig, change) && !isIgnored(ruleKey);
+        private boolean shouldApply(RuleConfig ruleConfig, String ruleKey, String errorMessage) {
+            final boolean ignored = isIgnored(ruleKey);
+            if (ignored) {
+                reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, ruleKey, errorMessage));
+            }
+            return evaluateCondition(ruleConfig, change) && !ignored;
         }
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
@@ -133,10 +145,10 @@ public class RuleRunner {
         }
 
         private boolean isIgnored(String ruleName) {
-            if (change == null || change.getChangeSet().getComments() == null || !change.getChangeSet().getComments().contains(LQL_IGNORE_TOKEN)) {
+            if (changeSet == null || changeSet.getComments() == null || !changeSet.getComments().contains(LQL_IGNORE_TOKEN)) {
                 return false;
             }
-            final String comments = change.getChangeSet().getComments();
+            final String comments = changeSet.getComments();
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
             return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);

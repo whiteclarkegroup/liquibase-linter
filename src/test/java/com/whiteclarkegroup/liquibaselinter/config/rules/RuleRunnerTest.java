@@ -23,7 +23,7 @@ class RuleRunnerTest {
         ChangeLogParseException changeLogParseException =
                 assertThrows(ChangeLogParseException.class, () -> ruleRunner.forChange(mockChange(null)).run(RuleType.TABLE_NAME, "TBL_TEST"));
 
-        assertTrue(changeLogParseException.getMessage().contains("Message: Table name does not follow pattern"));
+        assertTrue(changeLogParseException.getMessage().contains("Table name does not follow pattern"));
     }
 
     private RuleRunner getRuleRunner() {

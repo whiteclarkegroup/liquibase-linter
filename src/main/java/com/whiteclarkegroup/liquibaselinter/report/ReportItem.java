@@ -1,6 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
-import liquibase.change.Change;
+import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 
 public class ReportItem {
@@ -16,24 +16,24 @@ public class ReportItem {
     private final ReportItemType type;
     private final String message;
 
-    public static ReportItem error(DatabaseChangeLog databaseChangeLog, Change change, String rule, String message) {
-        return new ReportItem(getFilePath(databaseChangeLog, change), getChangeSetId(change), rule, ReportItemType.ERROR, message);
+    public static ReportItem error(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
+        return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.ERROR, message);
     }
 
-    public static ReportItem ignored(DatabaseChangeLog databaseChangeLog, Change change, String rule, String message) {
-        return new ReportItem(getFilePath(databaseChangeLog, change), getChangeSetId(change), rule, ReportItemType.IGNORED, message);
+    public static ReportItem ignored(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
+        return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.IGNORED, message);
     }
 
-    private static String getChangeSetId(Change change) {
-        if (change != null) {
-            return change.getChangeSet().getId();
+    private static String getChangeSetId(ChangeSet changeSet) {
+        if (changeSet != null) {
+            return changeSet.getId();
         }
-        return null;
+        return "";
     }
 
-    private static String getFilePath(DatabaseChangeLog databaseChangeLog, Change change) {
-        if (change != null) {
-            return change.getChangeSet().getFilePath();
+    private static String getFilePath(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet) {
+        if (changeSet != null) {
+            return changeSet.getFilePath();
         } else if (databaseChangeLog != null) {
             return databaseChangeLog.getFilePath();
         } else {

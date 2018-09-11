@@ -26,7 +26,7 @@ public class ConsoleReporter implements Reporter {
 
     private void printTypeChangeSetLine(StringBuilder output, ReportItem item) {
         output.append(getType(item));
-        if (item.getChangeSetId() != null) {
+        if (item.getChangeSetId() != null && !item.getChangeSetId().isEmpty()) {
             output.append(" changeSet '").append(item.getChangeSetId()).append("'");
         }
         output.append(NEW_LINE);

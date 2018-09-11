@@ -75,7 +75,7 @@ public class ChangeLogLinter {
             Collection<String> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
-            ruleRunner.forDatabaseChangeLog(databaseChangeLog)
+            ruleRunner.forChangeSet(changeSet)
                     .run(RuleType.NO_PRECONDITIONS, changeSet.getPreconditions())
                     .run(RuleType.HAS_CONTEXT, contexts)
                     .run(RuleType.HAS_COMMENT, changeSet.getComments())
