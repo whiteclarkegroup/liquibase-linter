@@ -4,7 +4,7 @@
 
     <groupId>com.whiteclarkegroup</groupId>
     <artifactId>liquibase-linter</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.2.1</version>
 
     <name>Liquibase Linter</name>
     <description>Liquibase extension to add configurable script linting</description>
@@ -36,7 +36,7 @@
         <connection>scm:git:git://github.com/whiteclarkegroup/liquibase-linter.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:whiteclarkegroup/liquibase-linter.git</developerConnection>
         <url>https://github.com/whiteclarkegroup/liquibase-linter/tree/master</url>
-      <tag>HEAD</tag>
+      <tag>0.2.1</tag>
   </scm>
 
     <distributionManagement>
