@@ -29,8 +29,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
 
-    private static final Collection<Reporter> REPORTERS = Collections.singletonList(new ConsoleReporter());
-
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         loadConfig(resourceAccessor);
@@ -59,7 +57,7 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
         if (changeLog.getRootChangeLog() == changeLog && !config.isFailFast()) {
-            REPORTERS.forEach(Reporter::report);
+            Reporter.REPORTERS.forEach(Reporter::report);
         }
 
         return changeLog;

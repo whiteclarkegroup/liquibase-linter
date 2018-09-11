@@ -2,6 +2,7 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -17,10 +18,12 @@ public class RuleRunner {
 
     private final Config config;
     private final List<ChangeRule> changeRules;
+    private final Collection<ReportItem> reportItems;
 
     public RuleRunner(Config config) {
         this.config = config;
         this.changeRules = discoverChangeRules();
+        this.reportItems = new HashSet<>();
     }
 
     private List<ChangeRule> discoverChangeRules() {
@@ -40,15 +43,15 @@ public class RuleRunner {
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config.getRules(), changeRules, change, null);
+        return new RunningContext(config, changeRules, change, null, reportItems);
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config.getRules(), null, null, databaseChangeLog);
+        return new RunningContext(config, null, null, databaseChangeLog, reportItems);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config.getRules(), null, null, null);
+        return new RunningContext(config, null, null, null, reportItems);
     }
 
     public static class RunningContext {
@@ -58,12 +61,16 @@ public class RuleRunner {
         private final List<ChangeRule> changeRules;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
+        private final Config config;
+        private final Collection<ReportItem> reportItems;
 
-        private RunningContext(Map<String, RuleConfig> ruleConfigs, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog) {
-            this.ruleConfigs = ruleConfigs;
+        private RunningContext(Config config, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems) {
+            this.config = config;
+            this.ruleConfigs = config.getRules();
             this.changeRules = changeRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
+            this.reportItems = reportItems;
         }
 
         public RunningContext checkChange() throws ChangeLogParseException {
@@ -92,7 +99,11 @@ public class RuleRunner {
                     if (rule instanceof WithFormattedErrorMessage) {
                         errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
                     }
-                    throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
+                    if (config.isFailFast()) {
+                        throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
+                    } else {
+                        reportItems.add(ReportItem.error(databaseChangeLog, change, ruleType.getKey(), errorMessage));
+                    }
                 }
             }
             return this;
@@ -108,8 +119,8 @@ public class RuleRunner {
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
             return ruleConfig.getConditionalExpression()
-                    .map(expression -> expression.getValue(change, boolean.class))
-                    .orElse(true);
+                .map(expression -> expression.getValue(change, boolean.class))
+                .orElse(true);
         }
 
         private boolean isIgnored(String ruleName) {
@@ -119,7 +130,11 @@ public class RuleRunner {
             final String comments = change.getChangeSet().getComments();
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
-            return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
+            final boolean ignored = Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
+            if (ignored) {
+                reportItems.add(ReportItem.error(databaseChangeLog, change, ruleName, errorMessage));
+            }
+            return ignored;
         }
     }
 
