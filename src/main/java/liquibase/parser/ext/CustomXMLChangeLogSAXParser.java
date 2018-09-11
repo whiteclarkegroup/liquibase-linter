@@ -1,5 +1,6 @@
 package liquibase.parser.ext;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
@@ -29,6 +30,8 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
 
+    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
+
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         loadConfig(resourceAccessor);
@@ -57,7 +60,7 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
         if (changeLog.getRootChangeLog() == changeLog && !config.isFailFast()) {
-            Reporter.REPORTERS.forEach(Reporter::report);
+            REPORTERS.forEach(reporter -> reporter.report(ruleRunner.getReportItems()));
         }
 
         return changeLog;

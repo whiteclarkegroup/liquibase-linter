@@ -30,7 +30,7 @@ public class Config {
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
                   @JsonProperty("rules") Map<String, RuleConfig> rules,
-                  @JsonProperty("failFast") boolean failFast) {
+                  @JsonProperty("fail-fast") boolean failFast) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.rules = rules;
         this.failFast = failFast;

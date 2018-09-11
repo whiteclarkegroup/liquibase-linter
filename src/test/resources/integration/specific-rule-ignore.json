@@ -1,4 +1,5 @@
 {
+  "fail-fast": true,
   "rules": {
     "table-name-length": {
       "enabled": true,

@@ -1,5 +1,6 @@
 {
   "ignore-context-pattern": "^baseline.*$",
+  "fail-fast": true,
   "rules": {
     "no-duplicate-includes": {},
     "schema-name": {

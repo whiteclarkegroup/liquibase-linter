@@ -2,7 +2,7 @@ package com.whiteclarkegroup.liquibaselinter.report;
 
 import java.util.Collection;
 
-public class ConsoleReporter extends Reporter {
+public class ConsoleReporter implements Reporter {
 
     private static final String RESET = "\033[0m";
     private static final String RED = "\033[0;31m";

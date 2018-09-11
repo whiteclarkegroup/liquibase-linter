@@ -26,6 +26,10 @@ public class RuleRunner {
         this.reportItems = new HashSet<>();
     }
 
+    public Collection<ReportItem> getReportItems() {
+        return reportItems;
+    }
+
     private List<ChangeRule> discoverChangeRules() {
         return packageScanner.findImplementations(ChangeRule.class, CORE_RULES_PACKAGE).stream()
             .map(found -> {
@@ -95,10 +99,7 @@ public class RuleRunner {
             if (optionalRule.isPresent()) {
                 Rule rule = optionalRule.get();
                 if (shouldApply(ruleType, rule, change) && rule.invalid(object, change)) {
-                    String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
-                    if (rule instanceof WithFormattedErrorMessage) {
-                        errorMessage = ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
-                    }
+                    String errorMessage = getErrorMessage(ruleType, object, rule);
                     if (config.isFailFast()) {
                         throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
                     } else {
@@ -107,6 +108,14 @@ public class RuleRunner {
                 }
             }
             return this;
+        }
+
+        private String getErrorMessage(RuleType ruleType, Object object, Rule rule) {
+            final String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
+            if (rule instanceof WithFormattedErrorMessage) {
+                return ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
+            }
+            return errorMessage;
         }
 
         private boolean shouldApply(ChangeRule changeRule) {
@@ -130,11 +139,7 @@ public class RuleRunner {
             final String comments = change.getChangeSet().getComments();
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
-            final boolean ignored = Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
-            if (ignored) {
-                reportItems.add(ReportItem.error(databaseChangeLog, change, ruleName, errorMessage));
-            }
-            return ignored;
+            return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
         }
     }
 

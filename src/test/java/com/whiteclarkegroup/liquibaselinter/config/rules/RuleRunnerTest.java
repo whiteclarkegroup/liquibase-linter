@@ -28,7 +28,7 @@ class RuleRunnerTest {
 
     private RuleRunner getRuleRunner() {
         final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of(RuleType.TABLE_NAME.getKey(), RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
-        return new RuleRunner(new Config(null, ruleConfigMap));
+        return new RuleRunner(new Config(null, ruleConfigMap, true));
     }
 
     private Change mockChange(String changeComment) {

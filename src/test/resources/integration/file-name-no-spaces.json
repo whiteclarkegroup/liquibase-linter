@@ -1,4 +1,5 @@
 {
+  "fail-fast": true,
   "rules": {
     "file-name-no-spaces": {}
   }
