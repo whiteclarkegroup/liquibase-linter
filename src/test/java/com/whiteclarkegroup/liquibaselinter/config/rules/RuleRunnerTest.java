@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.google.common.collect.ImmutableMap;
+import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
 import liquibase.exception.ChangeLogParseException;
 import org.junit.jupiter.api.DisplayName;
@@ -27,7 +28,7 @@ class RuleRunnerTest {
 
     private RuleRunner getRuleRunner() {
         final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of(RuleType.TABLE_NAME.getKey(), RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
-        return new RuleRunner(ruleConfigMap);
+        return new RuleRunner(new Config(null, ruleConfigMap));
     }
 
     private Change mockChange(String changeComment) {

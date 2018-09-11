@@ -34,7 +34,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         loadConfig(resourceAccessor);
-        checkDuplicateIncludes(physicalChangeLogLocation, config);
 
         ParsedNode parsedNode = parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
         if (parsedNode == null) {
@@ -51,6 +50,10 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
             changeLog.load(parsedNode, resourceAccessor);
         } catch (Exception e) {
             throw new ChangeLogParseException(e);
+        }
+
+        if (!changeLog.getChangeSets().isEmpty()) {
+            checkDuplicateIncludes(physicalChangeLogLocation, config);
         }
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);

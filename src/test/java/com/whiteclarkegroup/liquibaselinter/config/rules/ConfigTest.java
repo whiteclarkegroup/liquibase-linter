@@ -2,11 +2,13 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.ImmutableMap;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -71,6 +73,20 @@ class ConfigTest {
         assertEquals(1, config.getRules().size());
         RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces");
         assertFalse(ruleConfig.isEnabled());
+    }
+
+    @DisplayName("Should indicate whether rule enabled from config map")
+    @Test
+    void shouldIndicateWhetherRuleEnabledFromConfigMap() {
+        Map<String, RuleConfig> map = ImmutableMap.of(
+            "present-but-off", RuleConfig.disabled(),
+            "present-and-on", RuleConfig.enabled()
+        );
+        Config config = new Config(null, map);
+
+        assertFalse(config.isRuleEnabled("not-even-present"));
+        assertFalse(config.isRuleEnabled("present-but-off"));
+        assertTrue(config.isRuleEnabled("present-and-on"));
     }
 
 }

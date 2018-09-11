@@ -17,7 +17,7 @@ public class RuleRunnerParameterResolver implements ParameterResolver {
 
     public RuleRunnerParameterResolver() {
         try (InputStream inputStream = getClass().getResourceAsStream("/lqllint.test.json")) {
-            this.ruleRunner = new RuleRunner(Config.fromInputStream(inputStream).getRules());
+            this.ruleRunner = new RuleRunner(Config.fromInputStream(inputStream));
         } catch (IOException e) {
             throw new UnexpectedLiquibaseException("Failed to load test lq lint default config file", e);
         }
