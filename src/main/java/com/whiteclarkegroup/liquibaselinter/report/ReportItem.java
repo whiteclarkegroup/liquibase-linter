@@ -5,7 +5,7 @@ import liquibase.changelog.DatabaseChangeLog;
 
 public class ReportItem {
 
-    private enum ReportItemType {
+    public enum ReportItemType {
         ERROR,
         IGNORED
     }
@@ -25,21 +25,20 @@ public class ReportItem {
     }
 
     private static String getChangeSetId(Change change) {
-        String changeSetId = "";
         if (change != null) {
-            changeSetId = change.getChangeSet().getId();
+            return change.getChangeSet().getId();
         }
-        return changeSetId;
+        return null;
     }
 
     private static String getFilePath(DatabaseChangeLog databaseChangeLog, Change change) {
-        String filePath = "";
         if (change != null) {
-            filePath = change.getChangeSet().getFilePath();
+            return change.getChangeSet().getFilePath();
         } else if (databaseChangeLog != null) {
-            filePath = databaseChangeLog.getFilePath();
+            return databaseChangeLog.getFilePath();
+        } else {
+            return "Generic rule";
         }
-        return filePath;
     }
 
     private ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {

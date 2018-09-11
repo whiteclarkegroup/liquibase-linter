@@ -2,6 +2,7 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
+import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import liquibase.change.Change;
 import liquibase.changelog.DatabaseChangeLog;
@@ -18,16 +19,15 @@ public class RuleRunner {
 
     private final Config config;
     private final List<ChangeRule> changeRules;
-    private final Collection<ReportItem> reportItems;
+    private final Report report = new Report();
 
     public RuleRunner(Config config) {
         this.config = config;
         this.changeRules = discoverChangeRules();
-        this.reportItems = new HashSet<>();
     }
 
-    public Collection<ReportItem> getReportItems() {
-        return reportItems;
+    public Report getReport() {
+        return report;
     }
 
     private List<ChangeRule> discoverChangeRules() {
@@ -47,15 +47,15 @@ public class RuleRunner {
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, change, null, reportItems);
+        return new RunningContext(config, changeRules, change, null, report.getReportItems());
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, databaseChangeLog, reportItems);
+        return new RunningContext(config, null, null, databaseChangeLog, report.getReportItems());
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config, null, null, null, reportItems);
+        return new RunningContext(config, null, null, null, report.getReportItems());
     }
 
     public static class RunningContext {

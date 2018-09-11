@@ -9,6 +9,7 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.Rule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
+import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.Reporter;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
@@ -19,7 +20,6 @@ import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.resource.ResourceAccessor;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,11 +29,16 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
+    private String rootPhysicalChangeLogLocation;
 
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
 
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
+        if (rootPhysicalChangeLogLocation == null) {
+            rootPhysicalChangeLogLocation = physicalChangeLogLocation;
+        }
+
         loadConfig(resourceAccessor);
 
         ParsedNode parsedNode = parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
@@ -59,11 +64,17 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
-        if (changeLog.getRootChangeLog() == changeLog && !config.isFailFast()) {
-            REPORTERS.forEach(reporter -> reporter.report(ruleRunner.getReportItems()));
-        }
+        runReports(physicalChangeLogLocation, ruleRunner.getReport());
 
         return changeLog;
+    }
+
+    private void runReports(String physicalChangeLogLocation, Report report) throws ChangeLogParseException {
+        //TODO move to DatabaseChangeLog::getRootChangeLog when we support liquibase 3.6 minimum
+        if (rootPhysicalChangeLogLocation.equals(physicalChangeLogLocation) && !config.isFailFast() && report.hasItems()) {
+            REPORTERS.forEach(reporter -> reporter.processReport(report));
+            throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
+        }
     }
 
     @Override
