@@ -58,6 +58,7 @@ public class RuleRunner {
         return new RunningContext(config, null, null, null, report.getReportItems());
     }
 
+    @SuppressWarnings("unchecked")
     public static class RunningContext {
 
         private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
@@ -88,8 +89,8 @@ public class RuleRunner {
             if (change.getClass().isAssignableFrom(changeRule.getChangeType())
                 && changeRule.supports(change)
                 && changeRule.invalid(change)
-                && shouldApply(changeRule)) {
-                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, changeRule.getMessage(change));
+                && shouldApply(changeRule.getConfig(), changeRule.getName())) {
+                handleError(changeRule.getMessage(change), changeRule.getName());
             }
         }
 
@@ -98,16 +99,19 @@ public class RuleRunner {
             final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
             if (optionalRule.isPresent()) {
                 Rule rule = optionalRule.get();
-                if (shouldApply(ruleType, rule, change) && rule.invalid(object, change)) {
-                    String errorMessage = getErrorMessage(ruleType, object, rule);
-                    if (config.isFailFast()) {
-                        throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
-                    } else {
-                        reportItems.add(ReportItem.error(databaseChangeLog, change, ruleType.getKey(), errorMessage));
-                    }
+                if (rule.getRuleConfig().isEnabled() && shouldApply(rule.getRuleConfig(), ruleType.getKey()) && rule.invalid(object, change)) {
+                    handleError(getErrorMessage(ruleType, object, rule), ruleType.getKey());
                 }
             }
             return this;
+        }
+
+        private void handleError(String errorMessage, String rule) throws ChangeLogParseException {
+            if (config.isFailFast()) {
+                throw ChangeLogParseExceptionHelper.build(databaseChangeLog, change, errorMessage);
+            } else {
+                reportItems.add(ReportItem.error(databaseChangeLog, change, rule, errorMessage));
+            }
         }
 
         private String getErrorMessage(RuleType ruleType, Object object, Rule rule) {
@@ -118,12 +122,8 @@ public class RuleRunner {
             return errorMessage;
         }
 
-        private boolean shouldApply(ChangeRule changeRule) {
-            return evaluateCondition(changeRule.getConfig(), change) && !isIgnored(changeRule.getName());
-        }
-
-        private boolean shouldApply(RuleType ruleType, Rule rule, Change change) {
-            return rule.getRuleConfig().isEnabled() && evaluateCondition(rule.getRuleConfig(), change) && !isIgnored(ruleType.getKey());
+        private boolean shouldApply(RuleConfig ruleConfig, String ruleKey) {
+            return evaluateCondition(ruleConfig, change) && !isIgnored(ruleKey);
         }
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {

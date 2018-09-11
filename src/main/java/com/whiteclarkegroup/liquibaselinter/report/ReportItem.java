@@ -37,7 +37,7 @@ public class ReportItem {
         } else if (databaseChangeLog != null) {
             return databaseChangeLog.getFilePath();
         } else {
-            return "Generic rule";
+            return "Other";
         }
     }
 
