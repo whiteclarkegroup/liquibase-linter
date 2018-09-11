@@ -46,7 +46,11 @@ public class Config {
     }
 
     public RuleRunner getRuleRunner() {
-        return new RuleRunner(this.rules);
+        return new RuleRunner(this);
+    }
+
+    public boolean isRuleEnabled(String name) {
+        return rules.containsKey(name) && rules.get(name).isEnabled();
     }
 
     static class RuleConfigDeserializer extends JsonDeserializer<Object> {

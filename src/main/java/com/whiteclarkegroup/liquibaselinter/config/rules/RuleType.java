@@ -22,7 +22,6 @@ public enum RuleType {
     MODIFY_DATA_ENFORCE_WHERE("modify-data-enforce-where", ModifyDataEnforceWhere::new, "Modify data on table '%s' must have a where condition"),
     CREATE_INDEX_NAME("create-index-name", MandatoryPatternRule::new, "Index name does not follow pattern"),
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
-    PRIMARY_KEY_NAME("primary-key-name", MandatoryPatternRule::new, "Primary key name is missing or does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
     FILE_NAME_NO_SPACES("file-name-no-spaces", FileNameNoSpaces::new, "Changelog filenames should not contain spaces"),
     NO_PRECONDITIONS("no-preconditions", NullRule::new, "Preconditions are not allowed in this project"),
