@@ -6,7 +6,6 @@ import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.ChangeLogParserFactory;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
