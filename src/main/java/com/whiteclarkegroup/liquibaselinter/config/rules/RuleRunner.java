@@ -48,7 +48,7 @@ public class RuleRunner {
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, change, null, report.getReportItems(), change.getChangeSet());
+        return new RunningContext(config, changeRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
@@ -56,7 +56,7 @@ public class RuleRunner {
     }
 
     public RunningContext forChangeSet(ChangeSet changeSet) {
-        return new RunningContext(config, null, null, null, report.getReportItems(), changeSet);
+        return new RunningContext(config, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
     }
 
     public RunningContext forGeneric() {
@@ -67,17 +67,15 @@ public class RuleRunner {
     public static class RunningContext {
 
         private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
-        private final Map<String, RuleConfig> ruleConfigs;
+        private final Config config;
         private final List<ChangeRule> changeRules;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
-        private final Config config;
         private final Collection<ReportItem> reportItems;
         private final ChangeSet changeSet;
 
         private RunningContext(Config config, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
             this.config = config;
-            this.ruleConfigs = config.getRules();
             this.changeRules = changeRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
@@ -103,7 +101,7 @@ public class RuleRunner {
 
         @SuppressWarnings("unchecked")
         public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
-            final Optional<Rule> optionalRule = ruleType.create(ruleConfigs);
+            final Optional<Rule> optionalRule = ruleType.create(config.getRules());
             if (optionalRule.isPresent()) {
                 Rule rule = optionalRule.get();
                 final String errorMessage = getErrorMessage(ruleType, object, rule);
