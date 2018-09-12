@@ -73,7 +73,9 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         //TODO move to DatabaseChangeLog::getRootChangeLog when we support liquibase 3.6 minimum
         if (rootPhysicalChangeLogLocation.equals(physicalChangeLogLocation) && report.hasItems()) {
             REPORTERS.forEach(reporter -> reporter.processReport(report));
-            throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
+            if (report.countErrors() > 0) {
+                throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
+            }
         }
     }
 

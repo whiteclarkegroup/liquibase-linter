@@ -5,6 +5,9 @@ import com.whiteclarkegroup.liquibaselinter.resolvers.LiquibaseIntegrationTestRe
 import liquibase.Contexts;
 import liquibase.Liquibase;
 import liquibase.exception.ChangeLogParseException;
+import liquibase.parser.ChangeLogParserFactory;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.function.ThrowingConsumer;
@@ -34,6 +37,11 @@ abstract class LinterIntegrationTest {
             }
         };
         return DynamicTest.stream(getTests().iterator(), IntegrationTestConfig::getDisplayName, testExecutor);
+    }
+
+    @AfterAll
+    static void tearDown() {
+        ChangeLogParserFactory.reset();
     }
 
 }
