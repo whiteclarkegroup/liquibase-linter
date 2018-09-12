@@ -69,9 +69,9 @@ public class ConsoleReporter implements Reporter {
     private String getType(ReportItem.ReportItemType type) {
         switch (type) {
             case ERROR:
-                return RESET + RED + type + RESET;
+                return coloured(RED, type.name());
             case IGNORED:
-                return RESET + YELLOW + type + RESET;
+                return coloured(YELLOW, type.name());
             default:
                 return type.name();
         }
