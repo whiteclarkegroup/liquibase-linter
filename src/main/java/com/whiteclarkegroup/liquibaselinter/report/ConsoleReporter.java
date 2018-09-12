@@ -1,5 +1,10 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.groupingBy;
+
 public class ConsoleReporter implements Reporter {
 
     static final String RESET = "\033[0m";
@@ -10,25 +15,50 @@ public class ConsoleReporter implements Reporter {
     @Override
     public void processReport(Report report) {
         StringBuilder output = new StringBuilder();
-        report.getByFileName().forEach((key, value) -> {
-            output.append(NEW_LINE).append(key).append(NEW_LINE);
-            value.forEach(item -> {
-                printTypeChangeSetLine(output, item);
-                printRuleLine(output, item);
-            });
+        report.getByFileName().forEach((fileName, items) -> {
+            printFileName(output, fileName);
+            final Map<String, List<ReportItem>> groupedByChangeSet = items.stream().collect(groupingBy(ReportItem::getChangeSetId));
+            printByChangeSet(output, groupedByChangeSet);
         });
         printToConsole(output);
+    }
+
+    private void printByChangeSet(StringBuilder output, Map<String, List<ReportItem>> groupedByChangeSet) {
+        groupedByChangeSet.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .forEach(entry -> {
+                printChangeSetLine(output, entry.getKey());
+                final Map<ReportItem.ReportItemType, List<ReportItem>> groupedByType = entry.getValue().stream().collect(groupingBy(ReportItem::getType));
+                printRulesByType(output, groupedByType);
+            });
+    }
+
+    private void printRulesByType(StringBuilder output, final Map<ReportItem.ReportItemType, List<ReportItem>> groupedByType) {
+        groupedByType.entrySet().stream()
+            .sorted(Map.Entry.comparingByKey())
+            .forEach(entry -> {
+                printTypeLine(output, entry.getKey());
+                entry.getValue().forEach(itemByType -> printRuleLine(output, itemByType));
+            });
+    }
+
+    private void printFileName(StringBuilder output, String fileName) {
+        output.append(NEW_LINE).append(fileName).append(NEW_LINE);
     }
 
     private void printToConsole(StringBuilder output) {
         System.out.println(output.toString());
     }
 
-    private void printTypeChangeSetLine(StringBuilder output, ReportItem item) {
-        output.append(getType(item));
-        if (item.getChangeSetId() != null && !item.getChangeSetId().isEmpty()) {
-            output.append(" changeSet '").append(item.getChangeSetId()).append("'");
+    private void printChangeSetLine(StringBuilder output, String changeSetId) {
+        if (!changeSetId.isEmpty()) {
+            output.append("changeSet '").append(changeSetId).append("'");
+            output.append(NEW_LINE);
         }
+    }
+
+    private void printTypeLine(StringBuilder output, ReportItem.ReportItemType type) {
+        output.append(getType(type));
         output.append(NEW_LINE);
     }
 
@@ -36,15 +66,19 @@ public class ConsoleReporter implements Reporter {
         output.append("\t'").append(item.getRule()).append("': ").append(item.getMessage()).append(NEW_LINE);
     }
 
-    private String getType(ReportItem item) {
-        switch (item.getType()) {
+    private String getType(ReportItem.ReportItemType type) {
+        switch (type) {
             case ERROR:
-                return RESET + RED + item.getType().name() + RESET;
+                return RESET + RED + type + RESET;
             case IGNORED:
-                return RESET + YELLOW + item.getType().name() + RESET;
+                return RESET + YELLOW + type + RESET;
             default:
-                return item.getType().name();
+                return type.name();
         }
+    }
+
+    private String coloured(String colour, String value) {
+        return RESET + colour + value + RESET;
     }
 
 }
