@@ -26,7 +26,7 @@ public abstract class AbstractChangeRule<T extends Change> implements ChangeRule
     public abstract Class<T> getChangeType();
 
     @Override
-    public ChangeRule configure(RuleConfig ruleConfig) {
+    public ChangeRule<T> configure(RuleConfig ruleConfig) {
         this.ruleConfig = ruleConfig;
         if (ruleConfig.hasPattern()) {
             this.patternChecker = new PatternChecker(ruleConfig);
