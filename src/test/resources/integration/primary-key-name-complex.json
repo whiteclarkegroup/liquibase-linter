@@ -1,4 +1,5 @@
 {
+    "fail-fast": true,
     "rules": {
         "primary-key-name": {
             "errorMessage": "Primary key constraint '%s' must be named, ending with '_PK', and start with table name (unless too long)",

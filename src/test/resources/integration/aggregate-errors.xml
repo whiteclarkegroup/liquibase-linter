@@ -1,0 +1,29 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="201808283523452" author="luke.rogers">
+        <sql>
+            SELECT 1 FROM DUAL
+        </sql>
+    </changeSet>
+
+    <changeSet id="2017013452354" author="luke.rogers" context="test">
+        <comment>lql-ignore:has-comment</comment>
+        <update tableName="TEST">
+            <column name="TEST" value="TEST" />
+        </update>
+    </changeSet>
+
+    <changeSet id="20170245245" author="luke.rogers">
+        <preConditions>
+            <indexExists tableName="TEST" />
+        </preConditions>
+        <comment>lql-ignore:has-context</comment>
+        <update tableName="TEST">
+            <column name="TEST" value="TEST" />
+        </update>
+    </changeSet>
+
+</databaseChangeLog>

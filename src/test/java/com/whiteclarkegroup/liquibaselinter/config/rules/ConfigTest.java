@@ -82,7 +82,7 @@ class ConfigTest {
             "present-but-off", RuleConfig.disabled(),
             "present-and-on", RuleConfig.enabled()
         );
-        Config config = new Config(null, map);
+        Config config = new Config(null, map, true);
 
         assertFalse(config.isRuleEnabled("not-even-present"));
         assertFalse(config.isRuleEnabled("present-but-off"));
