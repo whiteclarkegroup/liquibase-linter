@@ -22,58 +22,54 @@ public class RuleRunner {
     private final PackageScanClassResolver packageScanner = new DefaultPackageScanClassResolver();
 
     private final Config config;
+    private final List<LintRule> allRules;
     private final List<ChangeRule> changeRules;
     private final List<ChangeSetRule> changeSetRules;
     private final Report report = new Report();
 
     public RuleRunner(Config config) {
         this.config = config;
-        this.changeRules = discoverChangeRules();
-        this.changeSetRules = discoverChangeSetRules();
+        this.allRules = discoverRules();
+        this.changeRules = assembleChangeRules();
+        this.changeSetRules = assembleChangeSetRules();
+    }
+
+    private List<LintRule> discoverRules() {
+        return packageScanner.findImplementations(LintRule.class, CORE_RULES_PACKAGE).stream()
+            .map(found -> {
+                try {
+                    Class<? extends LintRule> clazz = (Class<? extends LintRule>) found;
+                    return clazz.newInstance();
+                } catch (InstantiationException | IllegalAccessException ex) {
+                    return null;
+                }
+            })
+            .filter(lintRule -> {
+                if (lintRule != null && config.isRuleEnabled(lintRule.getName())) {
+                    lintRule.configure(config.getRules().get(lintRule.getName()));
+                    return true;
+                };
+                return false;
+            })
+            .collect(Collectors.toList());
+    }
+
+    private List<ChangeRule> assembleChangeRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeRule) lintRule)
+            .collect(Collectors.toList());
+    }
+
+    private List<ChangeSetRule> assembleChangeSetRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeSetRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeSetRule) lintRule)
+            .collect(Collectors.toList());
     }
 
     public Report getReport() {
         return report;
-    }
-
-    private List<ChangeRule> discoverChangeRules() {
-        return packageScanner.findImplementations(ChangeRule.class, CORE_RULES_PACKAGE).stream()
-            .map(found -> {
-                try {
-                    Class<? extends ChangeRule> clazz = (Class<? extends ChangeRule>) found;
-                    return clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    return null;
-                }
-            })
-            .filter(changeRule -> {
-                if (changeRule != null && config.isRuleEnabled(changeRule.getName())) {
-                    changeRule.configure(config.getRules().get(changeRule.getName()));
-                    return true;
-                };
-                return false;
-            })
-            .collect(Collectors.toList());
-    }
-
-    private List<ChangeSetRule> discoverChangeSetRules() {
-        return packageScanner.findImplementations(ChangeSetRule.class, CORE_RULES_PACKAGE).stream()
-            .map(found -> {
-                try {
-                    Class<? extends ChangeSetRule> clazz = (Class<? extends ChangeSetRule>) found;
-                    return clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    return null;
-                }
-            })
-            .filter(changeSetRule -> {
-                if (changeSetRule != null && config.isRuleEnabled(changeSetRule.getName())) {
-                    changeSetRule.configure(config.getRules().get(changeSetRule.getName()));
-                    return true;
-                };
-                return false;
-            })
-            .collect(Collectors.toList());
     }
 
     public RunningContext forChange(Change change) {
