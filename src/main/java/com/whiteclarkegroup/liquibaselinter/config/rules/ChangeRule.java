@@ -2,13 +2,8 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import liquibase.change.Change;
 
-public interface ChangeRule<T extends Change> {
-    String getName();
+public interface ChangeRule<T extends Change> extends LintRule {
     Class<T> getChangeType();
-
-    void configure(RuleConfig ruleConfig);
-    RuleConfig getConfig();
-
     default boolean supports(T change) {
         return true;
     }
