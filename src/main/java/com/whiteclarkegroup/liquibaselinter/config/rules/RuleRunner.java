@@ -91,7 +91,7 @@ public class RuleRunner {
         }
 
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
-            if (change.getClass().isAssignableFrom(changeRule.getChangeType())
+            if (changeRule.getChangeType().isAssignableFrom(change.getClass())
                 && changeRule.supports(change)
                 && changeRule.invalid(change)
                 && shouldApply(changeRule.getConfig(), changeRule.getName(), changeRule.getMessage(change))) {
