@@ -4,5 +4,7 @@ import liquibase.changelog.ChangeSet;
 
 public interface ChangeSetRule extends LintRule {
     boolean invalid(ChangeSet changeSet);
-    String getMessage(ChangeSet changeSet);
+    default String getMessage(ChangeSet changeSet) {
+        return getMessage();
+    }
 }

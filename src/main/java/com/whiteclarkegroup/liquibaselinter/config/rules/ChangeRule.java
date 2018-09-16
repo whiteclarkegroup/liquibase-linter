@@ -8,5 +8,7 @@ public interface ChangeRule<T extends Change> extends LintRule {
         return true;
     }
     boolean invalid(T change);
-    String getMessage(T change);
+    default String getMessage(T change) {
+        return getMessage();
+    }
 }

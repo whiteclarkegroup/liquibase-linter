@@ -1,19 +1,17 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.checker.PatternChecker;
-import liquibase.change.Change;
-import liquibase.changelog.ChangeSet;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class AbstractChangeSetRule implements ChangeSetRule {
+public abstract class AbstractLintRule implements LintRule {
     private final String name;
     private final String message;
     protected RuleConfig ruleConfig;
     private PatternChecker patternChecker;
 
-    protected AbstractChangeSetRule(String name, String message) {
+    protected AbstractLintRule(String name, String message) {
         this.name = name;
         this.message = message;
     }
@@ -36,19 +34,16 @@ public abstract class AbstractChangeSetRule implements ChangeSetRule {
         return ruleConfig;
     }
 
-    @Override
-    public abstract boolean invalid(ChangeSet changeSet);
-
     protected boolean checkNotBlank(String value) {
         return value == null || value.equals("");
     }
 
-    protected boolean checkPattern(String value, Change change) {
-        return patternChecker.check(value, change);
+    protected boolean checkPattern(String value, Object subject) {
+        return patternChecker.check(value, subject);
     }
 
     @Override
-    public String getMessage(ChangeSet changeSet) {
+    public String getMessage() {
         return getMesageTemplate();
     }
 

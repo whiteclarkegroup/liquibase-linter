@@ -1,17 +1,15 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
-import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
-import liquibase.change.Change;
 import liquibase.change.core.InsertDataChange;
-import liquibase.change.core.LoadDataChange;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.precondition.core.PreconditionContainer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 
 class NoPreconditionsRuleImplTest {

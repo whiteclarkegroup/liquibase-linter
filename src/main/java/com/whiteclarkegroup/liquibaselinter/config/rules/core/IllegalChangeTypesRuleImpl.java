@@ -1,11 +1,11 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
-import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractChangeRule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
-import liquibase.change.core.AddPrimaryKeyChange;
 
-public class IllegalChangeTypesRuleImpl extends AbstractChangeRule<Change> {
+public class IllegalChangeTypesRuleImpl extends AbstractLintRule implements ChangeRule<Change> {
     private static final String NAME = "illegal-change-types";
     private static final String MESSAGE = "Change type '%s' is not allowed in this project";
 
