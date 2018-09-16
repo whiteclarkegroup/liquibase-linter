@@ -18,35 +18,40 @@ class IllegalChangeTypesRuleImplTest {
     @DisplayName("Null Illegal change type should be valid")
     @Test
     void nullIllegalChangeTypeShouldBeValid() {
-        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl().configure(RuleConfig.builder().build());
+        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl();
+        rule.configure(RuleConfig.builder().build());
         assertFalse(rule.invalid(new LoadDataChange()));
     }
 
     @DisplayName("Empty Illegal change type should be valid")
     @Test
     void emptyIllegalChangeTypeShouldBeValid() {
-        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl().configure(RuleConfig.builder().withValues(Collections.emptyList()).build());
+        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl();
+        rule.configure(RuleConfig.builder().withValues(Collections.emptyList()).build());
         assertFalse(rule.invalid(new LoadDataChange()));
     }
 
     @DisplayName("Mismatch Illegal change type should be valid")
     @Test
     void mismatchIllegalChangeTypeShouldBeValid() {
-        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl().configure(RuleConfig.builder().withValues(Collections.singletonList("liquibase.change.core.AddColumnChange")).build());
+        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl();
+        rule.configure(RuleConfig.builder().withValues(Collections.singletonList("liquibase.change.core.AddColumnChange")).build());
         assertFalse(rule.invalid(new LoadDataChange()));
     }
 
     @DisplayName("Illegal change type should be invalid")
     @Test
     void illegalChangeTypeShouldBeInvalid() {
-        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl().configure(RuleConfig.builder().withValues(Collections.singletonList("liquibase.change.core.LoadDataChange")).build());
+        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl();
+        rule.configure(RuleConfig.builder().withValues(Collections.singletonList("liquibase.change.core.LoadDataChange")).build());
         assertTrue(rule.invalid(new LoadDataChange()));
     }
 
     @DisplayName("Illegal change type from database change annotation name")
     @Test
     void illegalChangeTypeFromDatabaseChangeAnnotationName() {
-        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl().configure(RuleConfig.builder().withValues(Collections.singletonList(LoadDataChange.class.getAnnotation(DatabaseChange.class).name())).build());
+        ChangeRule<Change> rule = new IllegalChangeTypesRuleImpl();
+        rule.configure(RuleConfig.builder().withValues(Collections.singletonList(LoadDataChange.class.getAnnotation(DatabaseChange.class).name())).build());
         assertTrue(rule.invalid(new LoadDataChange()));
     }
 

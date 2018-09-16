@@ -41,9 +41,13 @@ public class RuleRunner {
                     return null;
                 }
             })
-            .filter(Objects::nonNull)
-            .filter(changeRule -> config.isRuleEnabled(changeRule.getName()))
-            .map(changeRule -> changeRule.configure(config.getRules().get(changeRule.getName())))
+            .filter(changeRule -> {
+                if (changeRule != null && config.isRuleEnabled(changeRule.getName())) {
+                    changeRule.configure(config.getRules().get(changeRule.getName()));
+                    return true;
+                };
+                return false;
+            })
             .collect(Collectors.toList());
     }
 
