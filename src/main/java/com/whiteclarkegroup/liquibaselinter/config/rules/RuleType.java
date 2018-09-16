@@ -24,7 +24,6 @@ public enum RuleType {
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
     FILE_NAME_NO_SPACES("file-name-no-spaces", FileNameNoSpaces::new, "Changelog filenames should not contain spaces"),
-    NO_PRECONDITIONS("no-preconditions", NullRule::new, "Preconditions are not allowed in this project"),
     HAS_COMMENT("has-comment", NotBlankRule::new, "Change set must have a comment"),
     HAS_CONTEXT("has-context", HasValuesRule::new, "Should have at least one context on the change set"),
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
