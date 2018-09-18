@@ -16,11 +16,11 @@ public class NoPreconditionsRuleImpl extends AbstractLintRule implements ChangeS
 
     @Override
     public boolean invalid(ChangeSet changeSet) {
-        return changeSet.getPreconditions() != null;
+        return changeSet.getPreconditions() != null && !changeSet.getPreconditions().getNestedPreconditions().isEmpty();
     }
 
     @Override
     public boolean invalid(DatabaseChangeLog changeLog) {
-        return changeLog.getPreconditions() != null;
+        return changeLog.getPreconditions() != null && !changeLog.getPreconditions().getNestedPreconditions().isEmpty();
     }
 }

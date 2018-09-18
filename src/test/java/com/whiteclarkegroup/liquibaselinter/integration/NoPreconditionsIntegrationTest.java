@@ -23,7 +23,12 @@ class NoPreconditionsIntegrationTest extends LinterIntegrationTest {
             "no-preconditions.json",
             "Preconditions are not allowed in this project");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldPass(
+            "Should pass without any preconditions",
+            "no-preconditions-pass.xml",
+            "no-preconditions.json");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }
