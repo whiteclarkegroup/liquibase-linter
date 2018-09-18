@@ -1,9 +1,10 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
-import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractChangeRule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.core.AddPrimaryKeyChange;
 
-public class PrimaryKeyNameRuleImpl extends AbstractChangeRule<AddPrimaryKeyChange> {
+public class PrimaryKeyNameRuleImpl extends AbstractLintRule implements ChangeRule<AddPrimaryKeyChange> {
     private static final String NAME = "primary-key-name";
     private static final String MESSAGE = "Primary key name is missing or does not follow pattern";
 

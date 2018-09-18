@@ -1,18 +1,17 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.checker.PatternChecker;
-import liquibase.change.Change;
 
 import java.util.Arrays;
 import java.util.Optional;
 
-public abstract class AbstractChangeRule<T extends Change> implements ChangeRule<T> {
+public abstract class AbstractLintRule implements LintRule {
     private final String name;
     private final String message;
     protected RuleConfig ruleConfig;
     private PatternChecker patternChecker;
 
-    protected AbstractChangeRule(String name, String message) {
+    protected AbstractLintRule(String name, String message) {
         this.name = name;
         this.message = message;
     }
@@ -23,15 +22,11 @@ public abstract class AbstractChangeRule<T extends Change> implements ChangeRule
     }
 
     @Override
-    public abstract Class<T> getChangeType();
-
-    @Override
-    public ChangeRule configure(RuleConfig ruleConfig) {
+    public void configure(RuleConfig ruleConfig) {
         this.ruleConfig = ruleConfig;
         if (ruleConfig.hasPattern()) {
             this.patternChecker = new PatternChecker(ruleConfig);
         }
-        return this;
     }
 
     @Override
@@ -39,19 +34,16 @@ public abstract class AbstractChangeRule<T extends Change> implements ChangeRule
         return ruleConfig;
     }
 
-    @Override
-    public abstract boolean invalid(T change);
-
     protected boolean checkNotBlank(String value) {
         return value == null || value.equals("");
     }
 
-    protected boolean checkPattern(String value, Change change) {
-        return patternChecker.check(value, change);
+    protected boolean checkPattern(String value, Object subject) {
+        return patternChecker.check(value, subject);
     }
 
     @Override
-    public String getMessage(T change) {
+    public String getMessage() {
         return getMesageTemplate();
     }
 

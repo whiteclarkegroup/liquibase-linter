@@ -37,15 +37,6 @@ class ChangeLogLinterTest {
         changeLogLinter = new ChangeLogLinter();
     }
 
-    @DisplayName("Change set should have at least one context")
-    @Test
-    void shouldHaveAtLeastOneContextPerChangeSet(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> changeLogLinter.lintChangeLog(changeSet.getChangeLog(), config, ruleRunner));
-
-        assertTrue(changeLogParseException.getMessage().contains("Should have at least one context on the change set"));
-    }
-
     @DisplayName("Should lint change sets with standard comment")
     @Test
     void shouldLintChangeSetsWithStandardComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {

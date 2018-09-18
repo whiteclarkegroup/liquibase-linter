@@ -24,15 +24,12 @@ public enum RuleType {
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
     FILE_NAME_NO_SPACES("file-name-no-spaces", FileNameNoSpaces::new, "Changelog filenames should not contain spaces"),
-    NO_PRECONDITIONS("no-preconditions", NullRule::new, "Preconditions are not allowed in this project"),
     HAS_COMMENT("has-comment", NotBlankRule::new, "Change set must have a comment"),
-    HAS_CONTEXT("has-context", HasValuesRule::new, "Should have at least one context on the change set"),
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
     VALID_CONTEXT("valid-context", ValidContext::new, "Context does not follow pattern"),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts"),
     MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new, "Modify data where starts with where clause, that's probably a mistake"),
-    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated"),
-    ILLEGAL_CHANGE_TYPES("illegal-change-types", IllegalChangeTypes::new, "Change type '%s' is not allowed in this project");
+    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated");
 
     private String key;
     private Function<RuleConfig, Rule> factory;

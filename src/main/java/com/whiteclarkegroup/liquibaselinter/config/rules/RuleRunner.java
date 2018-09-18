@@ -11,7 +11,10 @@ import liquibase.exception.ChangeLogParseException;
 import liquibase.servicelocator.DefaultPackageScanClassResolver;
 import liquibase.servicelocator.PackageScanClassResolver;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
@@ -19,48 +22,79 @@ public class RuleRunner {
     private final PackageScanClassResolver packageScanner = new DefaultPackageScanClassResolver();
 
     private final Config config;
+    private final List<LintRule> allRules;
     private final List<ChangeRule> changeRules;
+    private final List<ChangeSetRule> changeSetRules;
+    private final List<ChangeLogRule> changeLogRules;
     private final Report report = new Report();
 
     public RuleRunner(Config config) {
         this.config = config;
-        this.changeRules = discoverChangeRules();
+        this.allRules = discoverRules();
+        this.changeRules = assembleChangeRules();
+        this.changeSetRules = assembleChangeSetRules();
+        this.changeLogRules = assembleChangeLogRules();
+    }
+
+    private List<LintRule> discoverRules() {
+        return packageScanner.findImplementations(LintRule.class, CORE_RULES_PACKAGE).stream()
+            .map(found -> {
+                try {
+                    Class<? extends LintRule> clazz = (Class<? extends LintRule>) found;
+                    return clazz.newInstance();
+                } catch (InstantiationException | IllegalAccessException ex) {
+                    return null;
+                }
+            })
+            .filter(lintRule -> {
+                if (lintRule != null && config.isRuleEnabled(lintRule.getName())) {
+                    lintRule.configure(config.getRules().get(lintRule.getName()));
+                    return true;
+                }
+                return false;
+            })
+            .collect(Collectors.toList());
+    }
+
+    private List<ChangeRule> assembleChangeRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeRule) lintRule)
+            .collect(Collectors.toList());
+    }
+
+    private List<ChangeSetRule> assembleChangeSetRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeSetRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeSetRule) lintRule)
+            .collect(Collectors.toList());
+    }
+
+    private List<ChangeLogRule> assembleChangeLogRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeLogRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeLogRule) lintRule)
+            .collect(Collectors.toList());
     }
 
     public Report getReport() {
         return report;
     }
 
-    private List<ChangeRule> discoverChangeRules() {
-        return packageScanner.findImplementations(ChangeRule.class, CORE_RULES_PACKAGE).stream()
-            .map(found -> {
-                try {
-                    Class<? extends ChangeRule> clazz = (Class<? extends ChangeRule>) found;
-                    return clazz.newInstance();
-                } catch (InstantiationException | IllegalAccessException ex) {
-                    return null;
-                }
-            })
-            .filter(Objects::nonNull)
-            .filter(changeRule -> config.isRuleEnabled(changeRule.getName()))
-            .map(changeRule -> changeRule.configure(config.getRules().get(changeRule.getName())))
-            .collect(Collectors.toList());
-    }
-
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
+        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, databaseChangeLog, report.getReportItems(), null);
+        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null);
     }
 
     public RunningContext forChangeSet(ChangeSet changeSet) {
-        return new RunningContext(config, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
+        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config, null, null, null, report.getReportItems(), null);
+        return new RunningContext(config, null, null, null, null, null, report.getReportItems(), null);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,14 +103,18 @@ public class RuleRunner {
         private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
         private final Config config;
         private final List<ChangeRule> changeRules;
+        private final List<ChangeSetRule> changeSetRules;
+        private final List<ChangeLogRule> changeLogRules;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
         private final Collection<ReportItem> reportItems;
         private final ChangeSet changeSet;
 
-        private RunningContext(Config config, List<ChangeRule> changeRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
+        private RunningContext(Config config, List<ChangeRule> changeRules, List<ChangeSetRule> changeSetRules, List<ChangeLogRule> changeLogRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
             this.config = config;
             this.changeRules = changeRules;
+            this.changeSetRules = changeSetRules;
+            this.changeLogRules = changeLogRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
             this.reportItems = reportItems;
@@ -91,11 +129,37 @@ public class RuleRunner {
         }
 
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
-            if (change.getClass().isAssignableFrom(changeRule.getChangeType())
+            if (changeRule.getChangeType().isAssignableFrom(change.getClass())
                 && changeRule.supports(change)
                 && changeRule.invalid(change)
                 && shouldApply(changeRule.getConfig(), changeRule.getName(), changeRule.getMessage(change))) {
                 handleError(changeRule.getMessage(change), changeRule.getName());
+            }
+        }
+
+        public RunningContext checkChangeSet() throws ChangeLogParseException {
+            for (ChangeSetRule changeSetRule : changeSetRules) {
+                checkChangeSetRule(changeSetRule);
+            }
+            return this;
+        }
+
+        private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
+            if (changeSetRule.invalid(changeSet) && shouldApply(changeSetRule.getConfig(), changeSetRule.getName(), changeSetRule.getMessage(changeSet))) {
+                handleError(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+            }
+        }
+
+        public RunningContext checkChangeLog() throws ChangeLogParseException {
+            for (ChangeLogRule changeLogRule : changeLogRules) {
+                checkChangeLogRule(changeLogRule);
+            }
+            return this;
+        }
+
+        private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
+            if (changeLogRule.invalid(databaseChangeLog) && shouldApply(changeLogRule.getConfig(), changeLogRule.getName(), changeLogRule.getMessage(databaseChangeLog))) {
+                handleError(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
             }
         }
 
