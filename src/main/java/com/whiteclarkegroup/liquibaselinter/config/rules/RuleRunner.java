@@ -50,7 +50,7 @@ public class RuleRunner {
                 if (lintRule != null && config.isRuleEnabled(lintRule.getName())) {
                     lintRule.configure(config.getRules().get(lintRule.getName()));
                     return true;
-                };
+                }
                 return false;
             })
             .collect(Collectors.toList());
