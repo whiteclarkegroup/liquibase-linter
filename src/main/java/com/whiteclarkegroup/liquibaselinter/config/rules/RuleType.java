@@ -25,7 +25,6 @@ public enum RuleType {
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
     FILE_NAME_NO_SPACES("file-name-no-spaces", FileNameNoSpaces::new, "Changelog filenames should not contain spaces"),
     HAS_COMMENT("has-comment", NotBlankRule::new, "Change set must have a comment"),
-    HAS_CONTEXT("has-context", HasValuesRule::new, "Should have at least one context on the change set"),
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
     VALID_CONTEXT("valid-context", ValidContext::new, "Context does not follow pattern"),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts"),
