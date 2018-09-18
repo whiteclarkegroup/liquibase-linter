@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class NoPreconditionsRuleImplTest {
     @DisplayName("Should pass if no preconditions")
@@ -23,14 +24,26 @@ class NoPreconditionsRuleImplTest {
         assertFalse(rule.invalid(changeSet));
     }
 
-    @DisplayName("Should fail on mere prescence of preconditions")
+    @DisplayName("Should fail on mere prescence of preconditions in changeSet")
     @Test
-    void shouldFailWhenPreconditions() {
+    void shouldFailWhenPreconditionsInChangeSet() {
         NoPreconditionsRuleImpl rule = new NoPreconditionsRuleImpl();
         rule.configure(RuleConfig.builder().build());
         ChangeSet changeSet = new ChangeSet(mock(DatabaseChangeLog.class));
         changeSet.addChange(new InsertDataChange());
         changeSet.setPreconditions(mock(PreconditionContainer.class));
         assertTrue(rule.invalid(changeSet));
+    }
+
+    @DisplayName("Should fail on mere prescence of preconditions in changeLog")
+    @Test
+    void shouldFailWhenPreconditionsInChangeLog() {
+        NoPreconditionsRuleImpl rule = new NoPreconditionsRuleImpl();
+        rule.configure(RuleConfig.builder().build());
+        DatabaseChangeLog changeLog = mock(DatabaseChangeLog.class);
+        when(changeLog.getPreconditions()).thenReturn(mock(PreconditionContainer.class));
+        ChangeSet changeSet = new ChangeSet(changeLog);
+        changeSet.addChange(new InsertDataChange());
+        assertTrue(rule.invalid(changeLog));
     }
 }

@@ -61,7 +61,9 @@ public class ChangeLogLinter {
 
     @SuppressWarnings("unchecked")
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
-        ruleRunner.forDatabaseChangeLog(databaseChangeLog).run(RuleType.FILE_NAME_NO_SPACES, databaseChangeLog);
+        ruleRunner.forDatabaseChangeLog(databaseChangeLog)
+            .checkChangeLog()
+            .run(RuleType.FILE_NAME_NO_SPACES, databaseChangeLog);
         lintChangeSets(databaseChangeLog, config, ruleRunner);
     }
 

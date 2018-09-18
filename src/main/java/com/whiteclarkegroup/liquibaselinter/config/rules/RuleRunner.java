@@ -25,6 +25,7 @@ public class RuleRunner {
     private final List<LintRule> allRules;
     private final List<ChangeRule> changeRules;
     private final List<ChangeSetRule> changeSetRules;
+    private final List<ChangeLogRule> changeLogRules;
     private final Report report = new Report();
 
     public RuleRunner(Config config) {
@@ -32,6 +33,7 @@ public class RuleRunner {
         this.allRules = discoverRules();
         this.changeRules = assembleChangeRules();
         this.changeSetRules = assembleChangeSetRules();
+        this.changeLogRules = assembleChangeLogRules();
     }
 
     private List<LintRule> discoverRules() {
@@ -68,24 +70,31 @@ public class RuleRunner {
             .collect(Collectors.toList());
     }
 
+    private List<ChangeLogRule> assembleChangeLogRules() {
+        return allRules.stream()
+            .filter(lintRule -> ChangeLogRule.class.isAssignableFrom(lintRule.getClass()))
+            .map(lintRule -> (ChangeLogRule) lintRule)
+            .collect(Collectors.toList());
+    }
+
     public Report getReport() {
         return report;
     }
 
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, null, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
+        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, null, databaseChangeLog, report.getReportItems(), null);
+        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null);
     }
 
     public RunningContext forChangeSet(ChangeSet changeSet) {
-        return new RunningContext(config, null, changeSetRules,null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
+        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
     }
 
     public RunningContext forGeneric() {
-        return new RunningContext(config, null, null,null, null, report.getReportItems(), null);
+        return new RunningContext(config, null, null, null, null, null, report.getReportItems(), null);
     }
 
     @SuppressWarnings("unchecked")
@@ -95,15 +104,17 @@ public class RuleRunner {
         private final Config config;
         private final List<ChangeRule> changeRules;
         private final List<ChangeSetRule> changeSetRules;
+        private final List<ChangeLogRule> changeLogRules;
         private final Change change;
         private final DatabaseChangeLog databaseChangeLog;
         private final Collection<ReportItem> reportItems;
         private final ChangeSet changeSet;
 
-        private RunningContext(Config config, List<ChangeRule> changeRules, List<ChangeSetRule> changeSetRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
+        private RunningContext(Config config, List<ChangeRule> changeRules, List<ChangeSetRule> changeSetRules, List<ChangeLogRule> changeLogRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
             this.config = config;
             this.changeRules = changeRules;
             this.changeSetRules = changeSetRules;
+            this.changeLogRules = changeLogRules;
             this.change = change;
             this.databaseChangeLog = databaseChangeLog;
             this.reportItems = reportItems;
@@ -136,6 +147,19 @@ public class RuleRunner {
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
             if (changeSetRule.invalid(changeSet) && shouldApply(changeSetRule.getConfig(), changeSetRule.getName(), changeSetRule.getMessage(changeSet))) {
                 handleError(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+            }
+        }
+
+        public RunningContext checkChangeLog() throws ChangeLogParseException {
+            for (ChangeLogRule changeLogRule : changeLogRules) {
+                checkChangeLogRule(changeLogRule);
+            }
+            return this;
+        }
+
+        private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
+            if (changeLogRule.invalid(databaseChangeLog) && shouldApply(changeLogRule.getConfig(), changeLogRule.getName(), changeLogRule.getMessage(databaseChangeLog))) {
+                handleError(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
             }
         }
 
