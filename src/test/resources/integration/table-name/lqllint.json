@@ -1,0 +1,10 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "table-name": {
+            "enabled": true,
+            "pattern": "^(?!TBL)[A-Z_]+(?<!_)$",
+            "errorMessage": "Table '%s' name must be uppercase, use '_' separation and not start with TBL"
+        }
+    }
+}

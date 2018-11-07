@@ -1,0 +1,12 @@
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="201809011238" author="luke.rogers" context="ddl_script">
+        <addColumn tableName="TEST_TABLE">
+            <column name="TEST_COLUMN_1" type="NVARCHAR(100)"/>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

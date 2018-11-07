@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "table-name-length": {
+            "maxLength": 26,
+            "errorMessage": "Table '%s' name must not be longer than %d"
+        }
+    }
+}

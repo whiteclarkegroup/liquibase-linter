@@ -1,0 +1,6 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "drop-not-null-require-column-data-type": true
+    }
+}

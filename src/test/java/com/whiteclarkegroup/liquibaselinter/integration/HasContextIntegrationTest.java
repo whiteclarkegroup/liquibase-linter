@@ -13,14 +13,14 @@ class HasContextIntegrationTest extends LinterIntegrationTest {
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
             "Should not pass with no context value",
-            "has-context-fail.xml",
-            "has-context.json",
+            "has-context/has-context-fail.xml",
+            "has-context/has-context.json",
             "Should have at least one context on the change set");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
             "Should pass with a context value",
-            "has-context-pass.xml",
-            "has-context.json");
+            "has-context/has-context-pass.xml",
+            "has-context/has-context.json");
 
         return Arrays.asList(test1, test2);
     }
