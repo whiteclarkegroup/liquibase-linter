@@ -1,0 +1,12 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "unique-constraint-name": {
+            "enabled": true,
+            "errorMessage": "Unique constraint '%s' must follow pattern table name followed by 'U' and a number e.g. TABLE_U1",
+            "pattern": "^{{value}}_U[0-9]+$",
+            "condition": "(tableName + '_U').length() <= 28",
+            "dynamicValue": "tableName"
+        }
+    }
+}
