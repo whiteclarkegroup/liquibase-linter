@@ -79,7 +79,6 @@ public class ChangeLogLinter {
 
             ruleRunner.forChangeSet(changeSet)
                     .checkChangeSet()
-                    .run(RuleType.HAS_COMMENT, changeSet.getComments())
                     .run(RuleType.ISOLATE_DDL_CHANGES, changes);
 
             for (Change change : changes) {
