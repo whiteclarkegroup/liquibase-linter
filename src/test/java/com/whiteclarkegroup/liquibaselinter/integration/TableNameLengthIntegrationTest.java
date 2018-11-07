@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class HasContextIntegrationTest extends LinterIntegrationTest {
+class TableNameLengthIntegrationTest extends LinterIntegrationTest {
 
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should not pass with no context value",
-            "has-context/has-context-fail.xml",
-            "has-context/has-context.json",
-            "Should have at least one context on the change set");
+            "Should fail when table name length is exceeded",
+            "table-name-length/table-name-length-fail.xml",
+            "table-name-length/lqllint.json",
+            "Table 'THIS_TABLE_NAME_IS_FAR_TOO_LONG' name must not be longer than 26");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
-            "Should pass with a context value",
-            "has-context/has-context-pass.xml",
-            "has-context/has-context.json");
+            "Should pass when table name length is not exceeded",
+            "table-name-length/table-name-length-pass.xml",
+            "table-name-length/lqllint.json");
 
         return Arrays.asList(test1, test2);
     }

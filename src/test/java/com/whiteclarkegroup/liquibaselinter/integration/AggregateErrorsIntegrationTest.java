@@ -13,8 +13,8 @@ class AggregateErrorsIntegrationTest extends LinterIntegrationTest {
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
             "Should aggregate errors",
-            "aggregate-errors.xml",
-            "aggregate-errors.json",
+            "aggregate-errors/aggregate-errors.xml",
+            "aggregate-errors/aggregate-errors.json",
             "Linting failed with 3 errors");
 
         return Collections.singletonList(test1);
