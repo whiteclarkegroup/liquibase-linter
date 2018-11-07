@@ -1,0 +1,15 @@
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet author="lrogers" context="" id="201811070940">
+        <comment>Table</comment>
+        <addColumn tableName="TEST">
+            <column name="TEST_COLUMN" type="NVARCHAR(00)">
+                <constraints primaryKey="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>
