@@ -1,0 +1,12 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "create-index-name": {
+            "enabled": true,
+            "errorMessage": "Index '%s' must follow pattern table name followed by 'I' and a number e.g. APPLICATION_I1, or match a primary key or unique constraint name",
+            "pattern": "^{{value}}_(PK|U\\d|I\\d){1}$",
+            "condition": "tableName.length() <= 26",
+            "dynamicValue": "tableName"
+        }
+    }
+}

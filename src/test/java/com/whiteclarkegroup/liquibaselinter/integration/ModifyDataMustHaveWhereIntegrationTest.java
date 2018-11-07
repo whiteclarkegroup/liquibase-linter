@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class HasContextIntegrationTest extends LinterIntegrationTest {
+class ModifyDataMustHaveWhereIntegrationTest extends LinterIntegrationTest {
 
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should not pass with no context value",
-            "has-context/has-context-fail.xml",
-            "has-context/has-context.json",
-            "Should have at least one context on the change set");
+            "Should fail when modify data does not have where condition",
+            "modify-data-enforce-where/modify-data-enforce-where-fail.xml",
+            "modify-data-enforce-where/lqllint.json",
+            "Modify data on table 'MUST_HAVE_WHERE' must have a where condition");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
-            "Should pass with a context value",
-            "has-context/has-context-pass.xml",
-            "has-context/has-context.json");
+            "Should pass when modify data has where condition",
+            "modify-data-enforce-where/modify-data-enforce-where-pass.xml",
+            "modify-data-enforce-where/lqllint.json");
 
         return Arrays.asList(test1, test2);
     }

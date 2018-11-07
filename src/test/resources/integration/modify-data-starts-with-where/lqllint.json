@@ -1,0 +1,6 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "modify-data-starts-with-where": true
+    }
+}

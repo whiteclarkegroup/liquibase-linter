@@ -14,8 +14,8 @@ class SpecificRuleIgnoreIntegrationTest extends LinterIntegrationTest {
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldPass(
                 "Should be allowed to ignore specific rules",
-                "specific-rule-ignore.xml",
-                "specific-rule-ignore.json");
+            "specific-rule-ignore/specific-rule-ignore.xml",
+            "specific-rule-ignore/specific-rule-ignore.json");
 
         return Collections.singletonList(test1);
     }

@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class HasContextIntegrationTest extends LinterIntegrationTest {
+class SeparateDDLContextIntegrationTest extends LinterIntegrationTest {
 
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should not pass with no context value",
-            "has-context/has-context-fail.xml",
-            "has-context/has-context.json",
-            "Should have at least one context on the change set");
+            "Should fail with ddl script under non ddl context",
+            "separate-ddl-context/separate-ddl-context-fail.xml",
+            "separate-ddl-context/lqllint.json",
+            "Should have a ddl changes under ddl contexts");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
-            "Should pass with a context value",
-            "has-context/has-context-pass.xml",
-            "has-context/has-context.json");
+            "Should pass ddl script under ddl context",
+            "separate-ddl-context/separate-ddl-context-pass.xml",
+            "separate-ddl-context/lqllint.json");
 
         return Arrays.asList(test1, test2);
     }

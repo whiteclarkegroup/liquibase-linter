@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class HasContextIntegrationTest extends LinterIntegrationTest {
+class TableNameIntegrationTest extends LinterIntegrationTest {
 
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should not pass with no context value",
-            "has-context/has-context-fail.xml",
-            "has-context/has-context.json",
-            "Should have at least one context on the change set");
+            "Should fail when table name does not match the pattern",
+            "table-name/table-name-fail.xml",
+            "table-name/lqllint.json",
+            "Table 'TBL_TEST' name must be uppercase, use '_' separation and not start with TBL");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
-            "Should pass with a context value",
-            "has-context/has-context-pass.xml",
-            "has-context/has-context.json");
+            "Should pass when table name matches the pattern",
+            "table-name/table-name-pass.xml",
+            "table-name/lqllint.json");
 
         return Arrays.asList(test1, test2);
     }

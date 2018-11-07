@@ -1,0 +1,6 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "isolate-ddl-changes": true
+    }
+}

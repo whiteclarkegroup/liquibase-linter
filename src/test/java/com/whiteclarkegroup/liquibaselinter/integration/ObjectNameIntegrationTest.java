@@ -7,20 +7,20 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith(LiquibaseIntegrationTestResolver.class)
-class HasContextIntegrationTest extends LinterIntegrationTest {
+class ObjectNameIntegrationTest extends LinterIntegrationTest {
 
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should not pass with no context value",
-            "has-context/has-context-fail.xml",
-            "has-context/has-context.json",
-            "Should have at least one context on the change set");
+            "Should fail when object name does not match the pattern",
+            "object-name/object-name-fail.xml",
+            "object-name/lqllint.json",
+            "Object name 'NOT%FOLLOWING%PATTERN' name must be uppercase and use '_' separation");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldPass(
-            "Should pass with a context value",
-            "has-context/has-context-pass.xml",
-            "has-context/has-context.json");
+            "Should pass when object name matches the pattern",
+            "object-name/object-name-pass.xml",
+            "object-name/lqllint.json");
 
         return Arrays.asList(test1, test2);
     }

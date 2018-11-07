@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "schema-name": {
+            "pattern": "^\\$\\{[a-z_]+\\}$",
+            "errorMessage": "Must use schema name token, not %s"
+        }
+    }
+}

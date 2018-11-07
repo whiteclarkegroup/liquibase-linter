@@ -1,0 +1,11 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "modify-data-enforce-where": {
+            "errorMessage": "Modify data on table '%s' must have a where condition",
+            "values": [
+                "MUST_HAVE_WHERE"
+            ]
+        }
+    }
+}
