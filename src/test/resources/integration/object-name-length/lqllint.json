@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "object-name-length": {
+            "maxLength": 30,
+            "errorMessage": "Object name '%s' must be less than %d characters"
+        }
+    }
+}
