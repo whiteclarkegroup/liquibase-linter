@@ -15,7 +15,6 @@ class ColumnConfigLinter {
             final ConstraintsConfig constraints = columnConfig.getConstraints();
             ruleRunner.forChange((Change) change)
                     .run(RuleType.CREATE_COLUMN_REMARKS, columnConfig.getRemarks())
-                    .run(RuleType.CREATE_COLUMN_NULLABLE_CONSTRAINT, constraints)
                     .run(RuleType.CREATE_COLUMN_NO_DEFINE_PRIMARY_KEY, constraints);
         }
     }
