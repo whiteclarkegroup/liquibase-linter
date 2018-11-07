@@ -19,7 +19,6 @@ public enum RuleType {
     CREATE_COLUMN_REMARKS("create-column-remarks", NotBlankRule::new, "Add column must contain remarks"),
     CREATE_COLUMN_NULLABLE_CONSTRAINT("create-column-nullable-constraint", CreateColumnNullableConstraint::new, "Add column must specify nullable constraint"),
     CREATE_COLUMN_NO_DEFINE_PRIMARY_KEY("create-column-no-define-primary-key", CreateColumnNoDefinePrimaryKey::new, "Add column must not use primary key attribute. Instead use AddPrimaryKey change type"),
-    MODIFY_DATA_ENFORCE_WHERE("modify-data-enforce-where", ModifyDataEnforceWhere::new, "Modify data on table '%s' must have a where condition"),
     CREATE_INDEX_NAME("create-index-name", MandatoryPatternRule::new, "Index name does not follow pattern"),
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
@@ -28,7 +27,6 @@ public enum RuleType {
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
     VALID_CONTEXT("valid-context", ValidContext::new, "Context does not follow pattern"),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts"),
-    MODIFY_DATA_STARTS_WITH_WHERE("modify-data-starts-with-where", ModifyDataStartsWithWhere::new, "Modify data where starts with where clause, that's probably a mistake"),
     DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated");
 
     private String key;

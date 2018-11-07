@@ -14,8 +14,6 @@ class LinterFactory {
             ImmutableMap.<Class, Linter>builder()
                     .put(AddColumnChange.class, new AddColumnChangeLinter())
                     .put(CreateTableChange.class, new CreateTableChangeLinter())
-                    .put(DeleteDataChange.class, new ModifyDataChangeLinter())
-                    .put(UpdateDataChange.class, new ModifyDataChangeLinter())
                     .put(AddUniqueConstraintChange.class, new AddUniqueConstraintChangeLinter())
                     .put(CreateIndexChange.class, new CreateIndexChangeLinter())
                     .put(AddPrimaryKeyChange.class, new AddPrimaryKeyChangeLinter())

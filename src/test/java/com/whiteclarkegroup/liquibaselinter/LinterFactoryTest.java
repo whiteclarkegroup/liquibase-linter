@@ -32,26 +32,6 @@ class LinterFactoryTest {
         );
     }
 
-    @DisplayName("Should return update data change linter")
-    @Test
-    void shouldReturnUpdateDataChangeLinter() {
-        final Optional<Linter> linter = LinterFactory.getLinter(new UpdateDataChange());
-        assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), ModifyDataChangeLinter.class)
-        );
-    }
-
-    @DisplayName("Should return delete data change linter")
-    @Test
-    void shouldReturnDeleteDataChangeLinter() {
-        final Optional<Linter> linter = LinterFactory.getLinter(new DeleteDataChange());
-        assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), ModifyDataChangeLinter.class)
-        );
-    }
-
     @DisplayName("Should return create index change linter")
     @Test
     void shouldReturnCreateIndexChangeLinter() {
