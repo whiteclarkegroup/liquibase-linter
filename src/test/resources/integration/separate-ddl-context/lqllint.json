@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "separate-ddl-context": {
+            "pattern": "^.*ddl_test|.*ddl_script$",
+            "errorMessage": "Should have a ddl changes under ddl contexts"
+        }
+    }
+}
