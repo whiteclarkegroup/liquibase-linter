@@ -6,3 +6,4 @@ com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnNullableConst
 com.whiteclarkegroup.liquibaselinter.config.rules.core.DropNotNullRequireColumnDataTypeRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnNoDefinePrimaryKeyRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnRemarksRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateTableRemarksRuleImpl
