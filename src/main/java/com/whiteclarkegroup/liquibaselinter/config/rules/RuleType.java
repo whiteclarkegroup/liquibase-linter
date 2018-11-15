@@ -4,7 +4,6 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.generic.GenericRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.MandatoryPatternRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.MaxLengthRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.PatternRule;
-import com.whiteclarkegroup.liquibaselinter.config.rules.specific.IsolateDDLChanges;
 import com.whiteclarkegroup.liquibaselinter.config.rules.specific.SeparateDDLContexts;
 
 import java.util.Map;
@@ -22,7 +21,6 @@ public enum RuleType {
     CREATE_INDEX_NAME("create-index-name", MandatoryPatternRule::new, "Index name does not follow pattern"),
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
-    ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
     SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts");
 
     private String key;

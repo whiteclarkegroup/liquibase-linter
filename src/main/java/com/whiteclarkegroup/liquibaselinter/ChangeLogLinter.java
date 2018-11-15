@@ -76,9 +76,7 @@ public class ChangeLogLinter {
             Collection<String> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
-            ruleRunner.forChangeSet(changeSet)
-                    .checkChangeSet()
-                    .run(RuleType.ISOLATE_DDL_CHANGES, changes);
+            ruleRunner.forChangeSet(changeSet).checkChangeSet();
 
             for (Change change : changes) {
                 ruleRunner.forChange(change)

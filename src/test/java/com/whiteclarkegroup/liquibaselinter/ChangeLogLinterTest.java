@@ -43,7 +43,7 @@ class ChangeLogLinterTest {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
-        verify(changeSet, times(1)).getChanges();
+        verify(changeSet, times(2)).getChanges();
     }
 
 
@@ -62,7 +62,7 @@ class ChangeLogLinterTest {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
-        verify(changeSet, times(1)).getChanges();
+        verify(changeSet, times(2)).getChanges();
     }
 
     @DisplayName("Should not allow more than one ddl_test change in a change set")
