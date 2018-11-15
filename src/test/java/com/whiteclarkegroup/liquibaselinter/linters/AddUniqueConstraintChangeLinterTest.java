@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -39,19 +39,6 @@ class AddUniqueConstraintChangeLinterTest {
         changeSet.addChange(constraintChangeValid);
         addUniqueConstraintChangeLinter.lint(constraintChangeValid, ruleRunner);
         verify(objectNameLinter, times(1)).lintObjectNameLength("TEST_TEST_U1", constraintChangeValid, ruleRunner);
-    }
-
-    @DisplayName("Should validate name in incorrect format")
-    @Test
-    void shouldValidateNameInIncorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
-        AddUniqueConstraintChange constraintChangeInvalid = new AddUniqueConstraintChange();
-        constraintChangeInvalid.setChangeSet(changeSet);
-        constraintChangeInvalid.setTableName("MAGIC");
-        constraintChangeInvalid.setConstraintName("MAGIC");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> addUniqueConstraintChangeLinter.lint(constraintChangeInvalid, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Unique constraint 'MAGIC' must follow pattern " +
-                "table name followed by 'U' and a number e.g. TABLE_U1"));
     }
 
     @DisplayName("Should validate name in correct format")
