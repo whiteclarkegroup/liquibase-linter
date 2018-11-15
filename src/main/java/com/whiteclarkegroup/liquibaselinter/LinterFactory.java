@@ -11,16 +11,16 @@ import java.util.Optional;
 class LinterFactory {
 
     private static final Map<Class, Linter> LINTERS =
-            ImmutableMap.<Class, Linter>builder()
-                    .put(AddColumnChange.class, new AddColumnChangeLinter())
-                    .put(AddUniqueConstraintChange.class, new AddUniqueConstraintChangeLinter())
-                    .put(CreateIndexChange.class, new CreateIndexChangeLinter())
-                    .put(AddPrimaryKeyChange.class, new AddPrimaryKeyChangeLinter())
-                    .put(AddForeignKeyConstraintChange.class, new AddForeignKeyConstraintChangeLinter())
-                    .put(RenameViewChange.class, new RenameViewChangeLinter())
-                    .put(RenameColumnChange.class, new RenameColumnChangeLinter())
-                    .put(MergeColumnChange.class, new MergeColumnChangeLinter())
-                    .build();
+        ImmutableMap.<Class, Linter>builder()
+            .put(AddColumnChange.class, new AddColumnChangeLinter())
+            .put(AddUniqueConstraintChange.class, new AddUniqueConstraintChangeLinter())
+            .put(CreateIndexChange.class, new CreateIndexChangeLinter())
+            .put(AddPrimaryKeyChange.class, new AddPrimaryKeyChangeLinter())
+            .put(AddForeignKeyConstraintChange.class, new AddForeignKeyConstraintChangeLinter())
+            .put(RenameViewChange.class, new RenameViewChangeLinter())
+            .put(RenameColumnChange.class, new RenameColumnChangeLinter())
+            .put(MergeColumnChange.class, new MergeColumnChangeLinter())
+            .build();
 
     private LinterFactory() {
     }

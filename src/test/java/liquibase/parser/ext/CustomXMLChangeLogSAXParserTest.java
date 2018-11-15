@@ -32,7 +32,7 @@ class CustomXMLChangeLogSAXParserTest {
         CustomXMLChangeLogSAXParser customXMLChangeLogSAXParser = new CustomXMLChangeLogSAXParser();
         ParsedNode parsedNode = mockParsedNode("SCHEMA_NAME");
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> customXMLChangeLogSAXParser.checkSchemaName(parsedNode, ruleRunner));
+            assertThrows(ChangeLogParseException.class, () -> customXMLChangeLogSAXParser.checkSchemaName(parsedNode, ruleRunner));
 
         assertTrue(changeLogParseException.getMessage().contains("Must use schema name token, not SCHEMA_NAME"));
     }
@@ -47,7 +47,7 @@ class CustomXMLChangeLogSAXParserTest {
 
         // now do one of them again
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> parser.checkDuplicateIncludes("foo/bar/baz.xml", config));
+            assertThrows(ChangeLogParseException.class, () -> parser.checkDuplicateIncludes("foo/bar/baz.xml", config));
         assertEquals("Changelog file 'foo/bar/baz.xml' was included more than once", changeLogParseException.getMessage());
     }
 

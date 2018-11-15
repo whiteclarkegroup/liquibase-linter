@@ -17,8 +17,8 @@ class LinterFactoryTest {
     void shouldReturnAddColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddColumnChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), AddColumnChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), AddColumnChangeLinter.class)
         );
     }
 
@@ -27,8 +27,8 @@ class LinterFactoryTest {
     void shouldReturnCreateIndexChangeLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new CreateIndexChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), CreateIndexChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), CreateIndexChangeLinter.class)
         );
     }
 
@@ -37,8 +37,8 @@ class LinterFactoryTest {
     void shouldReturnAddUniqueConstraintLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddUniqueConstraintChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), AddUniqueConstraintChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), AddUniqueConstraintChangeLinter.class)
         );
     }
 
@@ -47,8 +47,8 @@ class LinterFactoryTest {
     void shouldReturnAddPrimaryKeyLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddPrimaryKeyChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), AddPrimaryKeyChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), AddPrimaryKeyChangeLinter.class)
         );
     }
 
@@ -57,8 +57,8 @@ class LinterFactoryTest {
     void shouldReturnAddForeignKeyLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new AddForeignKeyConstraintChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), AddForeignKeyConstraintChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), AddForeignKeyConstraintChangeLinter.class)
         );
     }
 
@@ -67,8 +67,8 @@ class LinterFactoryTest {
     void shouldReturnRenameViewLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new RenameViewChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), RenameViewChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), RenameViewChangeLinter.class)
         );
     }
 
@@ -77,8 +77,8 @@ class LinterFactoryTest {
     void shouldReturnRenameColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new RenameColumnChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), RenameColumnChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), RenameColumnChangeLinter.class)
         );
     }
 
@@ -87,8 +87,8 @@ class LinterFactoryTest {
     void shouldReturnMergeColumnLinter() {
         final Optional<Linter> linter = LinterFactory.getLinter(new MergeColumnChange());
         assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), MergeColumnChangeLinter.class)
+            () -> assertTrue(linter.isPresent()),
+            () -> assertEquals(linter.get().getClass(), MergeColumnChangeLinter.class)
         );
     }
 }

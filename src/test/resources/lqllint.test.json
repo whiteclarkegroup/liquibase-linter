@@ -1,89 +1,89 @@
 {
-  "ignore-context-pattern": "^baseline.*$",
-  "fail-fast": true,
-  "rules": {
-    "no-duplicate-includes": {},
-    "schema-name": {
-      "enabled": true,
-      "pattern": "^\\$\\{[a-z_]+\\}$",
-      "errorMessage": "Must use schema name token, not %s"
-    },
-    "file-name-no-spaces": true,
-    "no-preconditions": true,
-    "has-comment": true,
-    "has-context": {},
-    "valid-context": {
-      "enabled": true,
-      "pattern": "^.*_test|.*_script$",
-      "errorMessage": "Context is incorrect, should end with '_test' or '_script'"
-    },
-    "isolate-ddl-changes": {},
-    "separate-ddl-context": {
-      "enabled": true,
-      "pattern": "^.*ddl_test|.*ddl_script$",
-      "errorMessage": "Should have a ddl changes under ddl contexts"
-    },
-    "table-name": {
-      "enabled": true,
-      "pattern": "^(?!TBL)[A-Z_]+(?<!_)$",
-      "errorMessage": "Table '%s' name must be uppercase, use '_' separation and not start with TBL"
-    },
-    "table-name-length": {
-      "enabled": true,
-      "maxLength": 26,
-      "errorMessage": "Table '%s' name must not be longer than %d"
-    },
-    "object-name": {
-      "enabled": true,
-      "pattern": "^(?!_)[A-Z_0-9]+(?<!_)$",
-      "errorMessage": "Object name '%s' name must be uppercase and use '_' separation"
-    },
-    "object-name-length": {
-      "enabled": true,
-      "maxLength": 30,
-      "errorMessage": "Object name '%s' must be less than %d characters"
-    },
-    "create-table-remarks": {},
-    "create-column-remarks": {},
-    "create-column-nullable-constraint": {},
-    "create-column-no-define-primary-key": {},
-    "modify-data-enforce-where": {
-      "enabled": true,
-      "errorMessage": "Modify data on table '%s' must have a where condition",
-      "values": [
-        "MUST_HAVE_WHERE"
-      ]
-    },
-    "modify-data-starts-with-where": {
-      "enabled": true,
-      "errorMessage": "Modify data where starts with where, that's probably a mistake"
-    },
-    "create-index-name": {
-      "enabled": true,
-      "errorMessage": "Index '%s' must follow pattern table name followed by 'I' and a number e.g. APPLICATION_I1, or match a primary key or unique constraint name",
-      "pattern": "^{{value}}_(PK|U\\d|I\\d){1}$",
-      "condition": "tableName.length() <= 26",
-      "dynamicValue": "tableName"
-    },
-    "unique-constraint-name": {
-      "enabled": true,
-      "errorMessage": "Unique constraint '%s' must follow pattern table name followed by 'U' and a number e.g. TABLE_U1",
-      "pattern": "^{{value}}_U[0-9]+$",
-      "condition": "(tableName + '_U').length() <= 28",
-      "dynamicValue": "tableName"
-    },
-    "primary-key-name": {
-      "enabled": true,
-      "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK' e.g. TABLE_PK",
-      "pattern": "^{{value}}_PK$",
-      "dynamicValue": "(tableName + '_PK').length() <= 30 ? tableName : '[A-Z_]+'"
-    },
-    "foreign-key-name": {
-      "enabled": true,
-      "errorMessage": "Foreign key constraint '%s' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK",
-      "pattern": "^{{value}}_FK$",
-      "dynamicValue": "(baseTableName + referencedTableName + '_FK').length() <= 30 ? baseTableName + '_' + referencedTableName : '[A-Z_]+'"
-    },
-    "drop-not-null-require-column-data-type": {}
-  }
+    "ignore-context-pattern": "^baseline.*$",
+    "fail-fast": true,
+    "rules": {
+        "no-duplicate-includes": {},
+        "schema-name": {
+            "enabled": true,
+            "pattern": "^\\$\\{[a-z_]+\\}$",
+            "errorMessage": "Must use schema name token, not %s"
+        },
+        "file-name-no-spaces": true,
+        "no-preconditions": true,
+        "has-comment": true,
+        "has-context": {},
+        "valid-context": {
+            "enabled": true,
+            "pattern": "^.*_test|.*_script$",
+            "errorMessage": "Context is incorrect, should end with '_test' or '_script'"
+        },
+        "isolate-ddl-changes": {},
+        "separate-ddl-context": {
+            "enabled": true,
+            "pattern": "^.*ddl_test|.*ddl_script$",
+            "errorMessage": "Should have a ddl changes under ddl contexts"
+        },
+        "table-name": {
+            "enabled": true,
+            "pattern": "^(?!TBL)[A-Z_]+(?<!_)$",
+            "errorMessage": "Table '%s' name must be uppercase, use '_' separation and not start with TBL"
+        },
+        "table-name-length": {
+            "enabled": true,
+            "maxLength": 26,
+            "errorMessage": "Table '%s' name must not be longer than %d"
+        },
+        "object-name": {
+            "enabled": true,
+            "pattern": "^(?!_)[A-Z_0-9]+(?<!_)$",
+            "errorMessage": "Object name '%s' name must be uppercase and use '_' separation"
+        },
+        "object-name-length": {
+            "enabled": true,
+            "maxLength": 30,
+            "errorMessage": "Object name '%s' must be less than %d characters"
+        },
+        "create-table-remarks": {},
+        "create-column-remarks": {},
+        "create-column-nullable-constraint": {},
+        "create-column-no-define-primary-key": {},
+        "modify-data-enforce-where": {
+            "enabled": true,
+            "errorMessage": "Modify data on table '%s' must have a where condition",
+            "values": [
+                "MUST_HAVE_WHERE"
+            ]
+        },
+        "modify-data-starts-with-where": {
+            "enabled": true,
+            "errorMessage": "Modify data where starts with where, that's probably a mistake"
+        },
+        "create-index-name": {
+            "enabled": true,
+            "errorMessage": "Index '%s' must follow pattern table name followed by 'I' and a number e.g. APPLICATION_I1, or match a primary key or unique constraint name",
+            "pattern": "^{{value}}_(PK|U\\d|I\\d){1}$",
+            "condition": "tableName.length() <= 26",
+            "dynamicValue": "tableName"
+        },
+        "unique-constraint-name": {
+            "enabled": true,
+            "errorMessage": "Unique constraint '%s' must follow pattern table name followed by 'U' and a number e.g. TABLE_U1",
+            "pattern": "^{{value}}_U[0-9]+$",
+            "condition": "(tableName + '_U').length() <= 28",
+            "dynamicValue": "tableName"
+        },
+        "primary-key-name": {
+            "enabled": true,
+            "errorMessage": "Primary key constraint '%s' must follow pattern table name followed by '_PK' e.g. TABLE_PK",
+            "pattern": "^{{value}}_PK$",
+            "dynamicValue": "(tableName + '_PK').length() <= 30 ? tableName : '[A-Z_]+'"
+        },
+        "foreign-key-name": {
+            "enabled": true,
+            "errorMessage": "Foreign key constraint '%s' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK",
+            "pattern": "^{{value}}_FK$",
+            "dynamicValue": "(baseTableName + referencedTableName + '_FK').length() <= 30 ? baseTableName + '_' + referencedTableName : '[A-Z_]+'"
+        },
+        "drop-not-null-require-column-data-type": {}
+    }
 }

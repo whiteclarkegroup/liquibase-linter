@@ -25,13 +25,12 @@ import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implements ChangeLogParser {
+    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
-
-    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
 
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {

@@ -12,16 +12,16 @@ class PrimaryKeyNameIntegrationTest extends LinterIntegrationTest {
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-                "Should fail when the table name can't be enforced but the suffix isn't used",
+            "Should fail when the table name can't be enforced but the suffix isn't used",
             "primary-key-name/primary-key-name-fail-on-suffix.xml",
             "primary-key-name/primary-key-name-complex.json",
-                "Primary key constraint 'NOT_EVEN_CLOSE' must be named, ending with '_PK', and start with table name (unless too long)");
+            "Primary key constraint 'NOT_EVEN_CLOSE' must be named, ending with '_PK', and start with table name (unless too long)");
 
         IntegrationTestConfig test2 = IntegrationTestConfig.shouldFail(
-                "Should fail when the table name can be enforced and isn't used",
+            "Should fail when the table name can be enforced and isn't used",
             "primary-key-name/primary-key-name-fail-on-tablename.xml",
             "primary-key-name/primary-key-name-complex.json",
-                "Primary key constraint 'BAZ_PK' must be named, ending with '_PK', and start with table name (unless too long)");
+            "Primary key constraint 'BAZ_PK' must be named, ending with '_PK', and start with table name (unless too long)");
 
         IntegrationTestConfig test3 = IntegrationTestConfig.shouldPass(
             "Should pass when used correctly",

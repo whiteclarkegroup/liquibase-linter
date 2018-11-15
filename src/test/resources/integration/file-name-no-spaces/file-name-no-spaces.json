@@ -1,6 +1,6 @@
 {
-  "fail-fast": true,
-  "rules": {
-    "file-name-no-spaces": {}
-  }
+    "fail-fast": true,
+    "rules": {
+        "file-name-no-spaces": {}
+    }
 }

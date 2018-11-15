@@ -1,6 +1,6 @@
 {
-  "fail-fast": true,
-  "rules": {
-    "no-duplicate-includes": true
-  }
+    "fail-fast": true,
+    "rules": {
+        "no-duplicate-includes": true
+    }
 }
