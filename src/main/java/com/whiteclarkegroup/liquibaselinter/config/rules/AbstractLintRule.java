@@ -35,7 +35,7 @@ public abstract class AbstractLintRule implements LintRule {
     }
 
     protected boolean checkNotBlank(String value) {
-        return value == null || value.equals("");
+        return value == null || value.isEmpty();
     }
 
     protected boolean checkPattern(String value, Object subject) {

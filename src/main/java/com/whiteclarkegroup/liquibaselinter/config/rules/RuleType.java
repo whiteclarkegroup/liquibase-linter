@@ -1,7 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.GenericRule;
-import com.whiteclarkegroup.liquibaselinter.config.rules.generic.MandatoryPatternRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.MaxLengthRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.PatternRule;
 
@@ -14,8 +13,7 @@ public enum RuleType {
     NO_DUPLICATE_INCLUDES("no-duplicate-includes", GenericRule::new, "Changelog file '%s' was included more than once"),
     SCHEMA_NAME("schema-name", PatternRule::new, "Schema name does not follow pattern"),
     OBJECT_NAME("object-name", PatternRule::new, "Object name does not follow pattern"),
-    OBJECT_NAME_LENGTH("object-name-length", MaxLengthRule::new, "Object name '%s' must be less than %d characters"),
-    FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern");
+    OBJECT_NAME_LENGTH("object-name-length", MaxLengthRule::new, "Object name '%s' must be less than %d characters");
 
     private String key;
     private Function<RuleConfig, Rule> factory;

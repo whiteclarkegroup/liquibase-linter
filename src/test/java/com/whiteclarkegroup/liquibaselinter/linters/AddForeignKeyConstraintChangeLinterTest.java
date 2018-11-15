@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -39,19 +39,6 @@ class AddForeignKeyConstraintChangeLinterTest {
         addForeignKeyConstraintChange.setConstraintName("BASE_REFERENCE_FK");
         addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner);
         verify(objectNameLinter, times(1)).lintObjectNameLength("BASE_REFERENCE_FK", addForeignKeyConstraintChange, ruleRunner);
-    }
-
-    @DisplayName("Should validate name in incorrect format")
-    @Test
-    void shouldValidateNameInIncorrectFormat(ChangeSet changeSet, RuleRunner ruleRunner) {
-        AddForeignKeyConstraintChange addForeignKeyConstraintChange = new AddForeignKeyConstraintChange();
-        addForeignKeyConstraintChange.setChangeSet(changeSet);
-        addForeignKeyConstraintChange.setBaseTableName("BASE");
-        addForeignKeyConstraintChange.setReferencedTableName("REFERENCE");
-        addForeignKeyConstraintChange.setConstraintName("TEST_PK_ABC");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint 'TEST_PK_ABC' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK"));
     }
 
     @DisplayName("Should validate name in correct format")
@@ -86,17 +73,4 @@ class AddForeignKeyConstraintChangeLinterTest {
         }
     }
 
-    @DisplayName("Should not validate if name in format but validate ending when longer than max length")
-    @Test
-    void shouldNotValidateNameInFormatButValidateEndingWhenMoreThanMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
-        AddForeignKeyConstraintChange addForeignKeyConstraintChange = new AddForeignKeyConstraintChange();
-        addForeignKeyConstraintChange.setChangeSet(changeSet);
-        addForeignKeyConstraintChange.setBaseTableName("TEST_TEST_TEST_TEST_TEST");
-        addForeignKeyConstraintChange.setReferencedTableName("REFERENCE");
-        addForeignKeyConstraintChange.setConstraintName("TEST_PK_ABC");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> addForeignKeyConstraintChangeLinter.lint(addForeignKeyConstraintChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Foreign key constraint '" + addForeignKeyConstraintChange.getConstraintName() +
-                "' must follow pattern {base_table_name}_{parent_table_name}_FK. e.g. ORDER_CUSTOMER_FK"));
-    }
 }
