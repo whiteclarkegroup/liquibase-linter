@@ -28,7 +28,7 @@ class TableNameLengthIntegrationTest extends LinterIntegrationTest {
             "table-name-length/lqllint.json",
             "Table 'THIS_TABLE_NAME_IS_FAR_TOO_LONG' name must not be longer than 26");
 
-        return Arrays.asList(test1, test2);
+        return Arrays.asList(test1, test2, test3);
     }
 
 }
