@@ -40,21 +40,6 @@ class TableNameLinterTest {
 
     @DisplayName("Should not allow table name exceeding max length")
     @Test
-    void shouldNotAllowTableNameExceedingMaxLength(ChangeSet changeSet, RuleRunner ruleRunner) {
-        CreateTableChange createTableChange = new CreateTableChange();
-        createTableChange.setTableName("TEST_TEST_TEST_TEST_TEST_TEST");
-        createTableChange.setRemarks("REMARK");
-        createTableChange.setChangeSet(changeSet);
-        changeSet.addChange(createTableChange);
-
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> tableNameLinter.lintTableName("TEST_TEST_TEST_TEST_TEST_TEST", createTableChange, ruleRunner));
-
-        assertTrue(changeLogParseException.getMessage().contains("Table 'TEST_TEST_TEST_TEST_TEST_TEST' name must not be longer than " + 26));
-    }
-
-    @DisplayName("Should not allow table name exceeding max length")
-    @Test
     void shouldNotAllowLowerCaseTableName(ChangeSet changeSet, RuleRunner ruleRunner) {
         CreateTableChange createTableChange = new CreateTableChange();
         createTableChange.setTableName("test_table");

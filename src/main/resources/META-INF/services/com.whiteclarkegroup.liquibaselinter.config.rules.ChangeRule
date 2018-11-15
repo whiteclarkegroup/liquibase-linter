@@ -7,3 +7,4 @@ com.whiteclarkegroup.liquibaselinter.config.rules.core.DropNotNullRequireColumnD
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnNoDefinePrimaryKeyRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnRemarksRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateTableRemarksRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.TableNameLengthRuleImpl
