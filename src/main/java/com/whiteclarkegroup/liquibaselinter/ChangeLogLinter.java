@@ -83,7 +83,6 @@ public class ChangeLogLinter {
             for (Change change : changes) {
                 ruleRunner.forChange(change)
                         .checkChange()
-                        .run(RuleType.VALID_CONTEXT, contexts)
                         .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
                 lint(change, ruleRunner);
             }

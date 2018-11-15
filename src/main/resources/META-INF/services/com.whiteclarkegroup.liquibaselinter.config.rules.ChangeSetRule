@@ -1,3 +1,4 @@
 com.whiteclarkegroup.liquibaselinter.config.rules.core.HasContextRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.HasCommentRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.NoPreconditionsRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.ValidContextRuleImpl
