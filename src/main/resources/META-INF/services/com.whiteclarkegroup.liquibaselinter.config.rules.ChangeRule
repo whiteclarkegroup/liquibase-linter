@@ -9,3 +9,4 @@ com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnRemarksRuleIm
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateTableRemarksRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.TableNameLengthRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.TableNameRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateIndexNameRuleImpl

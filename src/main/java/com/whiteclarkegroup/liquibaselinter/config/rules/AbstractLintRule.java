@@ -42,6 +42,10 @@ public abstract class AbstractLintRule implements LintRule {
         return patternChecker.check(value, subject);
     }
 
+    protected boolean checkMandatoryPattern(String value, Object subject) {
+        return value != null && patternChecker.check(value, subject);
+    }
+
     @Override
     public String getMessage() {
         return getMesageTemplate();

@@ -15,7 +15,6 @@ public enum RuleType {
     SCHEMA_NAME("schema-name", PatternRule::new, "Schema name does not follow pattern"),
     OBJECT_NAME("object-name", PatternRule::new, "Object name does not follow pattern"),
     OBJECT_NAME_LENGTH("object-name-length", MaxLengthRule::new, "Object name '%s' must be less than %d characters"),
-    CREATE_INDEX_NAME("create-index-name", MandatoryPatternRule::new, "Index name does not follow pattern"),
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern");
 

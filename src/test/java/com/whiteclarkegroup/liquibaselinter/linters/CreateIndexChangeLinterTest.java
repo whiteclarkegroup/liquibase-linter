@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({ChangeSetParameterResolver.class, RuleRunnerParameterResolver.class})
@@ -39,32 +39,6 @@ class CreateIndexChangeLinterTest {
         changeSet.addChange(validChange);
         createIndexChangeLinter.lint(validChange, ruleRunner);
         verify(objectNameLinter, times(1)).lintObjectNameLength("TEST_TEST_I1", validChange, ruleRunner);
-    }
-
-    @DisplayName("Should reject name where prefix doesn't match table name")
-    @Test
-    void shouldValidateInconsistentWithTableName(ChangeSet changeSet, RuleRunner ruleRunner) {
-        CreateIndexChange validChange = new CreateIndexChange();
-        validChange.setChangeSet(changeSet);
-        validChange.setTableName("TEST");
-        validChange.setIndexName("TEST_TEST_I1");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> createIndexChangeLinter.lint(validChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Index 'TEST_TEST_I1' must follow pattern " +
-                "table name followed by 'I' and a number e.g. APPLICATION_I1, or match a primary key or unique constraint name"));
-    }
-
-    @DisplayName("Should reject name where suffix isn't one of _PK, _Un or _In")
-    @Test
-    void shouldValidateUnsuitableSuffix(ChangeSet changeSet, RuleRunner ruleRunner) {
-        CreateIndexChange validChange = new CreateIndexChange();
-        validChange.setChangeSet(changeSet);
-        validChange.setTableName("TEST_TEST");
-        validChange.setIndexName("TEST_TEST_FOO");
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> createIndexChangeLinter.lint(validChange, ruleRunner));
-        assertTrue(changeLogParseException.getMessage().contains("Index 'TEST_TEST_FOO' must follow pattern " +
-                "table name followed by 'I' and a number e.g. APPLICATION_I1, or match a primary key or unique constraint name"));
     }
 
     @DisplayName("Should validate name in correct format for misc index")
