@@ -4,3 +4,4 @@ com.whiteclarkegroup.liquibaselinter.config.rules.core.ModifyDataStartsWithWhere
 com.whiteclarkegroup.liquibaselinter.config.rules.core.PrimaryKeyNameRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnNullableConstraintRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.DropNotNullRequireColumnDataTypeRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.CreateColumnNoDefinePrimaryKeyRuleImpl

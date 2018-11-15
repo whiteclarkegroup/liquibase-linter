@@ -55,22 +55,4 @@ class ColumnConfigLinterTest {
             fail(e);
         }
     }
-
-    @DisplayName("Should not allow primary key attribute")
-    @Test
-    void shouldNotAllowPrimaryKeyAttribute(AddColumnChange addColumnChange, RuleRunner ruleRunner) {
-        AddColumnConfig addColumnConfig = new AddColumnConfig();
-        addColumnConfig.setName("TEST");
-        addColumnConfig.setRemarks("REMARK");
-        final ConstraintsConfig constraints = new ConstraintsConfig();
-        constraints.setNullable(true);
-        constraints.setPrimaryKey(true);
-        addColumnConfig.setConstraints(constraints);
-        addColumnChange.addColumn(addColumnConfig);
-
-        ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> columnConfigLinter.lintColumnConfig(addColumnChange, ruleRunner));
-
-        assertTrue(changeLogParseException.getMessage().contains("Add column must not use primary key attribute. Instead use AddPrimaryKey change type"));
-    }
 }
