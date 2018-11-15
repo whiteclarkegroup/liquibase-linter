@@ -8,7 +8,6 @@ import liquibase.exception.ChangeLogParseException;
 
 public class AddColumnChangeLinter implements Linter<AddColumnChange> {
 
-    private final ColumnConfigLinter columnConfigLinter = new ColumnConfigLinter();
     private final ObjectNameLinter objectNameLinter = new ObjectNameLinter();
 
     @Override
@@ -16,11 +15,6 @@ public class AddColumnChangeLinter implements Linter<AddColumnChange> {
         for (AddColumnConfig addColumnConfig : change.getColumns()) {
             getObjectNameLinter().lintObjectName(addColumnConfig.getName(), change, ruleRunner);
         }
-        getColumnConfigLinter().lintColumnConfig(change, ruleRunner);
-    }
-
-    ColumnConfigLinter getColumnConfigLinter() {
-        return columnConfigLinter;
     }
 
     ObjectNameLinter getObjectNameLinter() {

@@ -18,17 +18,12 @@ import static org.mockito.Mockito.*;
 class CreateTableChangeLinterTest {
 
     private CreateTableChangeLinter createTableChangeLinter;
-    private ColumnConfigLinter columnConfigLinter;
     private TableNameLinter tableNameLinter;
 
     @BeforeEach
     void setUp() {
         tableNameLinter = mock(TableNameLinter.class);
-        columnConfigLinter = mock(ColumnConfigLinter.class);
         createTableChangeLinter = new CreateTableChangeLinter() {
-            public ColumnConfigLinter getColumnConfigLinter() {
-                return columnConfigLinter;
-            }
 
             public TableNameLinter getTableNameLinter() {
                 return tableNameLinter;
