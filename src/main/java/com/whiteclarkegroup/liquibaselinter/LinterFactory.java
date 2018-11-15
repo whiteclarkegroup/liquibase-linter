@@ -13,12 +13,10 @@ class LinterFactory {
     private static final Map<Class, Linter> LINTERS =
             ImmutableMap.<Class, Linter>builder()
                     .put(AddColumnChange.class, new AddColumnChangeLinter())
-                    .put(CreateTableChange.class, new CreateTableChangeLinter())
                     .put(AddUniqueConstraintChange.class, new AddUniqueConstraintChangeLinter())
                     .put(CreateIndexChange.class, new CreateIndexChangeLinter())
                     .put(AddPrimaryKeyChange.class, new AddPrimaryKeyChangeLinter())
                     .put(AddForeignKeyConstraintChange.class, new AddForeignKeyConstraintChangeLinter())
-                    .put(RenameTableChange.class, new RenameTableChangeLinter())
                     .put(RenameViewChange.class, new RenameViewChangeLinter())
                     .put(RenameColumnChange.class, new RenameColumnChangeLinter())
                     .put(MergeColumnChange.class, new MergeColumnChangeLinter())

@@ -22,16 +22,6 @@ class LinterFactoryTest {
         );
     }
 
-    @DisplayName("Should return create table linter for create table change type")
-    @Test
-    void shouldReturnCreateTableLinter() {
-        final Optional<Linter> linter = LinterFactory.getLinter(new CreateTableChange());
-        assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), CreateTableChangeLinter.class)
-        );
-    }
-
     @DisplayName("Should return create index change linter")
     @Test
     void shouldReturnCreateIndexChangeLinter() {
@@ -69,16 +59,6 @@ class LinterFactoryTest {
         assertAll(
                 () -> assertTrue(linter.isPresent()),
                 () -> assertEquals(linter.get().getClass(), AddForeignKeyConstraintChangeLinter.class)
-        );
-    }
-
-    @DisplayName("Should return rename table change linter")
-    @Test
-    void shouldReturnRenameTableLinter() {
-        final Optional<Linter> linter = LinterFactory.getLinter(new RenameTableChange());
-        assertAll(
-                () -> assertTrue(linter.isPresent()),
-                () -> assertEquals(linter.get().getClass(), RenameTableChangeLinter.class)
         );
     }
 

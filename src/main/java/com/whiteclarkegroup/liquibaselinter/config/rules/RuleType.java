@@ -13,7 +13,6 @@ public enum RuleType {
 
     NO_DUPLICATE_INCLUDES("no-duplicate-includes", GenericRule::new, "Changelog file '%s' was included more than once"),
     SCHEMA_NAME("schema-name", PatternRule::new, "Schema name does not follow pattern"),
-    TABLE_NAME("table-name", PatternRule::new, "Table name does not follow pattern"),
     OBJECT_NAME("object-name", PatternRule::new, "Object name does not follow pattern"),
     OBJECT_NAME_LENGTH("object-name-length", MaxLengthRule::new, "Object name '%s' must be less than %d characters"),
     CREATE_INDEX_NAME("create-index-name", MandatoryPatternRule::new, "Index name does not follow pattern"),
