@@ -32,7 +32,7 @@ public class CreateColumnRemarksRuleImpl extends AbstractLintRule implements Cha
     public boolean invalid(AbstractChange change) {
         ChangeWithColumns changeWithColumns = (ChangeWithColumns) change;
         for (ColumnConfig columnConfig : (List<ColumnConfig>) changeWithColumns.getColumns()) {
-            if (columnConfig.getRemarks() == null || columnConfig.getRemarks().isEmpty()) {
+            if (checkNotBlank(columnConfig.getRemarks())) {
                 return true;
             }
         }

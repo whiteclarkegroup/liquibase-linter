@@ -14,7 +14,6 @@ public class HasCommentRuleImpl extends AbstractLintRule implements ChangeSetRul
 
     @Override
     public boolean invalid(ChangeSet changeSet) {
-        final String comments = changeSet.getComments();
-        return comments == null || comments.isEmpty();
+        return checkNotBlank(changeSet.getComments());
     }
 }

@@ -43,7 +43,7 @@ public abstract class AbstractLintRule implements LintRule {
     }
 
     protected boolean checkMandatoryPattern(String value, Object subject) {
-        return value != null && patternChecker.check(value, subject);
+        return checkNotBlank(value) || patternChecker.check(value, subject);
     }
 
     @Override

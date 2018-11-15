@@ -19,7 +19,7 @@ public class CreateTableRemarksRuleImpl extends AbstractLintRule implements Chan
 
     @Override
     public boolean invalid(CreateTableChange createTableChange) {
-        return createTableChange.getRemarks() == null || createTableChange.getRemarks().isEmpty();
+        return checkNotBlank(createTableChange.getRemarks());
     }
 
 }

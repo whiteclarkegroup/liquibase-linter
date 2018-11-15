@@ -19,7 +19,7 @@ public class DropNotNullRequireColumnDataTypeRuleImpl extends AbstractLintRule i
 
     @Override
     public boolean invalid(DropNotNullConstraintChange dropNotNullConstraintChange) {
-        return dropNotNullConstraintChange.getColumnDataType() == null || dropNotNullConstraintChange.getColumnDataType().isEmpty();
+        return checkNotBlank(dropNotNullConstraintChange.getColumnDataType());
     }
 
 }
