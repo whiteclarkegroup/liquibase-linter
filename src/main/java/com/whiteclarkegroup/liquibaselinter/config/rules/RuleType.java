@@ -24,8 +24,7 @@ public enum RuleType {
     UNIQUE_CONSTRAINT_NAME("unique-constraint-name", MandatoryPatternRule::new, "Unique constraint name does not follow pattern"),
     FOREIGN_KEY_NAME("foreign-key-name", MandatoryPatternRule::new, "Foreign key name is missing or does not follow pattern"),
     ISOLATE_DDL_CHANGES("isolate-ddl-changes", IsolateDDLChanges::new, "Should only have a single ddl change per change set"),
-    SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts"),
-    DROP_NOT_NULL_REQUIRE_COLUMN_DATA_TYPE("drop-not-null-require-column-data-type", NotBlankRule::new, "Drop not null constraint column data type attribute must be populated");
+    SEPARATE_DDL_CONTEXT("separate-ddl-context", SeparateDDLContexts::new, "Should have a ddl changes under ddl contexts");
 
     private String key;
     private Function<RuleConfig, Rule> factory;

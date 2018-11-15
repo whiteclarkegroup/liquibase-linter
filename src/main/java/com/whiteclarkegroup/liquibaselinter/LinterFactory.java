@@ -22,7 +22,6 @@ class LinterFactory {
                     .put(RenameViewChange.class, new RenameViewChangeLinter())
                     .put(RenameColumnChange.class, new RenameColumnChangeLinter())
                     .put(MergeColumnChange.class, new MergeColumnChangeLinter())
-                    .put(DropNotNullConstraintChange.class, new DropNotNullConstraintChangeLinter())
                     .build();
 
     private LinterFactory() {
