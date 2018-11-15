@@ -3,15 +3,12 @@ package com.whiteclarkegroup.liquibaselinter;
 import com.google.common.collect.ImmutableList;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
-import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import liquibase.change.Change;
 import liquibase.change.core.*;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,15 +70,12 @@ public class ChangeLogLinter {
                 continue;
             }
 
-            Collection<String> contexts = changeSet.getContexts() != null ? changeSet.getContexts().getContexts() : Collections.emptySet();
             List<Change> changes = changeSet.getChanges();
 
             ruleRunner.forChangeSet(changeSet).checkChangeSet();
 
             for (Change change : changes) {
-                ruleRunner.forChange(change)
-                        .checkChange()
-                        .run(RuleType.SEPARATE_DDL_CONTEXT, contexts);
+                ruleRunner.forChange(change).checkChange();
                 lint(change, ruleRunner);
             }
 

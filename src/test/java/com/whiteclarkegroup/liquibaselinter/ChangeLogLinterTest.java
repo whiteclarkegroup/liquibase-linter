@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
@@ -39,11 +40,12 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should lint change sets with standard comment")
     @Test
-    void shouldLintChangeSetsWithStandardComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldLintChangeSetsWithStandardComment() throws ChangeLogParseException {
+        Config config = new Config(null, ImmutableMap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
-        changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
-        verify(changeSet, times(2)).getChanges();
+        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
+        verify(changeSet, times(1)).getChanges();
     }
 
 
@@ -58,11 +60,12 @@ class ChangeLogLinterTest {
 
     @DisplayName("Should not fall over on null comment")
     @Test
-    void shouldNotFallOverOnNullComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldNotFallOverOnNullComment() throws ChangeLogParseException {
+        Config config = new Config(null, ImmutableMap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
-        changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
-        verify(changeSet, times(2)).getChanges();
+        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
+        verify(changeSet, times(1)).getChanges();
     }
 
     @DisplayName("Should not allow more than one ddl_test change in a change set")
