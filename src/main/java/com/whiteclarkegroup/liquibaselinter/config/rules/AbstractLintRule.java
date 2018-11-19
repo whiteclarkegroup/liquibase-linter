@@ -46,6 +46,10 @@ public abstract class AbstractLintRule implements LintRule {
         return checkNotBlank(value) || patternChecker.check(value, subject);
     }
 
+    protected boolean checkMaxLength(String value) {
+        return value != null && value.length() > getConfig().getMaxLength();
+    }
+
     @Override
     public String getMessage() {
         return getMesageTemplate();

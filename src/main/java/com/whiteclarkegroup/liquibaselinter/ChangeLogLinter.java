@@ -10,7 +10,6 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ChangeLogLinter {
 
@@ -76,7 +75,6 @@ public class ChangeLogLinter {
 
             for (Change change : changes) {
                 ruleRunner.forChange(change).checkChange();
-                lint(change, ruleRunner);
             }
 
         }
@@ -96,14 +94,6 @@ public class ChangeLogLinter {
 
     private boolean hasIgnoreComment(ChangeSet changeSet) {
         return changeSet.getComments() != null && changeSet.getComments().endsWith("lql-ignore");
-    }
-
-    @SuppressWarnings("unchecked")
-    private void lint(Change change, RuleRunner ruleRunner) throws ChangeLogParseException {
-        final Optional<Linter> linter = LinterFactory.getLinter(change);
-        if (linter.isPresent()) {
-            linter.get().lint(change, ruleRunner);
-        }
     }
 
 }

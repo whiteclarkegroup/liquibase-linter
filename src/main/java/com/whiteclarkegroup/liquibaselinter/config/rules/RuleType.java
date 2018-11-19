@@ -1,7 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.GenericRule;
-import com.whiteclarkegroup.liquibaselinter.config.rules.generic.MaxLengthRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.generic.PatternRule;
 
 import java.util.Map;
@@ -11,9 +10,7 @@ import java.util.function.Function;
 public enum RuleType {
 
     NO_DUPLICATE_INCLUDES("no-duplicate-includes", GenericRule::new, "Changelog file '%s' was included more than once"),
-    SCHEMA_NAME("schema-name", PatternRule::new, "Schema name does not follow pattern"),
-    OBJECT_NAME("object-name", PatternRule::new, "Object name does not follow pattern"),
-    OBJECT_NAME_LENGTH("object-name-length", MaxLengthRule::new, "Object name '%s' must be less than %d characters");
+    SCHEMA_NAME("schema-name", PatternRule::new, "Schema name does not follow pattern");
 
     private String key;
     private Function<RuleConfig, Rule> factory;

@@ -30,7 +30,7 @@ class RuleRunnerTest {
     }
 
     private RuleRunner getRuleRunner() {
-        final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of(RuleType.OBJECT_NAME.getKey(), RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
+        final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of(RuleType.SCHEMA_NAME.getKey(), RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
         return new RuleRunner(new Config(null, ruleConfigMap, true));
     }
 
