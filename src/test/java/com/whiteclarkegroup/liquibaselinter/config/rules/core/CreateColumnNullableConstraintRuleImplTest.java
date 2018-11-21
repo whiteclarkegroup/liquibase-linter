@@ -40,7 +40,7 @@ class CreateColumnNullableConstraintRuleImplTest {
 
     @DisplayName("Not null nullable attribute should be valid")
     @Test
-    void notNullNullableAttributeShouldBeInvalid() {
+    void notNullNullableAttributeShouldBeValid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         constraintsConfig.setNullable(Boolean.TRUE);
         final AddColumnChange addColumnChange = mockAddColumnChangeWithConstraints(constraintsConfig);

@@ -35,9 +35,9 @@ class CreateColumnNoDefinePrimaryKeyRuleImplTest {
         assertFalse(createColumnNoDefinePrimaryKeyRule.invalid(buildAddColumnChange(Boolean.FALSE)));
     }
 
-    @DisplayName("False primary key attribute should be valid")
+    @DisplayName("True primary key attribute should be valid")
     @Test
-    void falsePrimaryKeyAttributeShouldBeInvalid() {
+    void truePrimaryKeyAttributeShouldBeInvalid() {
         ConstraintsConfig constraintsConfig = new ConstraintsConfig();
         constraintsConfig.setPrimaryKey(Boolean.TRUE);
         assertTrue(constraintsConfig.isPrimaryKey());

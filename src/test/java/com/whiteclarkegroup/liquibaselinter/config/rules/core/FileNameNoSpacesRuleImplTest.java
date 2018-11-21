@@ -23,7 +23,7 @@ class FileNameNoSpacesRuleImplTest {
         assertTrue(fileNameNoSpaces.invalid(withFilePath("//test/dir/this has spaces.xml")));
     }
 
-    @DisplayName("Filename with spaces should be invalid")
+    @DisplayName("Filename without spaces should be valid")
     @Test
     void filenameWithoutSpacesShouldBeValid() {
         assertFalse(fileNameNoSpaces.invalid(withFilePath("//test/dir/this-has-spaces.xml")));

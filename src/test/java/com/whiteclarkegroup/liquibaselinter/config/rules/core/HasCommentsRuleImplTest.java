@@ -12,7 +12,7 @@ class HasCommentsRuleImplTest {
 
     @DisplayName("Should pass when a comment has been provided on the changeSet")
     @Test
-    void shouldPassWithContexts() {
+    void shouldPassWithPopulatedComment() {
         ChangeSet changeSet = mock(ChangeSet.class, RETURNS_DEEP_STUBS);
         when(changeSet.getComments()).thenReturn("Some comment");
         assertFalse(new HasCommentRuleImpl().invalid(changeSet));
@@ -20,9 +20,17 @@ class HasCommentsRuleImplTest {
 
     @DisplayName("Should fail when a comment has not been provided on the changeSet")
     @Test
-    void shouldFailWithNoContexts() {
+    void shouldFailWithNoComment() {
         ChangeSet changeSet = mock(ChangeSet.class, RETURNS_DEEP_STUBS);
         when(changeSet.getComments()).thenReturn(null);
+        assertTrue(new HasCommentRuleImpl().invalid(changeSet));
+    }
+
+    @DisplayName("Should fail when a comment is blank on the changeSet")
+    @Test
+    void shouldFailWithBlankComment() {
+        ChangeSet changeSet = mock(ChangeSet.class, RETURNS_DEEP_STUBS);
+        when(changeSet.getComments()).thenReturn("");
         assertTrue(new HasCommentRuleImpl().invalid(changeSet));
     }
 
