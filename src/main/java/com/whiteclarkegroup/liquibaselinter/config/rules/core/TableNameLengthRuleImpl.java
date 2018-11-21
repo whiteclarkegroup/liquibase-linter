@@ -27,7 +27,7 @@ public class TableNameLengthRuleImpl extends AbstractLintRule implements ChangeR
     @Override
     public boolean invalid(AbstractChange change) {
         String tableName = getTableName(change);
-        return tableName != null && tableName.length() > getConfig().getMaxLength();
+        return tableName != null && checkMaxLength(tableName);
     }
 
     @Override
