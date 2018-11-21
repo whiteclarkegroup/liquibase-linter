@@ -14,3 +14,5 @@ com.whiteclarkegroup.liquibaselinter.config.rules.core.UniqueConstraintNameRuleI
 com.whiteclarkegroup.liquibaselinter.config.rules.core.ForeignKeyNameRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.ObjectNameRulesImpl$ObjectNameLengthRuleImpl
 com.whiteclarkegroup.liquibaselinter.config.rules.core.ObjectNameRulesImpl$ObjectNameRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.SchemaNameRulesImpl$NoSchemaNameRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.SchemaNameRulesImpl$SchemaNameRuleImpl
