@@ -10,7 +10,10 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
@@ -138,19 +141,6 @@ public class RuleRunner {
             }
         }
 
-        @SuppressWarnings("unchecked")
-        public RunningContext run(RuleType ruleType, Object object) throws ChangeLogParseException {
-            final Optional<Rule> optionalRule = ruleType.create(config.getRules());
-            if (optionalRule.isPresent()) {
-                Rule rule = optionalRule.get();
-                final String errorMessage = getErrorMessage(ruleType, object, rule);
-                if (rule.getRuleConfig().isEnabled() && shouldApply(rule.getRuleConfig(), ruleType.getKey(), errorMessage) && rule.invalid(object, change)) {
-                    handleError(errorMessage, ruleType.getKey());
-                }
-            }
-            return this;
-        }
-
         private void handleError(String errorMessage, String rule) throws ChangeLogParseException {
             if (config.isFailFast()) {
                 throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
@@ -159,18 +149,11 @@ public class RuleRunner {
             }
         }
 
-        private String getErrorMessage(RuleType ruleType, Object object, Rule rule) {
-            final String errorMessage = Optional.ofNullable(rule.getErrorMessage()).orElse(ruleType.getDefaultErrorMessage());
-            if (rule instanceof WithFormattedErrorMessage) {
-                return ((WithFormattedErrorMessage) rule).formatErrorMessage(errorMessage, object);
-            }
-            return errorMessage;
-        }
-
         private boolean shouldApply(RuleConfig ruleConfig, String ruleKey, String errorMessage) {
             final boolean ignored = isIgnored(ruleKey);
             if (ignored) {
                 reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, ruleKey, errorMessage));
+                return false;
             }
             return evaluateCondition(ruleConfig, change) && !ignored;
         }

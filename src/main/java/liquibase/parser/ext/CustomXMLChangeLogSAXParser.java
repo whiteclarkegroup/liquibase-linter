@@ -7,7 +7,6 @@ import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
-import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.Reporter;
@@ -47,8 +46,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
 
         RuleRunner ruleRunner = config.getRuleRunner();
 
-        checkSchemaName(parsedNode, ruleRunner);
-
         DatabaseChangeLog changeLog = new DatabaseChangeLog(physicalChangeLogLocation);
         changeLog.setChangeLogParameters(changeLogParameters);
         try {
@@ -86,17 +83,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     @Override
     public int getPriority() {
         return 100;
-    }
-
-    void checkSchemaName(ParsedNode parsedNode, RuleRunner ruleRunner) throws ChangeLogParseException {
-        if ("schemaName".equals(parsedNode.getName())) {
-            ruleRunner.forGeneric().run(RuleType.SCHEMA_NAME, parsedNode.getValue().toString());
-        }
-        if (parsedNode.getChildren() != null && !parsedNode.getChildren().isEmpty()) {
-            for (ParsedNode childNode : parsedNode.getChildren()) {
-                checkSchemaName(childNode, ruleRunner);
-            }
-        }
     }
 
     protected void loadConfig(ResourceAccessor resourceAccessor) {
