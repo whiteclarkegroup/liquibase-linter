@@ -10,6 +10,7 @@ public class ReportItem {
     private final String rule;
     private final ReportItemType type;
     private final String message;
+
     private ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {
         this.filePath = filePath;
         this.changeSetId = changeSetId;
