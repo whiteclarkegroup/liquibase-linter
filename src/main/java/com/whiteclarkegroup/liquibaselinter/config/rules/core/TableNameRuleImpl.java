@@ -26,12 +26,12 @@ public class TableNameRuleImpl extends AbstractLintRule implements ChangeRule<Ab
 
     @Override
     public boolean invalid(AbstractChange change) {
-        return checkPattern(getTableName(change), change);
+        return checkMandatoryPattern(getTableName(change), change);
     }
 
     @Override
     public String getMessage(AbstractChange change) {
-        return formatMessage(getTableName(change));
+        return formatMessage(getTableName(change), getConfig().getPatternString());
     }
 
     private String getTableName(AbstractChange change) {

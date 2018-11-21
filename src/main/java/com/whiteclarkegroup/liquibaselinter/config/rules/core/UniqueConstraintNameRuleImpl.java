@@ -24,7 +24,7 @@ public class UniqueConstraintNameRuleImpl extends AbstractLintRule implements Ch
 
     @Override
     public String getMessage(AddUniqueConstraintChange change) {
-        return formatMessage(change.getConstraintName());
+        return formatMessage(change.getConstraintName(), getConfig().getPatternString());
     }
 
 }
