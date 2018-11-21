@@ -8,7 +8,6 @@ import liquibase.change.core.*;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ObjectNameRulesImpl {
@@ -21,7 +20,9 @@ public class ObjectNameRulesImpl {
             || change instanceof CreateTableChange
             || change instanceof MergeColumnChange
             || change instanceof RenameColumnChange
-            || change instanceof RenameViewChange;
+            || change instanceof RenameViewChange
+            || change instanceof CreateViewChange
+            || change instanceof CreateIndexChange;
     }
 
     private static Collection<String> getObjectNames(AbstractChange change) {
@@ -41,6 +42,10 @@ public class ObjectNameRulesImpl {
             return Collections.singletonList(((RenameColumnChange) change).getNewColumnName());
         } else if (change instanceof RenameViewChange) {
             return Collections.singletonList(((RenameViewChange) change).getNewViewName());
+        } else if (change instanceof CreateViewChange) {
+            return Collections.singletonList(((CreateViewChange) change).getViewName());
+        } else if (change instanceof CreateIndexChange) {
+            return Collections.singletonList(((CreateIndexChange) change).getIndexName());
         }
         return Collections.emptyList();
     }
@@ -65,13 +70,13 @@ public class ObjectNameRulesImpl {
 
         @Override
         public boolean invalid(AbstractChange change) {
-            return getObjectNames(change).stream().anyMatch(objectName -> checkPattern(objectName, change));
+            return getObjectNames(change).stream().anyMatch(objectName -> checkMandatoryPattern(objectName, change));
         }
 
         @Override
         public String getMessage(AbstractChange change) {
-            Optional<String> first = getObjectNames(change).stream().filter(objectName -> checkPattern(objectName, change)).findFirst();
-            return formatMessage(first.get());
+            String joined = getObjectNames(change).stream().filter(objectName -> checkMandatoryPattern(objectName, change)).collect(Collectors.joining(","));
+            return formatMessage(joined, getConfig().getPatternString());
         }
 
     }
@@ -91,26 +96,19 @@ public class ObjectNameRulesImpl {
 
         @Override
         public boolean supports(AbstractChange change) {
-            return doesSupport(change) || change instanceof CreateIndexChange;
+            return doesSupport(change);
         }
 
         @Override
         public boolean invalid(AbstractChange change) {
-            if (change instanceof CreateIndexChange) {
-                return checkMaxLength(((CreateIndexChange) change).getIndexName());
-            } else {
-                return getObjectNames(change).stream().anyMatch(this::checkMaxLength);
-            }
+            return getObjectNames(change).stream().anyMatch(this::checkMaxLength);
         }
 
         @Override
         public String getMessage(AbstractChange change) {
-            if (change instanceof CreateIndexChange) {
-                return formatMessage(((CreateIndexChange) change).getIndexName(), getConfig().getMaxLength());
-            } else {
-                Optional<String> first = getObjectNames(change).stream().filter(this::checkMaxLength).findFirst();
-                return formatMessage(first.get(), getConfig().getMaxLength());
-            }
+            String joined = getObjectNames(change).stream().filter(this::checkMaxLength).collect(Collectors.joining(","));
+            return formatMessage(joined, getConfig().getMaxLength());
+
         }
     }
 }

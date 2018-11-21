@@ -17,13 +17,13 @@ class PrimaryKeyNameRuleImplTest {
         primaryKeyNameRule = new PrimaryKeyNameRuleImpl();
     }
 
-    @DisplayName("Foreign key name must not be null")
+    @DisplayName("Primary key name must not be null")
     @Test
     void primaryKeyNameMustNotBeNull() {
         assertTrue(primaryKeyNameRule.invalid(getAddPrimaryKeyConstraintChange(null)));
     }
 
-    @DisplayName("Foreign key name must follow pattern basic")
+    @DisplayName("Primary key name must follow pattern basic")
     @Test
     void primaryKeyNameMustFollowPatternBasic() {
         primaryKeyNameRule.configure(RuleConfig.builder().withPattern("^VALID_PK$").build());
@@ -31,7 +31,7 @@ class PrimaryKeyNameRuleImplTest {
         assertFalse(primaryKeyNameRule.invalid(getAddPrimaryKeyConstraintChange("VALID_PK")));
     }
 
-    @DisplayName("Foreign key name must follow pattern dynamic value")
+    @DisplayName("Primary key name must follow pattern dynamic value")
     @Test
     void primaryKeyNameMustFollowPatternDynamicValue() {
         primaryKeyNameRule.configure(RuleConfig.builder().withPattern("^{{value}}_PK$").withDynamicValue("tableName").build());
@@ -39,7 +39,7 @@ class PrimaryKeyNameRuleImplTest {
         assertFalse(primaryKeyNameRule.invalid(getAddPrimaryKeyConstraintChange("TABLE_PK")));
     }
 
-    @DisplayName("Foreign key name rule should support formatted error message with pattern arg")
+    @DisplayName("Primary key name rule should support formatted error message with pattern arg")
     @Test
     void primaryKeyNameRuleShouldReturnFormattedErrorMessage() {
         primaryKeyNameRule.configure(RuleConfig.builder().withPattern("^VALID_PK$").withErrorMessage("Primary key constraint '%s' must follow pattern '%s'").build());
