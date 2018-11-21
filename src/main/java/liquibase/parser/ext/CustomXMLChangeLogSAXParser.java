@@ -5,7 +5,7 @@ import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
-import com.whiteclarkegroup.liquibaselinter.config.rules.Rule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
@@ -106,10 +106,10 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     }
 
     void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
-        final Optional<Rule> rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
-        if (rule.isPresent() && rule.get().getRuleConfig().isEnabled()) {
+        RuleConfig ruleConfig = config.getRules().get("no-duplicate-includes");
+        if (ruleConfig != null && ruleConfig.isEnabled()) {
             if (alreadyParsed.contains(physicalChangeLogLocation)) {
-                final String errorMessage = Optional.ofNullable(rule.get().getErrorMessage()).orElse(RuleType.NO_DUPLICATE_INCLUDES.getDefaultErrorMessage());
+                final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
             alreadyParsed.add(physicalChangeLogLocation);
