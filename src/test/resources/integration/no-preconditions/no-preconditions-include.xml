@@ -3,8 +3,6 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
 
-    <include relativeToChangelogFile="true" file="no-preconditions-include.xml"/>
-
     <changeSet id="201809011238" author="luke.rogers">
         <insert tableName="FOO">
             <column name="BAR" value="test value"/>
