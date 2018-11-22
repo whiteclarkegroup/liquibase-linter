@@ -4,14 +4,11 @@ import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.resolvers.DefaultConfigParameterResolver;
 import com.whiteclarkegroup.liquibaselinter.resolvers.RuleRunnerParameterResolver;
 import liquibase.exception.ChangeLogParseException;
-import liquibase.parser.core.ParsedNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @ExtendWith({DefaultConfigParameterResolver.class, RuleRunnerParameterResolver.class})
 class CustomXMLChangeLogSAXParserTest {
@@ -30,10 +27,4 @@ class CustomXMLChangeLogSAXParserTest {
         assertEquals("Changelog file 'foo/bar/baz.xml' was included more than once", changeLogParseException.getMessage());
     }
 
-    private ParsedNode mockParsedNode(String value) {
-        ParsedNode parsedNode = mock(ParsedNode.class);
-        when(parsedNode.getName()).thenReturn("schemaName");
-        when(parsedNode.getValue()).thenReturn(value);
-        return parsedNode;
-    }
 }
