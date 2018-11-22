@@ -4,7 +4,7 @@ title: schema-name
 
 ## Why?
 
-You might want to restrict which schema names changes can be made in, or ensure that that are parameterised rather than hardcoded.
+You might want to restrict which schema names changes can be made in.
 
 The `schema-name` rule matches the regex you provide against any `schemaName` attributes on changes, and fails where it is not matched.
 
@@ -19,8 +19,8 @@ The `schema-name` rule matches the regex you provide against any `schemaName` at
     "rules": {
         "schema-name": {
             "enabled": true,
-            "pattern": "^\\$\\{[a-z_]+\\}$",
-            "errorMessage": "Must use schema name token, not %s"
+            "pattern": "^FOO_SCHEMA$",
+            "errorMessage": "Schema name must follow pattern '%s'"
         }
     }
 }
