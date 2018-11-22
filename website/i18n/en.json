@@ -4,38 +4,105 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "Quality control for your Liquibase scripts",
-    "configure": "Configure",
-    "install": "Install",
-    "rules/create-column-no-define-primary-key": "create-column-no-define-primary-key",
-    "rules/create-column-nullable-constraint": "create-column-nullable-constraint",
-    "rules/create-column-remarks": "create-column-remarks",
-    "rules/create-index-name": "create-index-name",
-    "rules/create-table-remarks": "create-table-remarks",
-    "rules/drop-not-null-require-column-data-type": "drop-not-null-require-column-data-type",
-    "rules/file-name-no-spaces": "file-name-no-spaces",
-    "rules/foreign-key-name": "foreign-key-name",
-    "rules/has-comment": "has-comment",
-    "rules/has-context": "has-context",
-    "rules/illegal-change-types": "illegal-change-types",
-    "rules/index": "Using Rules",
-    "rules/isolate-ddl-changes": "isolate-ddl-changes",
-    "rules/modify-data-enforce-where": "modify-data-enforce-where",
-    "rules/modify-data-starts-with-where": "modify-data-starts-with-where",
-    "rules/no-duplicate-includes": "no-duplicate-includes",
-    "rules/no-preconditions": "no-preconditions",
-    "rules/object-name-length": "object-name-length",
-    "rules/object-name": "object-name",
-    "rules/primary-key-name": "primary-key-name",
-    "rules/schema-name": "schema-name",
-    "rules/separate-ddl-context": "separate-ddl-context",
-    "rules/table-name-length": "table-name-length",
-    "rules/table-name": "table-name",
-    "rules/unique-constraint-name": "unique-constraint-name",
-    "rules/valid-context": "valid-context",
-    "Setup": "Setup",
-    "Rules": "Rules",
-    "Blog": "Blog",
-    "GitHub": "GitHub"
+      "docs": {
+          "configure": {
+              "title": "Configure"
+          },
+          "install": {
+              "title": "Install"
+          },
+          "rules/create-column-no-define-primary-key": {
+              "title": "create-column-no-define-primary-key"
+          },
+          "rules/create-column-nullable-constraint": {
+              "title": "create-column-nullable-constraint"
+          },
+          "rules/create-column-remarks": {
+              "title": "create-column-remarks"
+          },
+          "rules/create-index-name": {
+              "title": "create-index-name"
+          },
+          "rules/create-table-remarks": {
+              "title": "create-table-remarks"
+          },
+          "rules/drop-not-null-require-column-data-type": {
+              "title": "drop-not-null-require-column-data-type"
+          },
+          "rules/file-name-no-spaces": {
+              "title": "file-name-no-spaces"
+          },
+          "rules/foreign-key-name": {
+              "title": "foreign-key-name"
+          },
+          "rules/has-comment": {
+              "title": "has-comment"
+          },
+          "rules/has-context": {
+              "title": "has-context"
+          },
+          "rules/illegal-change-types": {
+              "title": "illegal-change-types"
+          },
+          "rules/index": {
+              "title": "Using Rules"
+          },
+          "rules/isolate-ddl-changes": {
+              "title": "isolate-ddl-changes"
+          },
+          "rules/modify-data-enforce-where": {
+              "title": "modify-data-enforce-where"
+          },
+          "rules/modify-data-starts-with-where": {
+              "title": "modify-data-starts-with-where"
+          },
+          "rules/no-duplicate-includes": {
+              "title": "no-duplicate-includes"
+          },
+          "rules/no-preconditions": {
+              "title": "no-preconditions"
+          },
+          "rules/no-schema-name": {
+              "title": "no-schema-name"
+          },
+          "rules/object-name-length": {
+              "title": "object-name-length"
+          },
+          "rules/object-name": {
+              "title": "object-name"
+          },
+          "rules/primary-key-name": {
+              "title": "primary-key-name"
+          },
+          "rules/schema-name": {
+              "title": "schema-name"
+          },
+          "rules/separate-ddl-context": {
+              "title": "separate-ddl-context"
+          },
+          "rules/table-name-length": {
+              "title": "table-name-length"
+          },
+          "rules/table-name": {
+              "title": "table-name"
+          },
+          "rules/unique-constraint-name": {
+              "title": "unique-constraint-name"
+          },
+          "rules/valid-context": {
+              "title": "valid-context"
+          }
+      },
+      "links": {
+          "Setup": "Setup",
+          "Rules": "Rules",
+          "Blog": "Blog",
+          "GitHub": "GitHub"
+      },
+      "categories": {
+          "Setup": "Setup",
+          "Rules": "Rules"
+      }
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

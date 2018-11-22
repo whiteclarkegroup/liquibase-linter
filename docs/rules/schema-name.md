@@ -8,8 +8,6 @@ You might want to restrict which schema names changes can be made in, or ensure 
 
 The `schema-name` rule matches the regex you provide against any `schemaName` attributes on changes, and fails where it is not matched.
 
-This rule is run _before_ any parameters are replaced, so it can help you ensure that schema names are properly parameterised, if that's important to you. 
-
 ## Options
 
 - `pattern` - (regex, as string) regular expression that any `schemaName` attribute should adhere to
