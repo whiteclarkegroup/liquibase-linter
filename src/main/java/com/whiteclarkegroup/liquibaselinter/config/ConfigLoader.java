@@ -17,7 +17,7 @@ public class ConfigLoader {
             Config config;
             if ((config = loadConfig(resourceAccessor, LQLINT_CONFIG)) != null) {
                 return config;
-            } else if ((config = loadConfig(resourceAccessor, LQLINT_CONFIG)) != null) {
+            } else if ((config = loadConfig(resourceAccessor, LQLLINT_CONFIG)) != null) {
                 return config;
             }
         } catch (IOException e) {
