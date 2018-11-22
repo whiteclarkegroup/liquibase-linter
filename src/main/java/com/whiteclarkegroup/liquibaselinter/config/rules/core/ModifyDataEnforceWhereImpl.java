@@ -19,7 +19,7 @@ public class ModifyDataEnforceWhereImpl extends AbstractLintRule implements Chan
 
     @Override
     public boolean invalid(AbstractModifyDataChange modifyDataChange) {
-        return checkNotBlank(modifyDataChange.getWhere());
+        return getConfig().getValues().contains(modifyDataChange.getTableName()) && checkNotBlank(modifyDataChange.getWhere());
     }
 
     @Override
