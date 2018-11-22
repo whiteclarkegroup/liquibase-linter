@@ -13,16 +13,7 @@ import java.util.stream.Collectors;
 public class ObjectNameRulesImpl {
 
     private static boolean doesSupport(AbstractChange change) {
-        return change instanceof AddColumnChange
-            || change instanceof AddForeignKeyConstraintChange
-            || change instanceof AddPrimaryKeyChange
-            || change instanceof AddUniqueConstraintChange
-            || change instanceof CreateTableChange
-            || change instanceof MergeColumnChange
-            || change instanceof RenameColumnChange
-            || change instanceof RenameViewChange
-            || change instanceof CreateViewChange
-            || change instanceof CreateIndexChange;
+        return !getObjectNames(change).isEmpty();
     }
 
     private static Collection<String> getObjectNames(AbstractChange change) {

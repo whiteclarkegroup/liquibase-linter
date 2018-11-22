@@ -34,6 +34,10 @@ public abstract class AbstractLintRule implements LintRule {
         return ruleConfig;
     }
 
+    protected boolean checkBlank(String value) {
+        return value != null && !value.isEmpty();
+    }
+
     protected boolean checkNotBlank(String value) {
         return value == null || value.isEmpty();
     }
