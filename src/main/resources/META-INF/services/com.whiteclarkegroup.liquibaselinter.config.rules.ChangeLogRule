@@ -1,0 +1,2 @@
+com.whiteclarkegroup.liquibaselinter.config.rules.core.FileNameNoSpacesRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.NoPreconditionsRuleImpl

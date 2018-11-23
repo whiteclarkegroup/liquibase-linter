@@ -22,7 +22,13 @@ class CreateColumnNoDefinePrimaryKeyIntegrationTest extends LinterIntegrationTes
             "create-column-no-define-primary-key/create-column-no-define-primary-key-pass.xml",
             "create-column-no-define-primary-key/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldFail(
+            "Should fail when create column specifies primary key constraint attribute",
+            "create-column-no-define-primary-key/create-column-no-define-primary-key-create-table-fail.xml",
+            "create-column-no-define-primary-key/lqllint.json",
+            "Add column must not use primary key attribute. Instead use AddPrimaryKey change type");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }

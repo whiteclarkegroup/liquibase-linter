@@ -22,7 +22,13 @@ class CreateColumnRemarksIntegrationTest extends LinterIntegrationTest {
             "create-column-remarks/create-column-remarks-pass.xml",
             "create-column-remarks/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldFail(
+            "Should fail when create column does not have populated remarks attribute",
+            "create-column-remarks/create-column-remarks-create-table-fail.xml",
+            "create-column-remarks/lqllint.json",
+            "Add column must contain remarks");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }

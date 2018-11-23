@@ -20,14 +20,14 @@ class ConfigTest {
     @Test
     void shouldSupportValidConfigObject() throws IOException {
         String configJson = "{\n" +
-                "  \"rules\": {\n" +
-                "    \"schema-name\": {\n" +
-                "      \"enabled\": true,\n" +
-                "      \"pattern\": \"^\\\\$\\\\{[a-z_]+\\\\}$\",\n" +
-                "      \"errorMessage\": \"Must use schema name token, not %s\"\n" +
-                "    }\n" +
-                "  }\n" +
-                "}";
+            "  \"rules\": {\n" +
+            "    \"schema-name\": {\n" +
+            "      \"enabled\": true,\n" +
+            "      \"pattern\": \"^\\\\$\\\\{[a-z_]+\\\\}$\",\n" +
+            "      \"errorMessage\": \"Must use schema name token, not %s\"\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
         RuleConfig ruleConfig = config.getRules().get("schema-name");
@@ -38,12 +38,12 @@ class ConfigTest {
     @Test
     void shouldNotSupportInValidConfigObject() throws IOException {
         String configJson = "{\n" +
-                "  \"rules\": {\n" +
-                "    \"no-duplicate-includes\": []\n" +
-                "  }\n" +
-                "}";
+            "  \"rules\": {\n" +
+            "    \"no-duplicate-includes\": []\n" +
+            "  }\n" +
+            "}";
         JsonMappingException mappingException =
-                assertThrows(JsonMappingException.class, () -> OBJECT_MAPPER.readValue(configJson, Config.class));
+            assertThrows(JsonMappingException.class, () -> OBJECT_MAPPER.readValue(configJson, Config.class));
         assertTrue(mappingException.getMessage().contains("Cannot deserialize instance of `com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig$RuleConfigBuilder`"));
     }
 
@@ -51,10 +51,10 @@ class ConfigTest {
     @Test
     void shouldSupportHavingRuleConfigAsBoolean() throws IOException {
         String configJson = "{\n" +
-                "  \"rules\": {\n" +
-                "    \"file-name-no-spaces\": {}\n" +
-                "  }\n" +
-                "}";
+            "  \"rules\": {\n" +
+            "    \"file-name-no-spaces\": {}\n" +
+            "  }\n" +
+            "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
         RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces");
@@ -65,10 +65,10 @@ class ConfigTest {
     @Test
     void shouldReturnDisabledRuleForNullConfigObject() throws IOException {
         String configJson = "{\n" +
-                "  \"rules\": {\n" +
-                "    \"file-name-no-spaces\": null\n" +
-                "  }\n" +
-                "}";
+            "  \"rules\": {\n" +
+            "    \"file-name-no-spaces\": null\n" +
+            "  }\n" +
+            "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
         RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces");

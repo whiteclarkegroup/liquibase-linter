@@ -1,9 +1,9 @@
 {
-  "fail-fast": true,
-  "rules": {
-    "table-name-length": {
-      "enabled": true,
-      "maxLength": 10
+    "fail-fast": true,
+    "rules": {
+        "table-name-length": {
+            "enabled": true,
+            "maxLength": 10
+        }
     }
-  }
 }

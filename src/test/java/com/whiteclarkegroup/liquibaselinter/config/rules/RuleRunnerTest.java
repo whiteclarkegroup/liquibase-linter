@@ -3,6 +3,7 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 import com.google.common.collect.ImmutableMap;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
+import liquibase.change.core.RenameTableChange;
 import liquibase.exception.ChangeLogParseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,21 +19,22 @@ class RuleRunnerTest {
     @Test
     void shouldSupportSpecificRuleTypeIgnore() throws ChangeLogParseException {
         RuleRunner ruleRunner = getRuleRunner();
-        ruleRunner.forChange(mockChange("Test comment lql-ignore:schema-name,table-name")).run(RuleType.TABLE_NAME, "TBL_TEST");
+        ruleRunner.forChange(mockChange("Test comment lql-ignore:table-name")).checkChange();
 
         ChangeLogParseException changeLogParseException =
-                assertThrows(ChangeLogParseException.class, () -> ruleRunner.forChange(mockChange(null)).run(RuleType.TABLE_NAME, "TBL_TEST"));
+            assertThrows(ChangeLogParseException.class, () -> ruleRunner.forChange(mockChange(null)).checkChange());
 
         assertTrue(changeLogParseException.getMessage().contains("Table name does not follow pattern"));
     }
 
     private RuleRunner getRuleRunner() {
-        final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of(RuleType.TABLE_NAME.getKey(), RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
+        final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of("table-name", RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
         return new RuleRunner(new Config(null, ruleConfigMap, true));
     }
 
     private Change mockChange(String changeComment) {
-        Change change = mock(Change.class, RETURNS_DEEP_STUBS);
+        RenameTableChange change = mock(RenameTableChange.class, RETURNS_DEEP_STUBS);
+        when(change.getNewTableName()).thenReturn("TBL_TABLE");
         when(change.getChangeSet().getComments()).thenReturn(changeComment);
         return change;
     }

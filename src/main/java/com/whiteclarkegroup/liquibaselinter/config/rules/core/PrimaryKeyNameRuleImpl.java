@@ -20,7 +20,7 @@ public class PrimaryKeyNameRuleImpl extends AbstractLintRule implements ChangeRu
     @Override
     public boolean invalid(AddPrimaryKeyChange change) {
         final String constraintName = change.getConstraintName();
-        return checkNotBlank(constraintName) || checkPattern(constraintName, change);
+        return checkMandatoryPattern(constraintName, change);
     }
 
     @Override
