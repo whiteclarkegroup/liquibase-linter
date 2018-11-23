@@ -1,19 +1,21 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
+import org.fusesource.jansi.Ansi;
+import org.fusesource.jansi.AnsiConsole;
+
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.groupingBy;
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class ConsoleReporter implements Reporter {
 
-    static final String RESET = "\033[0m";
-    static final String RED = "\033[0;31m";
-    static final String YELLOW = "\033[0;33m";
     private static final String NEW_LINE = "\n";
 
     @Override
     public void processReport(Report report) {
+        installAnsi();
         StringBuilder output = new StringBuilder();
         report.getByFileName().forEach((fileName, items) -> {
             printFileName(output, fileName);
@@ -21,6 +23,7 @@ public class ConsoleReporter implements Reporter {
             printByChangeSet(output, groupedByChangeSet);
         });
         printToConsole(output);
+        uninstallAnsi();
     }
 
     private void printByChangeSet(StringBuilder output, Map<String, List<ReportItem>> groupedByChangeSet) {
@@ -69,16 +72,24 @@ public class ConsoleReporter implements Reporter {
     private String getType(ReportItem.ReportItemType type) {
         switch (type) {
             case ERROR:
-                return coloured(RED, type.name());
+                return coloured(Ansi.Color.RED, type.name());
             case IGNORED:
-                return coloured(YELLOW, type.name());
+                return coloured(Ansi.Color.YELLOW, type.name());
             default:
                 return type.name();
         }
     }
 
-    private String coloured(String colour, String value) {
-        return RESET + colour + value + RESET;
+    private String coloured(Ansi.Color colour, String value) {
+        return ansi().reset().fg(colour).a(value).reset().toString();
+    }
+
+    protected void installAnsi() {
+        AnsiConsole.systemInstall();
+    }
+
+    protected void uninstallAnsi() {
+        AnsiConsole.systemInstall();
     }
 
 }

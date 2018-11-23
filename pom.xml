@@ -59,6 +59,7 @@
         <jackson.version>2.9.7</jackson.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <spring.version>4.3.14.RELEASE</spring.version>
+        <jansi.version>1.17.1</jansi.version>
     </properties>
 
     <dependencies>
@@ -105,6 +106,11 @@
             <artifactId>spring-expression</artifactId>
             <groupId>org.springframework</groupId>
             <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <version>${jansi.version}</version>
         </dependency>
     </dependencies>
 

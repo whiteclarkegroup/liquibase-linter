@@ -3,6 +3,7 @@ package com.whiteclarkegroup.liquibaselinter.report;
 import com.google.common.collect.ImmutableList;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
+import org.fusesource.jansi.Ansi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,6 +13,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
+import static org.fusesource.jansi.Ansi.ansi;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -25,8 +27,18 @@ class ConsoleReporterTest {
     @BeforeEach
     void setUp() {
         outContent = new ByteArrayOutputStream();
-        consoleReporter = new ConsoleReporter();
-        System.setOut(new PrintStream(outContent));
+        PrintStream out = new PrintStream(outContent);
+        System.setOut(out);
+        consoleReporter = new ConsoleReporter() {
+            @Override
+            protected void installAnsi() {
+
+            }
+
+            @Override
+            protected void uninstallAnsi() {
+            }
+        };
     }
 
     @AfterEach
@@ -46,11 +58,13 @@ class ConsoleReporterTest {
         Report report = new Report();
         report.getReportItems().addAll(reportItems);
         consoleReporter.processReport(report);
-        assertTrue(outContent.toString().contains("src/main/resources/ddl/add-test-column.xml\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
+        String output = outContent.toString();
+        System.out.println(output);
+        assertTrue(output.contains("src/main/resources/ddl/add-test-column.xml\n" +
+            ansi().reset().fg(Ansi.Color.RED).a("ERROR").reset().toString() + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
-            ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
-            "\t'another-rule': Some other message about this rule\n"));
+            ansi().reset().fg(Ansi.Color.YELLOW).a("IGNORED").reset().toString() + "\n" +
+            "\t'another-rule': Some other message about this rule"));
     }
 
     @DisplayName("Should produce report with change set id if present, grouping by change set then type")
@@ -72,15 +86,15 @@ class ConsoleReporterTest {
 
         assertTrue(outContent.toString().contains("src/main/resources/ddl/add-test-column.xml\n" +
             "changeSet '2018010101'\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
+            ansi().reset().fg(Ansi.Color.RED).a("ERROR").reset().toString() + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
-            ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
+            ansi().reset().fg(Ansi.Color.YELLOW).a("IGNORED").reset().toString() + "\n" +
             "\t'another-rule': Some other message about this rule\n" +
             "changeSet '2018010199'\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
+            ansi().reset().fg(Ansi.Color.RED).a("ERROR").reset().toString() + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
             "\t'test-rule': Some rather long message about the error 3\n" +
-            ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
+            ansi().reset().fg(Ansi.Color.YELLOW).a("IGNORED").reset().toString() + "\n" +
             "\t'another-rule': Some other message about this rule\n"));
 
     }
