@@ -22,7 +22,13 @@ class TableNameIntegrationTest extends LinterIntegrationTest {
             "table-name/table-name-pass.xml",
             "table-name/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldFail(
+            "Should fail when table name does not match the pattern",
+            "table-name/table-name-rename-fail.xml",
+            "table-name/lqllint.json",
+            "Table 'TBL_TEST' name must be uppercase, use '_' separation and not start with TBL");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }

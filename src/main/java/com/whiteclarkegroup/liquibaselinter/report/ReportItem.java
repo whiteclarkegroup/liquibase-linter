@@ -5,16 +5,19 @@ import liquibase.changelog.DatabaseChangeLog;
 
 public class ReportItem {
 
-    public enum ReportItemType {
-        ERROR,
-        IGNORED
-    }
-
     private final String filePath;
     private final String changeSetId;
     private final String rule;
     private final ReportItemType type;
     private final String message;
+
+    private ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {
+        this.filePath = filePath;
+        this.changeSetId = changeSetId;
+        this.rule = rule;
+        this.type = type;
+        this.message = message;
+    }
 
     public static ReportItem error(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
         return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.ERROR, message);
@@ -41,14 +44,6 @@ public class ReportItem {
         }
     }
 
-    private ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {
-        this.filePath = filePath;
-        this.changeSetId = changeSetId;
-        this.rule = rule;
-        this.type = type;
-        this.message = message;
-    }
-
     public String getFilePath() {
         return filePath;
     }
@@ -67,5 +62,10 @@ public class ReportItem {
 
     public String getMessage() {
         return message;
+    }
+
+    public enum ReportItemType {
+        ERROR,
+        IGNORED
     }
 }

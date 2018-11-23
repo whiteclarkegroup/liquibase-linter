@@ -5,9 +5,8 @@ import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
-import com.whiteclarkegroup.liquibaselinter.config.rules.Rule;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
-import com.whiteclarkegroup.liquibaselinter.config.rules.RuleType;
 import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.Reporter;
@@ -25,13 +24,12 @@ import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
 public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implements ChangeLogParser {
+    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
-
-    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
 
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
@@ -47,8 +45,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         }
 
         RuleRunner ruleRunner = config.getRuleRunner();
-
-        checkSchemaName(parsedNode, ruleRunner);
 
         DatabaseChangeLog changeLog = new DatabaseChangeLog(physicalChangeLogLocation);
         changeLog.setChangeLogParameters(changeLogParameters);
@@ -89,17 +85,6 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
         return 100;
     }
 
-    void checkSchemaName(ParsedNode parsedNode, RuleRunner ruleRunner) throws ChangeLogParseException {
-        if ("schemaName".equals(parsedNode.getName())) {
-            ruleRunner.forGeneric().run(RuleType.SCHEMA_NAME, parsedNode.getValue().toString());
-        }
-        if (parsedNode.getChildren() != null && !parsedNode.getChildren().isEmpty()) {
-            for (ParsedNode childNode : parsedNode.getChildren()) {
-                checkSchemaName(childNode, ruleRunner);
-            }
-        }
-    }
-
     protected void loadConfig(ResourceAccessor resourceAccessor) {
         if (config == null) {
             config = configLoader.load(resourceAccessor);
@@ -107,10 +92,10 @@ public class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implement
     }
 
     void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
-        final Optional<Rule> rule = RuleType.NO_DUPLICATE_INCLUDES.create(config.getRules());
-        if (rule.isPresent() && rule.get().getRuleConfig().isEnabled()) {
+        RuleConfig ruleConfig = config.getRules().get("no-duplicate-includes");
+        if (ruleConfig != null && ruleConfig.isEnabled()) {
             if (alreadyParsed.contains(physicalChangeLogLocation)) {
-                final String errorMessage = Optional.ofNullable(rule.get().getErrorMessage()).orElse(RuleType.NO_DUPLICATE_INCLUDES.getDefaultErrorMessage());
+                final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
             alreadyParsed.add(physicalChangeLogLocation);

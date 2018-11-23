@@ -5,6 +5,7 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeLogRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
+import liquibase.precondition.core.PreconditionContainer;
 
 public class NoPreconditionsRuleImpl extends AbstractLintRule implements ChangeSetRule, ChangeLogRule {
     private static final String NAME = "no-preconditions";
@@ -21,6 +22,8 @@ public class NoPreconditionsRuleImpl extends AbstractLintRule implements ChangeS
 
     @Override
     public boolean invalid(DatabaseChangeLog changeLog) {
-        return changeLog.getPreconditions() != null && !changeLog.getPreconditions().getNestedPreconditions().isEmpty();
+        PreconditionContainer preconditions = changeLog.getPreconditions();
+        return preconditions != null
+            && (!preconditions.getNestedPreconditions().isEmpty() && !preconditions.getNestedPreconditions().stream().allMatch(pre -> pre instanceof PreconditionContainer));
     }
 }

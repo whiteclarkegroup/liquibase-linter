@@ -1,11 +1,11 @@
 {
-  "fail-fast": true,
-  "rules": {
-    "illegal-change-types": {
-      "enabled": true,
-      "values": [
-        "liquibase.change.core.LoadDataChange"
-      ]
+    "fail-fast": true,
+    "rules": {
+        "illegal-change-types": {
+            "enabled": true,
+            "values": [
+                "liquibase.change.core.LoadDataChange"
+            ]
+        }
     }
-  }
 }

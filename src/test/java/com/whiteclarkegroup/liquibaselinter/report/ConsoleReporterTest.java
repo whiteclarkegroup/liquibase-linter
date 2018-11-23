@@ -46,8 +46,8 @@ class ConsoleReporterTest {
         Report report = new Report();
         report.getReportItems().addAll(reportItems);
         consoleReporter.processReport(report);
-        assertTrue(outContent.toString().contains(  "src/main/resources/ddl/add-test-column.xml\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET +"\n" +
+        assertTrue(outContent.toString().contains("src/main/resources/ddl/add-test-column.xml\n" +
+            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
             ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
             "\t'another-rule': Some other message about this rule\n"));
@@ -70,17 +70,17 @@ class ConsoleReporterTest {
         report.getReportItems().addAll(reportItems);
         consoleReporter.processReport(report);
 
-        assertTrue(outContent.toString().contains(  "src/main/resources/ddl/add-test-column.xml\n" +
+        assertTrue(outContent.toString().contains("src/main/resources/ddl/add-test-column.xml\n" +
             "changeSet '2018010101'\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET +"\n" +
+            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
             ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
             "\t'another-rule': Some other message about this rule\n" +
             "changeSet '2018010199'\n" +
-            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET +"\n" +
+            ConsoleReporter.RESET + ConsoleReporter.RED + "ERROR" + ConsoleReporter.RESET + "\n" +
             "\t'test-rule': Some rather long message about the error\n" +
             "\t'test-rule': Some rather long message about the error 3\n" +
-            ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET +"\n" +
+            ConsoleReporter.RESET + ConsoleReporter.YELLOW + "IGNORED" + ConsoleReporter.RESET + "\n" +
             "\t'another-rule': Some other message about this rule\n"));
 
     }

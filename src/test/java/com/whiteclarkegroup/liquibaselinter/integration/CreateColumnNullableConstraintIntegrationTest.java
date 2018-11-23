@@ -12,7 +12,7 @@ class CreateColumnNullableConstraintIntegrationTest extends LinterIntegrationTes
     @Override
     List<IntegrationTestConfig> getTests() {
         IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
-            "Should fail when create column does not a constraints tag with a populated nullable attribute",
+            "Should fail when create column does not have a constraints tag with a populated nullable attribute",
             "create-column-nullable-constraint/create-column-nullable-constraint-fail.xml",
             "create-column-nullable-constraint/lqllint.json",
             "Add column must specify nullable constraint");
@@ -22,7 +22,13 @@ class CreateColumnNullableConstraintIntegrationTest extends LinterIntegrationTes
             "create-column-nullable-constraint/create-column-nullable-constraint-pass.xml",
             "create-column-nullable-constraint/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldFail(
+            "Should fail when create table column does not have a constraints tag with a populated nullable attribute",
+            "create-column-nullable-constraint/create-column-nullable-constraint-fail-create-table.xml",
+            "create-column-nullable-constraint/lqllint.json",
+            "Add column must specify nullable constraint");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }

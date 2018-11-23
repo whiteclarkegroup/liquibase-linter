@@ -6,7 +6,7 @@ title: object-name
 
 You might already have some standards for how things are named in your databases schemas, to ensure consistency. Schema objects are a pain to rename once they're in, so it's good to be able to enforce this standard at the source (assuming you can express your standard as a regex).
 
-This rule will fail if the given regex does not match against the name for any new:
+This rule will fail if the given regex does not match against the name for any:
 
 - Table
 - Column

@@ -1,0 +1,6 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "no-schema-name": true
+    }
+}

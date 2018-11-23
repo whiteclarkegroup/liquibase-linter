@@ -1,0 +1,6 @@
+com.whiteclarkegroup.liquibaselinter.config.rules.core.HasContextRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.HasCommentRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.NoPreconditionsRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.ValidContextRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.IsolateDDLChangesRuleImpl
+com.whiteclarkegroup.liquibaselinter.config.rules.core.SeparateDDLChangesRuleImpl

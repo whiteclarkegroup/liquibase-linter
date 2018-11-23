@@ -34,12 +34,24 @@ public abstract class AbstractLintRule implements LintRule {
         return ruleConfig;
     }
 
+    protected boolean checkBlank(String value) {
+        return value != null && !value.isEmpty();
+    }
+
     protected boolean checkNotBlank(String value) {
-        return value == null || value.equals("");
+        return value == null || value.isEmpty();
     }
 
     protected boolean checkPattern(String value, Object subject) {
         return patternChecker.check(value, subject);
+    }
+
+    protected boolean checkMandatoryPattern(String value, Object subject) {
+        return checkNotBlank(value) || patternChecker.check(value, subject);
+    }
+
+    protected boolean checkMaxLength(String value) {
+        return value != null && value.length() > getConfig().getMaxLength();
     }
 
     @Override

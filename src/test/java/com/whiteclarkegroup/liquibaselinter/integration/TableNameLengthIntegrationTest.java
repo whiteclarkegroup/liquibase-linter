@@ -22,7 +22,13 @@ class TableNameLengthIntegrationTest extends LinterIntegrationTest {
             "table-name-length/table-name-length-pass.xml",
             "table-name-length/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldFail(
+            "Should fail when table name length is exceeded",
+            "table-name-length/table-name-length-rename-fail.xml",
+            "table-name-length/lqllint.json",
+            "Table 'THIS_TABLE_NAME_IS_FAR_TOO_LONG' name must not be longer than 26");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }

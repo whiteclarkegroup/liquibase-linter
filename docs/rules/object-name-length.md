@@ -14,7 +14,7 @@ For example:
 - **PostgreSQL** [supports up to 63 characters](https://www.postgresql.org/docs/current/static/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS) - but will automatically truncate longer names and use the result, without erroring <span style="white-space:nowrap">¯\\\_(ツ)\_/¯</span>
 - **H2** apparently [has no limits](http://www.h2database.com/html/advanced.html#limits_limitations) on object names
 
-This rule will fail if the given maximum length is exceeded by the name for any new:
+This rule will fail if the given maximum length is exceeded by the name for any:
 
 - Table
 - Column

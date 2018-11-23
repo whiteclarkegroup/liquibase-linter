@@ -22,7 +22,12 @@ class ValidContextIntegrationTest extends LinterIntegrationTest {
             "valid-context/valid-context-pass.xml",
             "valid-context/lqllint.json");
 
-        return Arrays.asList(test1, test2);
+        IntegrationTestConfig test3 = IntegrationTestConfig.shouldPass(
+            "Should pass with no context value",
+            "valid-context/valid-no-context-value-pass.xml",
+            "valid-context/lqllint.json");
+
+        return Arrays.asList(test1, test2, test3);
     }
 
 }
