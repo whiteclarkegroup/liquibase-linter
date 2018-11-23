@@ -8,6 +8,9 @@
           "configure": {
               "title": "Configure"
           },
+          "customRules": {
+              "title": "Adding custom rules"
+          },
           "install": {
               "title": "Install"
           },
