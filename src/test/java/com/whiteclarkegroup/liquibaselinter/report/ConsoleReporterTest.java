@@ -32,11 +32,12 @@ class ConsoleReporterTest {
         consoleReporter = new ConsoleReporter() {
             @Override
             protected void installAnsi() {
-
+                // ansi is difficult to test with so noop installing makes it easier
             }
 
             @Override
             protected void uninstallAnsi() {
+                // ansi is difficult to test with so noop uninstalling makes it easier
             }
         };
     }
