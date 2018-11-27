@@ -2,7 +2,7 @@ package liquibase.parser.ext;
 
 import liquibase.resource.ResourceAccessor;
 
-public class ConfigAwareCustomXMLChangeLogSAXParser extends CustomXMLChangeLogSAXParser {
+public class ConfigAwareCustomXMLChangeLogSAXParser extends LintAwareChangeLogSAXParser {
 
     @Override
     protected void loadConfig(ResourceAccessor resourceAccessor) {
