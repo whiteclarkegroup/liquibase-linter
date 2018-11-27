@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @SuppressWarnings("WeakerAccess")
-public class LintAwareChangeLogSAXParser implements ChangeLogParser {
+public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
     private static final CustomXMLChangeLogSAXParser xmlParser = new CustomXMLChangeLogSAXParser();
     private static final JsonChangeLogParser jsonParser = new JsonChangeLogParser();

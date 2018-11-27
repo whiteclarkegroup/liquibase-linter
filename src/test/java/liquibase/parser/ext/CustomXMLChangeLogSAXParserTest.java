@@ -15,7 +15,7 @@ class CustomXMLChangeLogSAXParserTest {
 
     @Test
     void shouldPreventDuplicateIncludes(Config config) throws Exception {
-        LintAwareChangeLogSAXParser parser = new LintAwareChangeLogSAXParser();
+        LintAwareChangeLogParser parser = new LintAwareChangeLogParser();
 
         // do a couple includes
         parser.checkDuplicateIncludes("foo/bar/baz.xml", config);
