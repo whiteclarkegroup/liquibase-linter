@@ -27,9 +27,9 @@ import java.util.Set;
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
-    private static final CustomXMLChangeLogSAXParser xmlParser = new CustomXMLChangeLogSAXParser();
-    private static final JsonChangeLogParser jsonParser = new JsonChangeLogParser();
-    private static final YamlChangeLogParser yamlParser = new YamlChangeLogParser();
+    private static final CustomXMLChangeLogSAXParser XML_PARSER = new CustomXMLChangeLogSAXParser();
+    private static final JsonChangeLogParser JSON_PARSER = new JsonChangeLogParser();
+    private static final YamlChangeLogParser YAML_PARSER = new YamlChangeLogParser();
 
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
@@ -61,18 +61,18 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private DatabaseChangeLog getDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        if (xmlParser.supports(physicalChangeLogLocation, resourceAccessor)) {
+        if (XML_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
             return parseXmlDatabaseChangeLog(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        } else if (jsonParser.supports(physicalChangeLogLocation, resourceAccessor)) {
-            return jsonParser.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        } else if (yamlParser.supports(physicalChangeLogLocation, resourceAccessor)) {
-            return yamlParser.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
+        } else if (JSON_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
+            return JSON_PARSER.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
+        } else if (YAML_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
+            return YAML_PARSER.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
         }
         throw new IllegalArgumentException("Change log file type not supported");
     }
 
     private DatabaseChangeLog parseXmlDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        ParsedNode parsedNode = xmlParser.parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
+        ParsedNode parsedNode = XML_PARSER.parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
         if (parsedNode == null) {
             return null;
         }
@@ -99,9 +99,9 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     @Override
     public boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
-        return xmlParser.supports(changeLogFile, resourceAccessor)
-            || jsonParser.supports(changeLogFile, resourceAccessor)
-            || yamlParser.supports(changeLogFile, resourceAccessor);
+        return XML_PARSER.supports(changeLogFile, resourceAccessor)
+            || JSON_PARSER.supports(changeLogFile, resourceAccessor)
+            || YAML_PARSER.supports(changeLogFile, resourceAccessor);
     }
 
     @Override
