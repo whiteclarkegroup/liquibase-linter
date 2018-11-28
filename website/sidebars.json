@@ -7,7 +7,7 @@
               "type": "subcategory",
               "label": "Custom Rules",
               "ids": [
-                  "customRules"
+                  "custom-rules"
               ]
           },
           {
