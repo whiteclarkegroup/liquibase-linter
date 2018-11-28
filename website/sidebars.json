@@ -3,32 +3,45 @@
       "Setup": ["install", "configure"],
       "Rules": [
           "rules/index",
-          "rules/create-column-no-define-primary-key",
-          "rules/create-column-nullable-constraint",
-          "rules/create-column-remarks",
-          "rules/create-index-name",
-          "rules/create-table-remarks",
-          "rules/drop-not-null-require-column-data-type",
-          "rules/file-name-no-spaces",
-          "rules/foreign-key-name",
-          "rules/has-comment",
-          "rules/has-context",
-          "rules/illegal-change-types",
-          "rules/isolate-ddl-changes",
-          "rules/modify-data-enforce-where",
-          "rules/modify-data-starts-with-where",
-          "rules/no-duplicate-includes",
-          "rules/no-preconditions",
-          "rules/no-schema-name",
-          "rules/object-name",
-          "rules/object-name-length",
-          "rules/primary-key-name",
-          "rules/schema-name",
-          "rules/separate-ddl-context",
-          "rules/table-name",
-          "rules/table-name-length",
-          "rules/unique-constraint-name",
-          "rules/valid-context"
+          {
+              "type": "subcategory",
+              "label": "Custom Rules",
+              "ids": [
+                  "custom-rules"
+              ]
+          },
+          {
+              "type": "subcategory",
+              "label": "Core Rules",
+              "ids": [
+                  "rules/create-column-no-define-primary-key",
+                  "rules/create-column-nullable-constraint",
+                  "rules/create-column-remarks",
+                  "rules/create-index-name",
+                  "rules/create-table-remarks",
+                  "rules/drop-not-null-require-column-data-type",
+                  "rules/file-name-no-spaces",
+                  "rules/foreign-key-name",
+                  "rules/has-comment",
+                  "rules/has-context",
+                  "rules/illegal-change-types",
+                  "rules/isolate-ddl-changes",
+                  "rules/modify-data-enforce-where",
+                  "rules/modify-data-starts-with-where",
+                  "rules/no-duplicate-includes",
+                  "rules/no-preconditions",
+                  "rules/no-schema-name",
+                  "rules/object-name",
+                  "rules/object-name-length",
+                  "rules/primary-key-name",
+                  "rules/schema-name",
+                  "rules/separate-ddl-context",
+                  "rules/table-name",
+                  "rules/table-name-length",
+                  "rules/unique-constraint-name",
+                  "rules/valid-context"
+              ]
+          }
       ]
   }
 }
