@@ -10,7 +10,7 @@ Fortunately it's trivial to implement custom rules and apply them in your own pr
 
 Let's say for argument's sake that we have a Liquibase project for an app. We ship customised implementations of this app to different clients, so we have a `core` context and then client-specific contexts like `client_jane` and `client_john`.
 
-In the database for our app, we have a table called `FORM_LAYOUT` that holds configuration for how forms are laid out, always differently for each client. One day, somebody makes a mistake and does a Liquibase change script to update `FORM_LAYOUT` for Jane, but accidentally uses the `core` context. It slips through code review and torpedoes all other client's form layout configs.
+In the database for our app, we have a table called `FORM_LAYOUT` that holds configuration for how forms are laid out, which is always different for each client. One day, somebody makes a mistake and does a Liquibase change script to update `FORM_LAYOUT` for Jane, but accidentally uses the `core` context. It slips through code review and torpedoes all other client's form layout configs.
 
 We want to stop this happening again at the source, so let's see if we can do it with a lint rule.
 
@@ -20,7 +20,7 @@ There are three interfaces you could implement when writing a custom rule in Jav
 
 - [ChangeRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeRule.java) for linting each individual change, useful when you want to prevent issues with the content of the change itself
 - [ChangeSetRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeSetRule.java) for linting each changeSet, useful when you want to check things like comments and contexts, or the overall content of a changeSet e.g. when you want ensure certain changes happen together, or in isolation
-- [ChangeLogRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeLogRule.java) for linting each changeLog file, useful when you want to check teh overall content at changeLog level - rarely used in practise
+- [ChangeLogRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeLogRule.java) for linting each changeLog file, useful when you want to check the overall content at changeLog level - rarely used in practise
 
 The `ChangeRule` interface uses generics, so you can target a specific change type e.g. `implements ChangeRule<InsertDataChange>` for inserts, or just do `implements ChangeRule<Change>` to catch all changes. You can also use this to lint [custom changes](http://www.liquibase.org/documentation/changes/custom_change.html), if you have any of those in your project.
 
