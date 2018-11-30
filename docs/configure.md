@@ -10,12 +10,21 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
 
 ```json
 {
+    "fail-fast": false,
     "ignore-context-pattern": null,
     "rules": {}
 }
 ```
 
 This example has nothing switched on but is a good place to start; you can [grab it from here](../examples/lqlint.json).
+
+## Reporting and `fail-fast`
+
+By default, lint failures are aggregated and reported at the end after all changes are scanned:
+
+![Example console output for failed rules](/liquibase-linter/img/console-example.png)
+
+If you prefer, you can set `fail-fast` to `true` in your config file so that the process will exit as soon as it finds the first failure.
 
 ## Ignoring certain changes
 
