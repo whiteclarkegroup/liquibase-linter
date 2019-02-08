@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.AbstractChange;
@@ -96,6 +97,7 @@ public class SchemaNameRulesImpl {
         return Collections.emptyList();
     }
 
+    @AutoService({ChangeRule.class})
     public static class SchemaNameRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
 
         private static final String NAME = "schema-name";
@@ -128,6 +130,7 @@ public class SchemaNameRulesImpl {
 
     }
 
+    @AutoService({ChangeRule.class})
     public static class NoSchemaNameRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
 
         private static final String NAME = "no-schema-name";

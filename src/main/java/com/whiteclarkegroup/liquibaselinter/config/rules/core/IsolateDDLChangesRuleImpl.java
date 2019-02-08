@@ -1,10 +1,12 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
 import liquibase.changelog.ChangeSet;
 
+@AutoService({ChangeSetRule.class})
 public class IsolateDDLChangesRuleImpl extends AbstractLintRule implements ChangeSetRule {
     private static final String NAME = "isolate-ddl-changes";
     private static final String MESSAGE = "Should only have a single ddl change per change set";

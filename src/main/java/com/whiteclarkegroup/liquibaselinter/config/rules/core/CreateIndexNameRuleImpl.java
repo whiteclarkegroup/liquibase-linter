@@ -1,9 +1,11 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.core.CreateIndexChange;
 
+@AutoService({ChangeRule.class})
 public class CreateIndexNameRuleImpl extends AbstractLintRule implements ChangeRule<CreateIndexChange> {
     private static final String NAME = "create-index-name";
     private static final String MESSAGE = "Index name does not follow pattern";

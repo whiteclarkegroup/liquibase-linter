@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeLogRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
@@ -7,6 +8,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.precondition.core.PreconditionContainer;
 
+@AutoService({ChangeLogRule.class, ChangeSetRule.class})
 public class NoPreconditionsRuleImpl extends AbstractLintRule implements ChangeSetRule, ChangeLogRule {
     private static final String NAME = "no-preconditions";
     private static final String MESSAGE = "Preconditions are not allowed in this project";
