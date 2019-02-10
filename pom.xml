@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.whiteclarkegroup</groupId>
@@ -36,8 +37,8 @@
         <connection>scm:git:git://github.com/whiteclarkegroup/liquibase-linter.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:whiteclarkegroup/liquibase-linter.git</developerConnection>
         <url>https://github.com/whiteclarkegroup/liquibase-linter/tree/master</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <distributionManagement>
         <snapshotRepository>
@@ -56,10 +57,12 @@
         <guava.version>23.0</guava.version>
         <mockito.version>1.9.0</mockito.version>
         <maven.surefire.version>2.19.1</maven.surefire.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
         <jackson.version>2.9.8</jackson.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <spring.version>4.3.14.RELEASE</spring.version>
         <jansi.version>1.17.1</jansi.version>
+        <auto-service.version>1.0-rc4</auto-service.version>
     </properties>
 
     <dependencies>
@@ -112,6 +115,11 @@
             <artifactId>jansi</artifactId>
             <version>${jansi.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>${auto-service.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -119,9 +127,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.version}</version>
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <annotationProcessorPaths>
+                        <annotationProcessorPath>
+                            <groupId>com.google.auto.service</groupId>
+                            <artifactId>auto-service</artifactId>
+                            <version>${auto-service.version}</version>
+                        </annotationProcessorPath>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>

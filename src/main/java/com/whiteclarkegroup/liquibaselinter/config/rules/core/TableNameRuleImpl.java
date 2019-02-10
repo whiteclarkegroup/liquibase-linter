@@ -1,11 +1,13 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.AbstractChange;
 import liquibase.change.core.CreateTableChange;
 import liquibase.change.core.RenameTableChange;
 
+@AutoService({ChangeRule.class})
 public class TableNameRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
     private static final String NAME = "table-name";
     private static final String MESSAGE = "Table name does not follow pattern";

@@ -1,10 +1,12 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.Change;
 import liquibase.change.DatabaseChange;
 
+@AutoService({ChangeRule.class})
 public class IllegalChangeTypesRuleImpl extends AbstractLintRule implements ChangeRule<Change> {
     private static final String NAME = "illegal-change-types";
     private static final String MESSAGE = "Change type '%s' is not allowed in this project";

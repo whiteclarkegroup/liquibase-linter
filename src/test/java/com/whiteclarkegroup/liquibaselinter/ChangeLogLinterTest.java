@@ -11,6 +11,7 @@ import liquibase.ContextExpression;
 import liquibase.change.Change;
 import liquibase.change.core.AddColumnChange;
 import liquibase.change.core.InsertDataChange;
+import liquibase.change.core.UpdateDataChange;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -163,7 +164,7 @@ class ChangeLogLinterTest {
     void shouldNotAllowContextWithSuffixNotEndingInAllowed(Config config, RuleRunner ruleRunner) {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("dml"), "Comment");
-        addChangeToChangeSet(changeSet, new AddColumnChange());
+        addChangeToChangeSet(changeSet, new UpdateDataChange());
 
         ChangeLogParseException changeLogParseException =
             assertThrows(ChangeLogParseException.class, () -> changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner));

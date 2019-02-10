@@ -1,11 +1,13 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeLogRule;
 import liquibase.changelog.DatabaseChangeLog;
 
 import java.util.Optional;
 
+@AutoService({ChangeLogRule.class})
 public class FileNameNoSpacesRuleImpl extends AbstractLintRule implements ChangeLogRule {
     private static final String NAME = "file-name-no-spaces";
     private static final String MESSAGE = "Changelog filenames should not contain spaces";

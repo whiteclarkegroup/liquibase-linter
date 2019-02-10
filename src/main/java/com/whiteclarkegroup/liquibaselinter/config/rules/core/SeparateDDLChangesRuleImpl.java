@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
@@ -9,6 +10,7 @@ import liquibase.changelog.ChangeSet;
 
 import java.util.Collection;
 
+@AutoService({ChangeSetRule.class})
 public class SeparateDDLChangesRuleImpl extends AbstractLintRule implements ChangeSetRule {
     private static final String NAME = "separate-ddl-context";
     private static final String MESSAGE = "Should have a ddl changes under ddl contexts";

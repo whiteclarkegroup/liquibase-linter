@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.AbstractChange;
@@ -41,6 +42,7 @@ public class ObjectNameRulesImpl {
         return Collections.emptyList();
     }
 
+    @AutoService({ChangeRule.class})
     public static class ObjectNameRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
         private static final String NAME = "object-name";
         private static final String MESSAGE = "Object name does not follow pattern";
@@ -72,6 +74,7 @@ public class ObjectNameRulesImpl {
 
     }
 
+    @AutoService({ChangeRule.class})
     public static class ObjectNameLengthRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
         private static final String NAME = "object-name-length";
         private static final String MESSAGE = "Object name '%s' must be less than %d characters";

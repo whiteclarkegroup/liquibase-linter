@@ -1,9 +1,11 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.core.AbstractModifyDataChange;
 
+@AutoService({ChangeRule.class})
 public class ModifyDataEnforceWhereImpl extends AbstractLintRule implements ChangeRule<AbstractModifyDataChange> {
     private static final String NAME = "modify-data-enforce-where";
     private static final String MESSAGE = "Modify data on table '%s' must have a where condition";

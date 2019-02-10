@@ -1,10 +1,12 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
 import liquibase.ContextExpression;
 import liquibase.changelog.ChangeSet;
 
+@AutoService({ChangeSetRule.class})
 public class ValidContextRuleImpl extends AbstractLintRule implements ChangeSetRule {
     private static final String NAME = "valid-context";
     private static final String MESSAGE = "Context does not follow pattern";

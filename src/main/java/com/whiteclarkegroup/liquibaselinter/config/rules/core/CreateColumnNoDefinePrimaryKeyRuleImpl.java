@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.AbstractChange;
@@ -11,6 +12,7 @@ import liquibase.change.core.CreateTableChange;
 
 import java.util.List;
 
+@AutoService({ChangeRule.class})
 public class CreateColumnNoDefinePrimaryKeyRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
     private static final String NAME = "create-column-no-define-primary-key";
     private static final String MESSAGE = "Add column must not use primary key attribute. Instead use AddPrimaryKey change type";

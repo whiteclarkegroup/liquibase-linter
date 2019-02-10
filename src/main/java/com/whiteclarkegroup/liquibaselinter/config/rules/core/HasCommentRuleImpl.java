@@ -1,9 +1,11 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeSetRule;
 import liquibase.changelog.ChangeSet;
 
+@AutoService({ChangeSetRule.class})
 public class HasCommentRuleImpl extends AbstractLintRule implements ChangeSetRule {
     private static final String NAME = "has-comment";
     private static final String MESSAGE = "Change set must have a comment";
