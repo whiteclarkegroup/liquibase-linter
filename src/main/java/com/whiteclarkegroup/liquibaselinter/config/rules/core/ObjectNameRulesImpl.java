@@ -131,7 +131,7 @@ public class ObjectNameRulesImpl {
         }
 
         private boolean isReservedWord(String value) {
-            return ReservedWords.SQL_SERVER.contains(value);
+            return ReservedWords.MSSQL.contains(value) || ReservedWords.ORACLE.contains(value);
         }
 
         @Override

@@ -28,6 +28,7 @@ class NoReservedWordsRuleImplTest {
         ruleImpl.configure(RuleConfig.enabled());
 
         assertTrue(ruleImpl.invalid(getAddColumnChange("SESSION_USER", "FOO_BAR")));
+        assertTrue(ruleImpl.invalid(getAddColumnChange("MAXEXTENTS", "FOO_BAR")));
     }
 
     @DisplayName("Should allow usage of a valid name")
