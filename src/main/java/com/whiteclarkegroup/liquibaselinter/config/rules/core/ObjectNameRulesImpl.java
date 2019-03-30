@@ -105,4 +105,40 @@ public class ObjectNameRulesImpl {
 
         }
     }
+
+    @AutoService({ChangeRule.class})
+    public static class NoReservedWordsRuleImpl extends AbstractLintRule implements ChangeRule<AbstractChange> {
+        private static final String NAME = "no-reserved-words";
+        private static final String MESSAGE = "'%s' is a reserved word; choose a different name";
+
+        public NoReservedWordsRuleImpl() {
+            super(NAME, MESSAGE);
+        }
+
+        @Override
+        public Class<AbstractChange> getChangeType() {
+            return AbstractChange.class;
+        }
+
+        @Override
+        public boolean supports(AbstractChange change) {
+            return doesSupport(change);
+        }
+
+        @Override
+        public boolean invalid(AbstractChange change) {
+            return getObjectNames(change).stream().anyMatch(this::isReservedWord);
+        }
+
+        private boolean isReservedWord(String value) {
+            return ReservedWords.SQL_SERVER.contains(value);
+        }
+
+        @Override
+        public String getMessage(AbstractChange change) {
+            String joined = getObjectNames(change).stream().filter(this::isReservedWord).collect(Collectors.joining(","));
+            return formatMessage(joined);
+
+        }
+    }
 }
