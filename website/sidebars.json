@@ -30,6 +30,7 @@
                   "rules/modify-data-starts-with-where",
                   "rules/no-duplicate-includes",
                   "rules/no-preconditions",
+                  "rules/no-reserved-words",
                   "rules/no-schema-name",
                   "rules/object-name",
                   "rules/object-name-length",

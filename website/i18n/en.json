@@ -65,6 +65,9 @@
       "rules/no-preconditions": {
         "title": "no-preconditions"
       },
+        "rules/no-reserved-words": {
+            "title": "no-reserved-words"
+        },
       "rules/no-schema-name": {
         "title": "no-schema-name"
       },
