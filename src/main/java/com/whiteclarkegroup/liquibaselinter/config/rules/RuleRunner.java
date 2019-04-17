@@ -49,7 +49,7 @@ public class RuleRunner {
 
     private boolean filterAndConfigureRule(LintRule rule) {
         if (rule != null && config.isRuleEnabled(rule.getName())) {
-            rule.configure(config.getRules().get(rule.getName()));
+            rule.configure(config.getRules().get(rule.getName()).get(0));
             return true;
         }
         return false;

@@ -1,6 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
@@ -42,7 +42,7 @@ class ChangeLogLinterTest {
     @DisplayName("Should lint change sets with standard comment")
     @Test
     void shouldLintChangeSetsWithStandardComment() throws ChangeLogParseException {
-        Config config = new Config(null, ImmutableMap.of(), true);
+        Config config = new Config(null, ImmutableListMultimap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
@@ -62,7 +62,7 @@ class ChangeLogLinterTest {
     @DisplayName("Should not fall over on null comment")
     @Test
     void shouldNotFallOverOnNullComment() throws ChangeLogParseException {
-        Config config = new Config(null, ImmutableMap.of(), true);
+        Config config = new Config(null, ImmutableListMultimap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));

@@ -2,13 +2,13 @@ package com.whiteclarkegroup.liquibaselinter.config.rules;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class ConfigTest {
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("schema-name");
+        RuleConfig ruleConfig = config.getRules().get("schema-name").get(0);
         assertTrue(ruleConfig.isEnabled());
     }
 
@@ -57,7 +57,7 @@ class ConfigTest {
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces");
+        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces").get(0);
         assertTrue(ruleConfig.isEnabled());
     }
 
@@ -71,14 +71,14 @@ class ConfigTest {
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
         assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces");
+        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces").get(0);
         assertFalse(ruleConfig.isEnabled());
     }
 
     @DisplayName("Should indicate whether rule enabled from config map")
     @Test
     void shouldIndicateWhetherRuleEnabledFromConfigMap() {
-        Map<String, RuleConfig> map = ImmutableMap.of(
+        ListMultimap<String, RuleConfig> map = ImmutableListMultimap.of(
             "present-but-off", RuleConfig.disabled(),
             "present-and-on", RuleConfig.enabled()
         );

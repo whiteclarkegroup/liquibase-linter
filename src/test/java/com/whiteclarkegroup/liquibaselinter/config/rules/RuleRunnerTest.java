@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import liquibase.change.Change;
 import liquibase.change.core.RenameTableChange;
@@ -28,7 +29,7 @@ class RuleRunnerTest {
     }
 
     private RuleRunner getRuleRunner() {
-        final ImmutableMap<String, RuleConfig> ruleConfigMap = ImmutableMap.of("table-name", RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
+        final ListMultimap<String, RuleConfig> ruleConfigMap = ImmutableListMultimap.of("table-name", RuleConfig.builder().withEnabled(true).withPattern("^(?!TBL)[A-Z_]+(?<!_)$").build());
         return new RuleRunner(new Config(null, ruleConfigMap, true));
     }
 
