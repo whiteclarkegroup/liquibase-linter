@@ -61,6 +61,27 @@ class ConfigTest {
         assertTrue(ruleConfig.isEnabled());
     }
 
+    @DisplayName("Should support having an array of configs for one rule")
+    @Test
+    void shouldSupportArrayOfRuleConfigs() throws IOException {
+        String configJson = "{\n" +
+            "    \"rules\": {\n" +
+            "        \"object-name\": [\n" +
+            "            {\n" +
+            "                \"pattern\": \"^(?!_)[A-Z_0-9]+(?<!_)$\",\n" +
+            "                \"errorMessage\": \"Object name '%s' name must be uppercase and use '_' separation\"\n" +
+            "            },\n" +
+            "            {\n" +
+            "                \"pattern\": \"^POWER.*$\",\n" +
+            "                \"errorMessage\": \"Object name '%s' name must begin with 'POWER'\"\n" +
+            "            }\n" +
+            "        ]\n" +
+            "    }\n" +
+            "}\n";
+        Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        assertEquals(2, config.getRules().size());
+    }
+
     @DisplayName("Should return disabled rule for null config object")
     @Test
     void shouldReturnDisabledRuleForNullConfigObject() throws IOException {

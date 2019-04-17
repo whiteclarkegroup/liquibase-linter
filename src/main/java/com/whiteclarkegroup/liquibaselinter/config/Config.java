@@ -17,6 +17,7 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -72,15 +73,23 @@ public class Config {
             final Map<String, Object> config = jsonParser.readValueAs(VALUE_TYPE_REF);
             final ImmutableListMultimap.Builder<String, RuleConfig> ruleConfigs = new ImmutableListMultimap.Builder<>();
             config.forEach((key, value) -> {
-                try {
-                    boolean ruleEnabled = OBJECT_MAPPER.convertValue(value, boolean.class);
-                    ruleConfigs.put(key, ruleEnabled ? RuleConfig.enabled() : RuleConfig.disabled());
-                } catch (IllegalArgumentException e) {
-                    RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
-                    ruleConfigs.put(key, ruleConfig);
+                if (value instanceof List) {
+                    ((List) value).forEach(item -> populateConfigValue(ruleConfigs, key, item));
+                } else {
+                    populateConfigValue(ruleConfigs, key, value);
                 }
             });
             return ruleConfigs.build();
+        }
+
+        private void populateConfigValue(ImmutableListMultimap.Builder<String, RuleConfig> ruleConfigs, String key, Object value) {
+            try {
+                boolean ruleEnabled = OBJECT_MAPPER.convertValue(value, boolean.class);
+                ruleConfigs.put(key, ruleEnabled ? RuleConfig.enabled() : RuleConfig.disabled());
+            } catch (IllegalArgumentException e) {
+                RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
+                ruleConfigs.put(key, ruleConfig);
+            }
         }
     }
 
