@@ -39,12 +39,12 @@ class ConfigTest {
     void shouldNotSupportInValidConfigObject() throws IOException {
         String configJson = "{\n" +
             "  \"rules\": {\n" +
-            "    \"no-duplicate-includes\": []\n" +
+            "    \"no-duplicate-includes\": \"foo\"\n" +
             "  }\n" +
             "}";
         JsonMappingException mappingException =
             assertThrows(JsonMappingException.class, () -> OBJECT_MAPPER.readValue(configJson, Config.class));
-        assertTrue(mappingException.getMessage().contains("Cannot deserialize instance of `com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig$RuleConfigBuilder`"));
+        assertTrue(mappingException.getMessage().contains("instance of `com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig$RuleConfigBuilder`"));
     }
 
     @DisplayName("Should support having rule config value as boolean")
@@ -52,7 +52,7 @@ class ConfigTest {
     void shouldSupportHavingRuleConfigAsBoolean() throws IOException {
         String configJson = "{\n" +
             "  \"rules\": {\n" +
-            "    \"file-name-no-spaces\": {}\n" +
+            "    \"file-name-no-spaces\": true\n" +
             "  }\n" +
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
