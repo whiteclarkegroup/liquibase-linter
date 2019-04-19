@@ -110,8 +110,8 @@ public class RuleRunner {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass())
                 && changeRule.supports(change)
                 && changeRule.invalid(change)
-                && shouldApply(changeRule.getConfig(), changeRule.getName(), changeRule.getMessage(change))) {
-                handleError(changeRule.getMessage(change), changeRule.getName());
+                && evaluateCondition(changeRule.getConfig(), change)) {
+                handleViolation(changeRule.getMessage(change), changeRule.getName());
             }
         }
 
@@ -123,8 +123,8 @@ public class RuleRunner {
         }
 
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
-            if (changeSetRule.invalid(changeSet) && shouldApply(changeSetRule.getConfig(), changeSetRule.getName(), changeSetRule.getMessage(changeSet))) {
-                handleError(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+            if (changeSetRule.invalid(changeSet) && evaluateCondition(changeSetRule.getConfig(), change)) {
+                handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName());
             }
         }
 
@@ -136,28 +136,21 @@ public class RuleRunner {
         }
 
         private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
-            if (changeLogRule.invalid(databaseChangeLog) && shouldApply(changeLogRule.getConfig(), changeLogRule.getName(), changeLogRule.getMessage(databaseChangeLog))) {
-                handleError(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+            if (changeLogRule.invalid(databaseChangeLog) && evaluateCondition(changeLogRule.getConfig(), change)) {
+                handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
             }
         }
 
-        private void handleError(String errorMessage, String rule) throws ChangeLogParseException {
+        private void handleViolation(String errorMessage, String rule) throws ChangeLogParseException {
+            if (isIgnored(rule)) {
+                reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
+                return;
+            }
             if (config.isFailFast()) {
                 throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
             } else {
                 reportItems.add(ReportItem.error(databaseChangeLog, changeSet, rule, errorMessage));
             }
-        }
-
-        private boolean shouldApply(RuleConfig ruleConfig, String ruleKey, String errorMessage) {
-            if (!evaluateCondition(ruleConfig, change)) {
-                return false;
-            }
-            if (isIgnored(ruleKey)) {
-                reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, ruleKey, errorMessage));
-                return false;
-            }
-            return true;
         }
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
