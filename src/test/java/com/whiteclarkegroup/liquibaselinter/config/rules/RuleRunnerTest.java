@@ -49,14 +49,16 @@ class RuleRunnerTest {
         assertTrue(changeLogParseException.getMessage().contains("Table name does not follow pattern"));
     }
 
-    @DisplayName("Should do nothing for rule violation when ignored via comment and fail-fast is on")
+    @DisplayName("Should report rule violation as ignored when ignored via comment and fail-fast is on")
     @Test
     void shouldNotThrowForIgnoredWhenFailFastOn() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, true);
 
         ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name")).checkChange();
 
-        // expect nothing thrown
+        assertEquals(0, ruleRunner.getReport().countErrors());
+        assertEquals(1, ruleRunner.getReport().countIgnored());
+        assertEquals("Table name does not follow pattern", ruleRunner.getReport().getReportItems().iterator().next().getMessage());
     }
 
     @DisplayName("Should add rule violation to report as an error when condition resolves to true")
