@@ -22,6 +22,10 @@ public class Report {
         return reportItems.stream().filter(item -> item.getType() == ReportItem.ReportItemType.ERROR).count();
     }
 
+    public long countIgnored() {
+        return reportItems.stream().filter(item -> item.getType() == ReportItem.ReportItemType.IGNORED).count();
+    }
+
     public boolean hasItems() {
         return !reportItems.isEmpty();
     }

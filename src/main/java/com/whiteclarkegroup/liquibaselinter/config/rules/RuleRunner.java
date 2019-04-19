@@ -150,12 +150,14 @@ public class RuleRunner {
         }
 
         private boolean shouldApply(RuleConfig ruleConfig, String ruleKey, String errorMessage) {
-            final boolean ignored = isIgnored(ruleKey);
-            if (ignored) {
+            if (!evaluateCondition(ruleConfig, change)) {
+                return false;
+            }
+            if (isIgnored(ruleKey)) {
                 reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, ruleKey, errorMessage));
                 return false;
             }
-            return evaluateCondition(ruleConfig, change) && !ignored;
+            return true;
         }
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
