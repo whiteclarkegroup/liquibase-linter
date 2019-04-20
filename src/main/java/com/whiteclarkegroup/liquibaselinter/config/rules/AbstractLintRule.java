@@ -26,6 +26,8 @@ public abstract class AbstractLintRule implements LintRule {
         this.ruleConfig = ruleConfig;
         if (ruleConfig.hasPattern()) {
             this.patternChecker = new PatternChecker(ruleConfig);
+        } else {
+            this.patternChecker = null;
         }
     }
 

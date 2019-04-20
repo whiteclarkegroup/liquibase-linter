@@ -50,6 +50,10 @@ public class Config {
         return rules;
     }
 
+    public List<RuleConfig> forRule(String ruleName) {
+        return rules.get(ruleName);
+    }
+
     public RuleRunner getRuleRunner() {
         return new RuleRunner(this);
     }
