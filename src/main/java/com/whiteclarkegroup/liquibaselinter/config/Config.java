@@ -10,12 +10,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -24,12 +26,12 @@ public class Config {
 
     private final Pattern ignoreContextPattern;
     @JsonDeserialize(using = RuleConfigDeserializer.class)
-    private final Map<String, RuleConfig> rules;
+    private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
-                  @JsonProperty("rules") Map<String, RuleConfig> rules,
+                  @JsonProperty("rules") ListMultimap<String, RuleConfig> rules,
                   @JsonProperty("fail-fast") boolean failFast) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.rules = rules;
@@ -44,8 +46,12 @@ public class Config {
         return ignoreContextPattern;
     }
 
-    public Map<String, RuleConfig> getRules() {
+    public ListMultimap<String, RuleConfig> getRules() {
         return rules;
+    }
+
+    public List<RuleConfig> forRule(String ruleName) {
+        return rules.get(ruleName);
     }
 
     public RuleRunner getRuleRunner() {
@@ -53,7 +59,7 @@ public class Config {
     }
 
     public boolean isRuleEnabled(String name) {
-        return rules.containsKey(name) && rules.get(name).isEnabled();
+        return rules.containsKey(name) && rules.get(name).stream().anyMatch(RuleConfig::isEnabled);
     }
 
     public boolean isFailFast() {
@@ -67,19 +73,27 @@ public class Config {
         };
 
         @Override
-        public Map<String, RuleConfig> deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        public ListMultimap<String, RuleConfig> deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
             final Map<String, Object> config = jsonParser.readValueAs(VALUE_TYPE_REF);
-            final Map<String, RuleConfig> ruleConfigs = new HashMap<>();
+            final ImmutableListMultimap.Builder<String, RuleConfig> ruleConfigs = new ImmutableListMultimap.Builder<>();
             config.forEach((key, value) -> {
-                try {
-                    boolean ruleEnabled = OBJECT_MAPPER.convertValue(value, boolean.class);
-                    ruleConfigs.put(key, ruleEnabled ? RuleConfig.enabled() : RuleConfig.disabled());
-                } catch (IllegalArgumentException e) {
-                    RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
-                    ruleConfigs.put(key, ruleConfig);
+                if (value instanceof List) {
+                    ((List) value).forEach(item -> populateConfigValue(ruleConfigs, key, item));
+                } else {
+                    populateConfigValue(ruleConfigs, key, value);
                 }
             });
-            return ruleConfigs;
+            return ruleConfigs.build();
+        }
+
+        private void populateConfigValue(ImmutableListMultimap.Builder<String, RuleConfig> ruleConfigs, String key, Object value) {
+            try {
+                boolean ruleEnabled = OBJECT_MAPPER.convertValue(value, boolean.class);
+                ruleConfigs.put(key, ruleEnabled ? RuleConfig.enabled() : RuleConfig.disabled());
+            } catch (IllegalArgumentException e) {
+                RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
+                ruleConfigs.put(key, ruleConfig);
+            }
         }
     }
 

@@ -36,23 +36,19 @@ public class RuleRunner {
     }
 
     private List<ChangeRule> assembleChangeRules() {
-        return Streams.stream(changeRuleServiceLoader).filter(this::filterAndConfigureRule).collect(Collectors.toList());
+        return Streams.stream(changeRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
     }
 
     private List<ChangeSetRule> assembleChangeSetRules() {
-        return Streams.stream(changeSetRuleServiceLoader).filter(this::filterAndConfigureRule).collect(Collectors.toList());
+        return Streams.stream(changeSetRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
     }
 
     private List<ChangeLogRule> assembleChangeLogRules() {
-        return Streams.stream(changeLogRuleServiceLoader).filter(this::filterAndConfigureRule).collect(Collectors.toList());
+        return Streams.stream(changeLogRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
     }
 
-    private boolean filterAndConfigureRule(LintRule rule) {
-        if (rule != null && config.isRuleEnabled(rule.getName())) {
-            rule.configure(config.getRules().get(rule.getName()));
-            return true;
-        }
-        return false;
+    private boolean filterRule(LintRule rule) {
+        return rule != null && config.isRuleEnabled(rule.getName());
     }
 
     public Report getReport() {
@@ -107,11 +103,14 @@ public class RuleRunner {
         }
 
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
-            if (changeRule.getChangeType().isAssignableFrom(change.getClass())
-                && changeRule.supports(change)
-                && changeRule.invalid(change)
-                && shouldApply(changeRule.getConfig(), changeRule.getName(), changeRule.getMessage(change))) {
-                handleError(changeRule.getMessage(change), changeRule.getName());
+            if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
+                final List<RuleConfig> configs = config.forRule(changeRule.getName());
+                for (RuleConfig config : configs) {
+                    changeRule.configure(config);
+                    if (evaluateCondition(config, change) && changeRule.invalid(change)) {
+                        handleViolation(changeRule.getMessage(change), changeRule.getName());
+                    }
+                }
             }
         }
 
@@ -123,8 +122,12 @@ public class RuleRunner {
         }
 
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
-            if (changeSetRule.invalid(changeSet) && shouldApply(changeSetRule.getConfig(), changeSetRule.getName(), changeSetRule.getMessage(changeSet))) {
-                handleError(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+            final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
+            for (RuleConfig config : configs) {
+                changeSetRule.configure(config);
+                if (evaluateCondition(config, change) && changeSetRule.invalid(changeSet)) {
+                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+                }
             }
         }
 
@@ -136,26 +139,25 @@ public class RuleRunner {
         }
 
         private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
-            if (changeLogRule.invalid(databaseChangeLog) && shouldApply(changeLogRule.getConfig(), changeLogRule.getName(), changeLogRule.getMessage(databaseChangeLog))) {
-                handleError(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+            final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
+            for (RuleConfig config : configs) {
+                changeLogRule.configure(config);
+                if (evaluateCondition(config, change) && changeLogRule.invalid(databaseChangeLog)) {
+                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+                }
             }
         }
 
-        private void handleError(String errorMessage, String rule) throws ChangeLogParseException {
+        private void handleViolation(String errorMessage, String rule) throws ChangeLogParseException {
+            if (isIgnored(rule)) {
+                reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
+                return;
+            }
             if (config.isFailFast()) {
                 throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
             } else {
                 reportItems.add(ReportItem.error(databaseChangeLog, changeSet, rule, errorMessage));
             }
-        }
-
-        private boolean shouldApply(RuleConfig ruleConfig, String ruleKey, String errorMessage) {
-            final boolean ignored = isIgnored(ruleKey);
-            if (ignored) {
-                reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, ruleKey, errorMessage));
-                return false;
-            }
-            return evaluateCondition(ruleConfig, change) && !ignored;
         }
 
         private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
