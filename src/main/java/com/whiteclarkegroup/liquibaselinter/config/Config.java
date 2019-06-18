@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Config {
@@ -52,6 +53,10 @@ public class Config {
 
     public List<RuleConfig> forRule(String ruleName) {
         return rules.get(ruleName);
+    }
+
+    public List<RuleConfig> getEnabledRuleConfig(String ruleName) {
+        return forRule(ruleName).stream().filter(RuleConfig::isEnabled).collect(Collectors.toList());
     }
 
     public RuleRunner getRuleRunner() {

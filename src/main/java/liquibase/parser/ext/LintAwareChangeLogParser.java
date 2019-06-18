@@ -128,11 +128,12 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private void checkForFilesNotIncluded(Config config, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        RuleConfig ruleConfig = config.getRules().get("file-not-included").stream()
-            .filter(RuleConfig::isEnabled)
-            .findAny().orElse(null);
+        RuleConfig ruleConfig = config.getEnabledRuleConfig("file-not-included").stream().findAny().orElse(null);
         if (ruleConfig != null) {
             String fileExtension = rootPhysicalChangeLogLocation.substring(rootPhysicalChangeLogLocation.lastIndexOf("."));
+            if (ruleConfig.getValues() == null || ruleConfig.getValues().isEmpty()) {
+                throw new IllegalArgumentException("values not configured for rule `file-not-included`");
+            }
             for (String path : ruleConfig.getValues()) {
                 Collection<String> filesInDirectory = getFilesInDirectory(path, resourceAccessor);
                 for (String file : filesInDirectory) {
@@ -162,9 +163,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
-        RuleConfig ruleConfig = config.getRules().get("no-duplicate-includes").stream()
-            .filter(RuleConfig::isEnabled)
-            .findAny().orElse(null);
+        RuleConfig ruleConfig = config.getEnabledRuleConfig("no-duplicate-includes").stream().findAny().orElse(null);
         if (ruleConfig != null) {
             if (filesParsed.contains(physicalChangeLogLocation)) {
                 final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
