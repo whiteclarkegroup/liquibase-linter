@@ -35,6 +35,9 @@
       "rules/file-name-no-spaces": {
         "title": "file-name-no-spaces"
       },
+      "rules/file-not-included": {
+        "title": "file-not-included"
+      },
       "rules/foreign-key-name": {
         "title": "foreign-key-name"
       },
