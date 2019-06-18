@@ -20,6 +20,7 @@ import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.parser.core.yaml.YamlChangeLogParser;
 import liquibase.resource.ResourceAccessor;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.Set;
@@ -32,7 +33,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final YamlChangeLogParser YAML_PARSER = new YamlChangeLogParser();
 
     protected final ConfigLoader configLoader = new ConfigLoader();
-    private final Set<String> alreadyParsed = Sets.newConcurrentHashSet();
+    private final Set<String> filesParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
@@ -55,7 +56,12 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
-        runReports(physicalChangeLogLocation, ruleRunner.getReport());
+        if (hasFinishedParsing(physicalChangeLogLocation)) {
+            checkForFilesNotIncluded(config);
+            runReports(ruleRunner.getReport());
+        }
+
+        filesParsed.add(physicalChangeLogLocation);
 
         return changeLog;
     }
@@ -87,14 +93,18 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         return changeLog;
     }
 
-    private void runReports(String physicalChangeLogLocation, Report report) throws ChangeLogParseException {
-        //TODO move to DatabaseChangeLog::getRootChangeLog when we support liquibase 3.6 minimum
-        if (rootPhysicalChangeLogLocation.equals(physicalChangeLogLocation) && report.hasItems()) {
+    private void runReports(Report report) throws ChangeLogParseException {
+        if (report.hasItems()) {
             REPORTERS.forEach(reporter -> reporter.processReport(report));
             if (report.countErrors() > 0) {
                 throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
             }
         }
+    }
+
+    private boolean hasFinishedParsing(String physicalChangeLogLocation) {
+        //TODO move to DatabaseChangeLog::getRootChangeLog when we support liquibase 3.6 minimum
+        return rootPhysicalChangeLogLocation.equals(physicalChangeLogLocation);
     }
 
     @Override
@@ -115,16 +125,48 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         }
     }
 
-    void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
+    private void checkForFilesNotIncluded(Config config) throws ChangeLogParseException {
+        RuleConfig ruleConfig = config.getRules().get("file-not-included").stream()
+            .filter(RuleConfig::isEnabled)
+            .findAny().orElse(null);
+        if (ruleConfig != null) {
+            for (String path : ruleConfig.getValues()) {
+                File[] filesInDirectory = getFilesInDirectory(path);
+                for (File file : filesInDirectory) {
+                    checkFileHasBeenParsed(ruleConfig, file);
+                }
+            }
+        }
+    }
+
+    private File[] getFilesInDirectory(String path) {
+        File directory = new File(path);
+        if (directory.isDirectory()) {
+            File[] files = directory.listFiles(File::isFile);
+            if (files != null) {
+                return files;
+            }
+        }
+        return new File[0];
+    }
+
+    private void checkFileHasBeenParsed(RuleConfig ruleConfig, File file) throws ChangeLogParseException {
+        String changeLogPath = file.getPath().replace('\\', '/');
+        if (!filesParsed.contains(changeLogPath)) {
+            final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was not included in deltas change log");
+            throw new ChangeLogParseException(String.format(errorMessage, changeLogPath));
+        }
+    }
+
+    private void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
         RuleConfig ruleConfig = config.getRules().get("no-duplicate-includes").stream()
             .filter(RuleConfig::isEnabled)
             .findAny().orElse(null);
         if (ruleConfig != null) {
-            if (alreadyParsed.contains(physicalChangeLogLocation)) {
+            if (filesParsed.contains(physicalChangeLogLocation)) {
                 final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
-            alreadyParsed.add(physicalChangeLogLocation);
         }
     }
 
