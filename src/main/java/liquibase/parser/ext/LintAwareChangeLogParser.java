@@ -20,10 +20,12 @@ import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.parser.core.yaml.YamlChangeLogParser;
 import liquibase.resource.ResourceAccessor;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
@@ -57,7 +59,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
         if (hasFinishedParsing(physicalChangeLogLocation)) {
-            checkForFilesNotIncluded(config);
+            checkForFilesNotIncluded(config, resourceAccessor);
             runReports(ruleRunner.getReport());
         }
 
@@ -125,34 +127,35 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         }
     }
 
-    private void checkForFilesNotIncluded(Config config) throws ChangeLogParseException {
+    private void checkForFilesNotIncluded(Config config, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         RuleConfig ruleConfig = config.getRules().get("file-not-included").stream()
             .filter(RuleConfig::isEnabled)
             .findAny().orElse(null);
         if (ruleConfig != null) {
+            String fileExtension = rootPhysicalChangeLogLocation.substring(rootPhysicalChangeLogLocation.lastIndexOf("."));
             for (String path : ruleConfig.getValues()) {
-                File[] filesInDirectory = getFilesInDirectory(path);
-                for (File file : filesInDirectory) {
-                    checkFileHasBeenParsed(ruleConfig, file);
+                Collection<String> filesInDirectory = getFilesInDirectory(path, resourceAccessor);
+                for (String file : filesInDirectory) {
+                    checkFileHasBeenParsed(ruleConfig, file, fileExtension);
                 }
             }
         }
     }
 
-    private File[] getFilesInDirectory(String path) {
-        File directory = new File(path);
-        if (directory.isDirectory()) {
-            File[] files = directory.listFiles(File::isFile);
-            if (files != null) {
-                return files;
-            }
+    private Collection<String> getFilesInDirectory(String path, ResourceAccessor resourceAccessor) {
+        try {
+            return resourceAccessor.list(null, path, true, false, true)
+                .stream()
+                .map(fullPath -> fullPath.substring(fullPath.lastIndexOf(path)))
+                .collect(Collectors.toSet());
+        } catch (IOException e) {
+            return Collections.emptyList();
         }
-        return new File[0];
     }
 
-    private void checkFileHasBeenParsed(RuleConfig ruleConfig, File file) throws ChangeLogParseException {
-        String changeLogPath = file.getPath().replace('\\', '/');
-        if (!filesParsed.contains(changeLogPath)) {
+    private void checkFileHasBeenParsed(RuleConfig ruleConfig, String file, String fileExtension) throws ChangeLogParseException {
+        String changeLogPath = file.replace('\\', '/');
+        if (changeLogPath.endsWith(fileExtension) && !filesParsed.contains(changeLogPath)) {
             final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was not included in deltas change log");
             throw new ChangeLogParseException(String.format(errorMessage, changeLogPath));
         }

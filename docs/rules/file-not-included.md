@@ -4,10 +4,12 @@ title: file-not-included
 
 ## Why?
 
-Although generally uncommon, sometimes including a change log in the deltas change log is forgotten.
+Although generally uncommon, sometimes including a change log in the root deltas change log is forgotten.
 
 The `file-not-included` rule will fail if any file in the specified target directories were not included.
-The specified directory will not be searched recursively, so only files directly under the path will be checked.
+The specified directory **is** searched recursively. The check is also only performed against files which have
+the same file extension as the root deltas change log. For example, if you are using `xml` change logs, a `*.json`
+file would be ignored.
 
 ## Options
 
