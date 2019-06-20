@@ -14,8 +14,8 @@ This rule will fail if an update or delete change on any of the given tables doe
 
 ## Options
 
-`values` - (array of strings) list of table names that cannot have unqualified modifications
-`pattern` - (regex, as string) optional regular expression that `<where>` conditions must adhere to
+- `values` - (array of strings) list of table names that cannot have unqualified modifications
+- `pattern` - (regex, as string) optional regular expression that `<where>` conditions must adhere to
 
 ## Exmple Usage
 
