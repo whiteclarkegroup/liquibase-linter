@@ -1,0 +1,12 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "modify-data-enforce-where": {
+            "errorMessage": "Modify data on table '%s' must have a where condition including with 'CODE = '",
+            "values": [
+                "MUST_HAVE_WHERE"
+            ],
+            "pattern": "^.*CODE = .*$"
+        }
+    }
+}

@@ -45,7 +45,9 @@ public abstract class AbstractLintRule implements LintRule {
     }
 
     protected boolean checkPattern(String value, Object subject) {
-        return patternChecker.check(value, subject);
+        return Optional.ofNullable(patternChecker)
+            .map(checker -> checker.check(value, subject))
+            .orElse(false);
     }
 
     protected boolean checkMandatoryPattern(String value, Object subject) {
