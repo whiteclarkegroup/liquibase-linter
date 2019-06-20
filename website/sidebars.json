@@ -21,6 +21,7 @@
                   "rules/create-table-remarks",
                   "rules/drop-not-null-require-column-data-type",
                   "rules/file-name-no-spaces",
+                  "rules/file-not-included",
                   "rules/foreign-key-name",
                   "rules/has-comment",
                   "rules/has-context",
