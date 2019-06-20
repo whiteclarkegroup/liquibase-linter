@@ -9,9 +9,6 @@ import liquibase.exception.ChangeLogParseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,25 +24,23 @@ class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
     }
 
     @Override
-    List<IntegrationTestConfig> getTests() {
-        IntegrationTestConfig test1 = IntegrationTestConfig.shouldFail(
+    void registerTests() {
+        shouldFail(
             "Should not allow file name with spaces",
             "file-name-no-spaces/file-name no-spaces.xml",
             "file-name-no-spaces/file-name-no-spaces.json",
             "src/test/resources/integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
 
-        IntegrationTestConfig test2 = IntegrationTestConfig.shouldFail(
+        shouldFail(
             "Should not allow included file with name that has spaces",
             "file-name-no-spaces/file-name-no-spaces.xml",
             "file-name-no-spaces/file-name-no-spaces.json",
             "src/test/resources/integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
 
-        IntegrationTestConfig test3 = IntegrationTestConfig.shouldPass(
+        shouldPass(
             "Should allow file name without spaces",
             "file-name-no-spaces/file-name-no-spaces-valid.xml",
             "file-name-no-spaces/file-name-no-spaces.json");
-
-        return Arrays.asList(test1, test2, test3);
     }
 
 }
