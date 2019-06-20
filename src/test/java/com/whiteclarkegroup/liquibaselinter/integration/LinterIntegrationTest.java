@@ -35,7 +35,6 @@ abstract class LinterIntegrationTest {
             if (running.getMessage() != null) {
                 ChangeLogParseException changeLogParseException = assertThrows(ChangeLogParseException.class, () -> liquibase.update(contexts, nullWriter));
                 assertTrue(changeLogParseException.getMessage().contains(running.getMessage()));
-
             } else {
                 liquibase.update(contexts, nullWriter);
             }
