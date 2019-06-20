@@ -27,13 +27,10 @@ public class PatternChecker {
         if (value == null || value.equals("")) {
             return false;
         }
-        if (ruleConfig.getPatternString() != null) {
-            if (ruleConfig.getPatternString().contains(DYNAMIC_VALUE)) {
-                return !getDynamicPattern(getDynamicValue(subject)).matcher(value).matches();
-            } else {
-                return !ruleConfig.getPattern().map(pattern -> pattern.matcher(value).matches()).orElse(true);
-            }
+        if (ruleConfig.getPatternString().contains(DYNAMIC_VALUE)) {
+            return !getDynamicPattern(getDynamicValue(subject)).matcher(value).matches();
+        } else {
+            return !ruleConfig.getPattern().map(pattern -> pattern.matcher(value).matches()).orElse(true);
         }
-        return false;
     }
 }
