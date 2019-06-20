@@ -11,8 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ChangeSetParameterResolver.class)
 class ModifyDataEnforceWhereImplTest {
@@ -31,6 +30,19 @@ class ModifyDataEnforceWhereImplTest {
         modifyDataEnforceWhere.configure(RuleConfig.builder().withValues(Collections.singletonList("REQUIRES_WHERE")).build());
         assertTrue(modifyDataEnforceWhere.invalid(getUpdateDataChange(changeSet, "")));
         assertTrue(modifyDataEnforceWhere.invalid(getDeleteDataChange(changeSet, "")));
+    }
+
+    @Test
+    void shouldEnforcePresenceAndPattern(ChangeSet changeSet) {
+        ModifyDataEnforceWhereImpl rule = new ModifyDataEnforceWhereImpl();
+        rule.configure(RuleConfig.builder()
+            .withValues(Collections.singletonList("REQUIRES_WHERE"))
+            .withPattern("^.*CODE =.*$")
+            .build());
+
+        assertTrue(rule.invalid(getUpdateDataChange(changeSet, null)));
+        assertTrue(rule.invalid(getUpdateDataChange(changeSet, "sausages")));
+        assertFalse(rule.invalid(getUpdateDataChange(changeSet, "CODE = 'foo'")));
     }
 
     @DisplayName("Modify data change should support formatter error messages")
