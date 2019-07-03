@@ -70,14 +70,6 @@ public class RuleConfig {
         return patternString;
     }
 
-    private String getCondition() {
-        return condition;
-    }
-
-    private String getDynamicValue() {
-        return dynamicValue;
-    }
-
     public Optional<Expression> getConditionalExpression() {
         if (conditionExpression == null && condition != null) {
             conditionExpression = new SpelExpressionParser().parseExpression(condition);
