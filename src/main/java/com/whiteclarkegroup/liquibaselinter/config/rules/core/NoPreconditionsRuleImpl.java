@@ -26,6 +26,6 @@ public class NoPreconditionsRuleImpl extends AbstractLintRule implements ChangeS
     public boolean invalid(DatabaseChangeLog changeLog) {
         PreconditionContainer preconditions = changeLog.getPreconditions();
         return preconditions != null
-            && (!preconditions.getNestedPreconditions().isEmpty() && !preconditions.getNestedPreconditions().stream().allMatch(pre -> pre instanceof PreconditionContainer));
+            && !preconditions.getNestedPreconditions().isEmpty() && !preconditions.getNestedPreconditions().stream().allMatch(pre -> pre instanceof PreconditionContainer);
     }
 }

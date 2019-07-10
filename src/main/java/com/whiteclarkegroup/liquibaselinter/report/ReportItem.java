@@ -3,7 +3,7 @@ package com.whiteclarkegroup.liquibaselinter.report;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 
-public class ReportItem {
+public final class ReportItem {
 
     private final String filePath;
     private final String changeSetId;

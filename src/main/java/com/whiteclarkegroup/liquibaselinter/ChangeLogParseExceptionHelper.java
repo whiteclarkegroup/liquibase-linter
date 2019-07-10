@@ -4,7 +4,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-public class ChangeLogParseExceptionHelper {
+public final class ChangeLogParseExceptionHelper {
 
     private ChangeLogParseExceptionHelper() {
 

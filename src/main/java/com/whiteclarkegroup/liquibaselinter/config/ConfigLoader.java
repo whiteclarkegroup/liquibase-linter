@@ -14,11 +14,14 @@ public class ConfigLoader {
 
     public Config load(ResourceAccessor resourceAccessor) {
         try {
-            Config config;
-            if ((config = loadConfig(resourceAccessor, LQLINT_CONFIG)) != null) {
+            Config config = loadConfig(resourceAccessor, LQLINT_CONFIG);
+            if (config != null) {
                 return config;
-            } else if ((config = loadConfig(resourceAccessor, LQLLINT_CONFIG)) != null) {
-                return config;
+            } else {
+                config = loadConfig(resourceAccessor, LQLLINT_CONFIG);
+                if (config != null) {
+                    return config;
+                }
             }
         } catch (IOException e) {
             throw new UnexpectedLiquibaseException("Failed to load lq lint config file", e);

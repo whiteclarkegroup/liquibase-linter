@@ -5,6 +5,8 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.core.AbstractModifyDataChange;
 
+import java.util.Locale;
+
 @AutoService({ChangeRule.class})
 public class ModifyDataStartsWithWhereImpl extends AbstractLintRule implements ChangeRule<AbstractModifyDataChange> {
     private static final String NAME = "modify-data-starts-with-where";
@@ -21,7 +23,7 @@ public class ModifyDataStartsWithWhereImpl extends AbstractLintRule implements C
 
     @Override
     public boolean invalid(AbstractModifyDataChange modifyDataChange) {
-        return modifyDataChange.getWhere() != null && modifyDataChange.getWhere().toLowerCase().startsWith("where");
+        return modifyDataChange.getWhere() != null && modifyDataChange.getWhere().toLowerCase(Locale.ENGLISH).startsWith("where");
     }
 
 }

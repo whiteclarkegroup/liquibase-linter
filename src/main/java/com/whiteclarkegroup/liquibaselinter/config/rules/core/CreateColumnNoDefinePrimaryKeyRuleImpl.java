@@ -36,7 +36,7 @@ public class CreateColumnNoDefinePrimaryKeyRuleImpl extends AbstractLintRule imp
         ChangeWithColumns changeWithColumns = (ChangeWithColumns) change;
         for (ColumnConfig columnConfig : (List<ColumnConfig>) changeWithColumns.getColumns()) {
             ConstraintsConfig constraints = columnConfig.getConstraints();
-            if (constraints != null && (Boolean.TRUE.equals(constraints.isPrimaryKey()))) {
+            if (constraints != null && Boolean.TRUE.equals(constraints.isPrimaryKey())) {
                 return true;
             }
         }
