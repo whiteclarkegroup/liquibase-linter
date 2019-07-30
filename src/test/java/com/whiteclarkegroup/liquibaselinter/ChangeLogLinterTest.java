@@ -42,7 +42,7 @@ class ChangeLogLinterTest {
     @DisplayName("Should lint change sets with standard comment")
     @Test
     void shouldLintChangeSetsWithStandardComment() throws ChangeLogParseException {
-        Config config = new Config(null, ImmutableListMultimap.of(), true);
+        Config config = new Config(null, null, ImmutableListMultimap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
@@ -62,7 +62,7 @@ class ChangeLogLinterTest {
     @DisplayName("Should not fall over on null comment")
     @Test
     void shouldNotFallOverOnNullComment() throws ChangeLogParseException {
-        Config config = new Config(null, ImmutableListMultimap.of(), true);
+        Config config = new Config(null, null, ImmutableListMultimap.of(), true);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
@@ -144,6 +144,16 @@ class ChangeLogLinterTest {
     void shouldNotLintBaselineScript(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("baseline_ddl_test"), "Test Data column");
+        changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
+        verify(changeSet, never()).getChanges();
+    }
+
+    @DisplayName("Should not lint script matching ignore file pattern")
+    @Test
+    void shouldNotLintScriptMatchingIgnoreFilePattern(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+        DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
+        ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("baseline_ddl_test"), "Test Data column");
+        when(changeSet.getFilePath()).thenReturn("/ignore/core/TEST.xml");
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
         verify(changeSet, never()).getChanges();
     }

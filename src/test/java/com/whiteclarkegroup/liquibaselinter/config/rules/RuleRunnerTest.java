@@ -129,7 +129,7 @@ class RuleRunnerTest {
                 .withPattern("^(?!FOO)[A-Z_]+(?<!_)$")
                 .withCondition(condition)
                 .build());
-        return new RuleRunner(new Config(null, ruleConfigMap, failFast));
+        return new RuleRunner(new Config(null, null, ruleConfigMap, failFast));
     }
 
     private Change mockInvalidChange(String changeComment, String tableName) {
