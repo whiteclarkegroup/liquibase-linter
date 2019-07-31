@@ -2,6 +2,5 @@ language: java
 jdk:
 - openjdk8
 script:
-- mvn test -B
 - mvn clean test -B -Dliquibase.version="[3.5.0,3.6.0)"
 - mvn clean test -B -Dliquibase.version="[3.6.0,3.7.0)"
