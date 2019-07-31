@@ -12,6 +12,7 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
 {
     "fail-fast": false,
     "ignore-context-pattern": null,
+    "ignore-files-pattern": null,
     "rules": {}
 }
 ```
@@ -40,6 +41,22 @@ Example usage:
     "rules": {}
 }
 ```
+
+<small>(Regular expression literals aren't valid JSON, so you do need to use a string.)</small>
+
+### `ignore-files-pattern`
+
+This config entry is an optional regular expression for file patterns that, if matched on a changeSet, will cause the linter to skip checking that changeSet.
+
+Example usage:
+
+```json
+{
+    "ignore-files-pattern": "^src/main/resources/core/legacy/.*$",
+    "rules": {}
+}
+```
+<small>To avoid issues with script file paths resolving to using either `\` or `/`, all occurrences of `\` are replaced with `/`
 
 <small>(Regular expression literals aren't valid JSON, so you do need to use a string.)</small>
 

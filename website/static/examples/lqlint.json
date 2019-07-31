@@ -1,4 +1,5 @@
 {
     "ignore-context-pattern": null,
+    "ignore-files-pattern": null,
     "rules": {}
 }
