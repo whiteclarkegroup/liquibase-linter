@@ -53,7 +53,7 @@
 
     <properties>
         <!-- libraries -->
-        <liquibase.version>[3.4.0,3.7.0)</liquibase.version>
+        <liquibase.version>[3.4.0,3.8.0)</liquibase.version>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <guava.version>28.0-jre</guava.version>
         <mockito.version>2.28.2</mockito.version>
