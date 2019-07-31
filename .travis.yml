@@ -3,3 +3,4 @@ jdk:
 - openjdk8
 script:
 - mvn test -B
+- mvn test -B -Dliquibase.version="[3.4.0,3.5.0)"
