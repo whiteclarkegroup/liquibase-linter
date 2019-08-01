@@ -54,9 +54,9 @@
     <properties>
         <!-- libraries -->
         <liquibase.version>[3.4.0,3.8.0)</liquibase.version>
-        <junit.jupiter.version>5.4.2</junit.jupiter.version>
+        <junit.jupiter.version>5.5.1</junit.jupiter.version>
         <guava.version>28.0-jre</guava.version>
-        <mockito.version>2.28.2</mockito.version>
+        <mockito.version>3.0.0</mockito.version>
         <jackson.version>2.9.9.1</jackson.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <spring.version>5.1.8.RELEASE</spring.version>

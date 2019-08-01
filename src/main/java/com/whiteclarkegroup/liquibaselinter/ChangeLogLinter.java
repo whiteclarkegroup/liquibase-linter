@@ -81,7 +81,7 @@ public class ChangeLogLinter {
     }
 
     private boolean isIgnorable(ChangeSet changeSet, Config config) {
-        return isIgnorableContext(changeSet, config) || hasIgnoreComment(changeSet);
+        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet, config) || hasIgnoreComment(changeSet);
     }
 
     private boolean isIgnorableContext(ChangeSet changeSet, Config config) {
@@ -94,6 +94,14 @@ public class ChangeLogLinter {
 
     private boolean hasIgnoreComment(ChangeSet changeSet) {
         return changeSet.getComments() != null && changeSet.getComments().endsWith("lql-ignore");
+    }
+
+    private boolean isIgnorableFilePath(ChangeSet changeSet, Config config) {
+        if (changeSet.getFilePath() != null && config.getIgnoreFilesPattern() != null) {
+            String changeLogPath = changeSet.getFilePath().replace('\\', '/');
+            return config.getIgnoreFilesPattern().matcher(changeLogPath).matches();
+        }
+        return false;
     }
 
 }

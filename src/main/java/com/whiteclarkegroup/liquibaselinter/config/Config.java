@@ -26,15 +26,18 @@ import java.util.stream.Collectors;
 public class Config {
 
     private final Pattern ignoreContextPattern;
+    private final Pattern ignoreFilesPattern;
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
+                  @JsonProperty("ignore-files-pattern") String ignoreFilesPatternString,
                   @JsonProperty("rules") ListMultimap<String, RuleConfig> rules,
                   @JsonProperty("fail-fast") boolean failFast) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
+        this.ignoreFilesPattern = ignoreFilesPatternString != null ? Pattern.compile(ignoreFilesPatternString) : null;
         this.rules = rules;
         this.failFast = failFast;
     }
@@ -45,6 +48,10 @@ public class Config {
 
     public Pattern getIgnoreContextPattern() {
         return ignoreContextPattern;
+    }
+
+    public Pattern getIgnoreFilesPattern() {
+        return ignoreFilesPattern;
     }
 
     public ListMultimap<String, RuleConfig> getRules() {
