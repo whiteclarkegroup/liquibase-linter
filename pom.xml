@@ -53,6 +53,7 @@
 
     <properties>
         <!-- libraries -->
+        <liquibase.version>[3.4.0,3.8.0)</liquibase.version>
         <junit.jupiter.version>5.5.1</junit.jupiter.version>
         <guava.version>28.0-jre</guava.version>
         <mockito.version>3.0.0</mockito.version>
@@ -76,7 +77,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>[3.4.0,3.7.0)</version>
+            <version>${liquibase.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -240,6 +241,22 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <!-- yaml was an optional dependency until 3.5+ so have to work around with profile -->
+        <profile>
+            <id>yaml</id>
+            <activation>
+                <property>
+                    <name>yaml.version</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.yaml</groupId>
+                    <artifactId>snakeyaml</artifactId>
+                    <version>${yaml.version}</version>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
 
