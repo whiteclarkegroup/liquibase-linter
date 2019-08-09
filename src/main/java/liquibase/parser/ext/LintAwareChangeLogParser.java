@@ -68,10 +68,6 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         return changeLog;
     }
 
-    private boolean lintingEnabledFromCurrentChangeLog() {
-        return !config.isEnabledFrom() || filesParsed.contains(config.getEnableFrom());
-    }
-
     private DatabaseChangeLog getDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
         if (XML_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
             return parseXmlDatabaseChangeLog(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
