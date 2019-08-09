@@ -24,6 +24,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,10 +43,10 @@ class ChangeLogLinterTest {
     @DisplayName("Should lint change sets with standard comment")
     @Test
     void shouldLintChangeSetsWithStandardComment() throws ChangeLogParseException {
-        Config config = new Config(null, null, ImmutableListMultimap.of(), true);
+        Config config = new Config(null, null, ImmutableListMultimap.of(), true, null);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Test Data column");
-        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
+        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config, new HashSet<>()));
         verify(changeSet, times(1)).getChanges();
     }
 
@@ -62,10 +63,10 @@ class ChangeLogLinterTest {
     @DisplayName("Should not fall over on null comment")
     @Test
     void shouldNotFallOverOnNullComment() throws ChangeLogParseException {
-        Config config = new Config(null, null, ImmutableListMultimap.of(), true);
+        Config config = new Config(null, null, ImmutableListMultimap.of(), true, null);
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
         ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "Comment");
-        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config));
+        changeLogLinter.lintChangeLog(databaseChangeLog, config, new RuleRunner(config, new HashSet<>()));
         verify(changeSet, times(1)).getChanges();
     }
 

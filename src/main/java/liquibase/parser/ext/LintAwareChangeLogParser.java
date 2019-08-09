@@ -54,7 +54,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
             checkDuplicateIncludes(physicalChangeLogLocation, config);
         }
 
-        RuleRunner ruleRunner = config.getRuleRunner();
+        RuleRunner ruleRunner = new RuleRunner(config, filesParsed);
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
@@ -66,6 +66,10 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
         filesParsed.add(physicalChangeLogLocation);
 
         return changeLog;
+    }
+
+    private boolean lintingEnabledFromCurrentChangeLog() {
+        return !config.isEnabledFrom() || filesParsed.contains(config.getEnableFrom());
     }
 
     private DatabaseChangeLog getDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {

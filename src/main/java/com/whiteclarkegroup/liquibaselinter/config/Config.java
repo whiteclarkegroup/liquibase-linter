@@ -13,7 +13,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
-import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,16 +29,19 @@ public class Config {
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
+    private final String enableFrom;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
                   @JsonProperty("ignore-files-pattern") String ignoreFilesPatternString,
                   @JsonProperty("rules") ListMultimap<String, RuleConfig> rules,
-                  @JsonProperty("fail-fast") boolean failFast) {
+                  @JsonProperty("fail-fast") boolean failFast,
+                  @JsonProperty("enable-from") String enableFrom) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.ignoreFilesPattern = ignoreFilesPatternString != null ? Pattern.compile(ignoreFilesPatternString) : null;
         this.rules = rules;
         this.failFast = failFast;
+        this.enableFrom = enableFrom;
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -66,16 +68,20 @@ public class Config {
         return forRule(ruleName).stream().filter(RuleConfig::isEnabled).collect(Collectors.toList());
     }
 
-    public RuleRunner getRuleRunner() {
-        return new RuleRunner(this);
-    }
-
     public boolean isRuleEnabled(String name) {
         return rules.containsKey(name) && rules.get(name).stream().anyMatch(RuleConfig::isEnabled);
     }
 
     public boolean isFailFast() {
         return failFast;
+    }
+
+    public String getEnableFrom() {
+        return enableFrom;
+    }
+
+    public boolean isEnabledFrom() {
+        return enableFrom != null && !enableFrom.isEmpty();
     }
 
     static class RuleConfigDeserializer extends JsonDeserializer<Object> {

@@ -10,10 +10,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
@@ -27,9 +24,11 @@ public class RuleRunner {
     private final List<ChangeSetRule> changeSetRules;
     private final List<ChangeLogRule> changeLogRules;
     private final Report report = new Report();
+    private final Set<String> filesParsed;
 
-    public RuleRunner(Config config) {
+    public RuleRunner(Config config, Set<String> filesParsed) {
         this.config = config;
+        this.filesParsed = filesParsed;
         this.changeRules = assembleChangeRules();
         this.changeSetRules = assembleChangeSetRules();
         this.changeLogRules = assembleChangeLogRules();
@@ -55,20 +54,20 @@ public class RuleRunner {
         return report;
     }
 
+    public Set<String> getFilesParsed() {
+        return filesParsed;
+    }
+
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
+        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet(), filesParsed);
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null);
+        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null, filesParsed);
     }
 
     public RunningContext forChangeSet(ChangeSet changeSet) {
-        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
-    }
-
-    public RunningContext forGeneric() {
-        return new RunningContext(config, null, null, null, null, null, report.getReportItems(), null);
+        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet, filesParsed);
     }
 
     @SuppressWarnings("unchecked")
@@ -83,8 +82,17 @@ public class RuleRunner {
         private final DatabaseChangeLog databaseChangeLog;
         private final Collection<ReportItem> reportItems;
         private final ChangeSet changeSet;
+        private final Set<String> filesParsed;
 
-        private RunningContext(Config config, List<ChangeRule> changeRules, List<ChangeSetRule> changeSetRules, List<ChangeLogRule> changeLogRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
+        private RunningContext(Config config,
+                               List<ChangeRule> changeRules,
+                               List<ChangeSetRule> changeSetRules,
+                               List<ChangeLogRule> changeLogRules,
+                               Change change,
+                               DatabaseChangeLog databaseChangeLog,
+                               Collection<ReportItem> reportItems,
+                               ChangeSet changeSet,
+                               Set<String> filesParsed) {
             this.config = config;
             this.changeRules = changeRules;
             this.changeSetRules = changeSetRules;
@@ -93,6 +101,7 @@ public class RuleRunner {
             this.databaseChangeLog = databaseChangeLog;
             this.reportItems = reportItems;
             this.changeSet = changeSet;
+            this.filesParsed = filesParsed;
         }
 
         public RunningContext checkChange() throws ChangeLogParseException {
@@ -167,6 +176,9 @@ public class RuleRunner {
         }
 
         private boolean isIgnored(String ruleName) {
+            if (config.isEnabledFrom() && !filesParsed.contains(config.getEnableFrom())) {
+                return true;
+            }
             if (changeSet == null || changeSet.getComments() == null || !changeSet.getComments().contains(LQL_IGNORE_TOKEN)) {
                 return false;
             }
