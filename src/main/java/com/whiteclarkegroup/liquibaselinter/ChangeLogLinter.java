@@ -81,10 +81,10 @@ public class ChangeLogLinter {
     }
 
     private boolean isIgnorable(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
-        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet, config) || hasIgnoreComment(changeSet) || hasAlreadyParsed(changeSet, ruleRunner);
+        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet, config) || hasIgnoreComment(changeSet) || hasAlreadyBeenParsed(changeSet, ruleRunner);
     }
 
-    private boolean hasAlreadyParsed(ChangeSet changeSet, RuleRunner ruleRunner) {
+    private boolean hasAlreadyBeenParsed(ChangeSet changeSet, RuleRunner ruleRunner) {
         return ruleRunner.getFilesParsed().contains(changeSet.getFilePath());
     }
 
