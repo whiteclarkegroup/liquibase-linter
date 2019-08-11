@@ -114,10 +114,10 @@ public class RuleRunner {
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
                 final List<RuleConfig> configs = config.forRule(changeRule.getName());
-                for (RuleConfig config : configs) {
-                    changeRule.configure(config);
-                    if (evaluateCondition(config, change) && changeRule.invalid(change)) {
-                        handleViolation(changeRule.getMessage(change), changeRule.getName());
+                for (RuleConfig ruleConfig : configs) {
+                    changeRule.configure(ruleConfig);
+                    if (evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                        handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig);
                     }
                 }
             }
@@ -132,10 +132,10 @@ public class RuleRunner {
 
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
             final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
-            for (RuleConfig config : configs) {
-                changeSetRule.configure(config);
-                if (evaluateCondition(config, change) && changeSetRule.invalid(changeSet)) {
-                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+            for (RuleConfig ruleConfig : configs) {
+                changeSetRule.configure(ruleConfig);
+                if (evaluateCondition(ruleConfig, change) && changeSetRule.invalid(changeSet)) {
+                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig);
                 }
             }
         }
@@ -149,16 +149,16 @@ public class RuleRunner {
 
         private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
             final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
-            for (RuleConfig config : configs) {
-                changeLogRule.configure(config);
-                if (evaluateCondition(config, change) && changeLogRule.invalid(databaseChangeLog)) {
-                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+            for (RuleConfig ruleConfig : configs) {
+                changeLogRule.configure(ruleConfig);
+                if (evaluateCondition(ruleConfig, change) && changeLogRule.invalid(databaseChangeLog)) {
+                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig);
                 }
             }
         }
 
-        private void handleViolation(String errorMessage, String rule) throws ChangeLogParseException {
-            if (isIgnored(rule)) {
+        private void handleViolation(String errorMessage, String rule, RuleConfig ruleConfig) throws ChangeLogParseException {
+            if (!isEnabledFrom(ruleConfig) || isIgnored(rule)) {
                 reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
                 return;
             }
@@ -176,9 +176,6 @@ public class RuleRunner {
         }
 
         private boolean isIgnored(String ruleName) {
-            if (config.isEnabledFrom() && !filesParsed.contains(config.getEnableFrom())) {
-                return true;
-            }
             if (changeSet == null || changeSet.getComments() == null || !changeSet.getComments().contains(LQL_IGNORE_TOKEN)) {
                 return false;
             }
@@ -186,6 +183,13 @@ public class RuleRunner {
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
             return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
+        }
+
+        private boolean isEnabledFrom(RuleConfig ruleConfig) {
+            if (!config.isEnabledFrom() && !ruleConfig.isEnabledFrom()) {
+                return true;
+            }
+            return !config.isEnabledFrom() || filesParsed.contains(config.getEnableFrom());
         }
     }
 
