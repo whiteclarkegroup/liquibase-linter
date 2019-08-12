@@ -11,6 +11,7 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
@@ -29,21 +30,13 @@ public class RuleRunner {
     public RuleRunner(Config config, Set<String> filesParsed) {
         this.config = config;
         this.filesParsed = filesParsed;
-        this.changeRules = assembleChangeRules();
-        this.changeSetRules = assembleChangeSetRules();
-        this.changeLogRules = assembleChangeLogRules();
+        this.changeRules = assembleRules(changeRuleServiceLoader);
+        this.changeSetRules = assembleRules(changeSetRuleServiceLoader);
+        this.changeLogRules = assembleRules(changeLogRuleServiceLoader);
     }
 
-    private List<ChangeRule> assembleChangeRules() {
-        return Streams.stream(changeRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
-    }
-
-    private List<ChangeSetRule> assembleChangeSetRules() {
-        return Streams.stream(changeSetRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
-    }
-
-    private List<ChangeLogRule> assembleChangeLogRules() {
-        return Streams.stream(changeLogRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
+    private <T extends LintRule> List<T> assembleRules(ServiceLoader<T> ruleServiceLoader) {
+        return Streams.stream(ruleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
     }
 
     private boolean filterRule(LintRule rule) {
@@ -113,13 +106,7 @@ public class RuleRunner {
 
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
-                final List<RuleConfig> configs = config.forRule(changeRule.getName());
-                for (RuleConfig ruleConfig : configs) {
-                    changeRule.configure(ruleConfig);
-                    if (evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
-                        handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig);
-                    }
-                }
+                checkRule(changeRule, () -> changeRule.invalid(change), () -> changeRule.getMessage(change));
             }
         }
 
@@ -131,13 +118,7 @@ public class RuleRunner {
         }
 
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
-            final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
-            for (RuleConfig ruleConfig : configs) {
-                changeSetRule.configure(ruleConfig);
-                if (evaluateCondition(ruleConfig, change) && changeSetRule.invalid(changeSet)) {
-                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig);
-                }
-            }
+            checkRule(changeSetRule, () -> changeSetRule.invalid(changeSet), () -> changeSetRule.getMessage(changeSet));
         }
 
         public RunningContext checkChangeLog() throws ChangeLogParseException {
@@ -148,11 +129,15 @@ public class RuleRunner {
         }
 
         private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
-            final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
+            checkRule(changeLogRule, () -> changeLogRule.invalid(databaseChangeLog), () -> changeLogRule.getMessage(databaseChangeLog));
+        }
+
+        private void checkRule(LintRule lintRule, Supplier<Boolean> invalidSupplier, Supplier<String> messageSupplier) throws ChangeLogParseException {
+            final List<RuleConfig> configs = config.forRule(lintRule.getName());
             for (RuleConfig ruleConfig : configs) {
-                changeLogRule.configure(ruleConfig);
-                if (evaluateCondition(ruleConfig, change) && changeLogRule.invalid(databaseChangeLog)) {
-                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig);
+                lintRule.configure(ruleConfig);
+                if (evaluateCondition(ruleConfig, change) && invalidSupplier.get()) {
+                    handleViolation(messageSupplier.get(), lintRule.getName(), ruleConfig);
                 }
             }
         }
