@@ -10,14 +10,25 @@ class EnableFromIntegrationTest extends LinterIntegrationTest {
     void registerTests() {
         shouldFail(
             "Should fail with no comment as enabled after fail 1",
-            "enable-from/root.xml",
-            "enable-from/lqllint-from-fail-1.json",
-            "src/test/resources/integration/enable-from/has-comment-fail-2.xml");
+            "enable-from/root-enable-from/root.xml",
+            "enable-from/root-enable-from/lqllint-from-fail-1.json",
+            "src/test/resources/integration/enable-from/root-enable-from/has-comment-fail-2.xml");
 
         shouldPass(
             "Should pass with a comment as rule not enabled with first two",
-            "enable-from/root.xml",
-            "enable-from/lqllint-from-fail-2.json");
+            "enable-from/root-enable-from/root.xml",
+            "enable-from/root-enable-from/lqllint-from-fail-2.json");
+
+        shouldFail(
+            "Should fail with no comment as enabled after fail 1 for rule",
+            "enable-from/rule-enable-from/root.xml",
+            "enable-from/rule-enable-from/lqllint-from-fail-1.json",
+            "src/test/resources/integration/enable-from/rule-enable-from/has-comment-fail-2.xml");
+
+        shouldPass(
+            "Should pass with a comment as rule not enabled with first two for rule",
+            "enable-from/rule-enable-from/root.xml",
+            "enable-from/rule-enable-from/lqllint-from-fail-2.json");
     }
 
 }

@@ -1,7 +1,0 @@
-{
-    "fail-fast": true,
-    "enable-from": "src/test/resources/integration/enable-from/has-comment-fail-2.xml",
-    "rules": {
-        "has-comment": true
-    }
-}

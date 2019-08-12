@@ -189,7 +189,11 @@ public class RuleRunner {
             if (!config.isEnabledFrom() && !ruleConfig.isEnabledFrom()) {
                 return true;
             }
-            return !config.isEnabledFrom() || filesParsed.contains(config.getEnableFrom());
+            if (ruleConfig.isEnabledFrom()) {
+                return filesParsed.contains(ruleConfig.getEnableFrom());
+            } else {
+                return filesParsed.contains(config.getEnableFrom());
+            }
         }
     }
 
