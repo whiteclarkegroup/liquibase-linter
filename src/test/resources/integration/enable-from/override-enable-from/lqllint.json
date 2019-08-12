@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "enable-from": "src/test/resources/integration/enable-from/override-enable-from/has-comment-fail-1.xml",
+    "rules": {
+        "has-comment": {
+            "enableFrom": "src/test/resources/integration/enable-from/override-enable-from/has-comment-fail-2.xml"
+        }
+    }
+}

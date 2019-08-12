@@ -29,6 +29,11 @@ class EnableFromIntegrationTest extends LinterIntegrationTest {
             "Should pass with a comment as rule not enabled with first two for rule",
             "enable-from/rule-enable-from/root.xml",
             "enable-from/rule-enable-from/lqllint-from-fail-2.json");
+
+        shouldPass(
+            "Should pass with a comment as rule not enabled as overridden with rule enable from",
+            "enable-from/override-enable-from/root.xml",
+            "enable-from/override-enable-from/lqllint.json");
     }
 
 }
