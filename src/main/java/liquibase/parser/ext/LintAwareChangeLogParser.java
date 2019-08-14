@@ -16,25 +16,27 @@ import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.ChangeLogParser;
 import liquibase.parser.core.formattedsql.FormattedSqlChangeLogParser;
 import liquibase.parser.core.json.JsonChangeLogParser;
+import liquibase.parser.core.sql.SqlChangeLogParser;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.parser.core.yaml.YamlChangeLogParser;
 import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
-    private static final Collection<ChangeLogParser> SUPPORTED_PARSERS = ImmutableList.of(
-        new XMLChangeLogSAXParser(),
-        new JsonChangeLogParser(),
-        new YamlChangeLogParser(),
-        new FormattedSqlChangeLogParser()
+    private static final Collection<ChangeLogParser> SUPPORTED_PARSERS = ImmutableList.sortedCopyOf(
+        Comparator.comparingInt(ChangeLogParser::getPriority).reversed(),
+        ImmutableList.of(
+            new XMLChangeLogSAXParser(),
+            new JsonChangeLogParser(),
+            new YamlChangeLogParser(),
+            new FormattedSqlChangeLogParser(),
+            new SqlChangeLogParser()
+        )
     );
 
     protected final ConfigLoader configLoader = new ConfigLoader();
