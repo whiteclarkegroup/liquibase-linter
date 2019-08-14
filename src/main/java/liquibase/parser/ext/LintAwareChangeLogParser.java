@@ -14,30 +14,20 @@ import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.ChangeLogParser;
-import liquibase.parser.core.formattedsql.FormattedSqlChangeLogParser;
-import liquibase.parser.core.json.JsonChangeLogParser;
-import liquibase.parser.core.sql.SqlChangeLogParser;
-import liquibase.parser.core.xml.XMLChangeLogSAXParser;
-import liquibase.parser.core.yaml.YamlChangeLogParser;
+import liquibase.parser.ChangeLogParserFactory;
 import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
-    private static final Collection<ChangeLogParser> SUPPORTED_PARSERS = ImmutableList.sortedCopyOf(
-        Comparator.comparingInt(ChangeLogParser::getPriority).reversed(),
-        ImmutableList.of(
-            new XMLChangeLogSAXParser(),
-            new JsonChangeLogParser(),
-            new YamlChangeLogParser(),
-            new FormattedSqlChangeLogParser(),
-            new SqlChangeLogParser()
-        )
-    );
 
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
@@ -74,7 +64,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private DatabaseChangeLog getDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        ChangeLogParser supportingParser = SUPPORTED_PARSERS.stream()
+        ChangeLogParser supportingParser = getParsers()
             .filter(parser -> parser.supports(physicalChangeLogLocation, resourceAccessor))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Change log file type not supported"));
@@ -97,7 +87,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     @Override
     public boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
-        return SUPPORTED_PARSERS.stream().anyMatch(parser -> parser.supports(changeLogFile, resourceAccessor));
+        return getParsers().anyMatch(parser -> parser.supports(changeLogFile, resourceAccessor));
     }
 
     @Override
@@ -154,6 +144,12 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
         }
+    }
+
+    private Stream<ChangeLogParser> getParsers() {
+        return ChangeLogParserFactory.getInstance().getParsers()
+            .stream()
+            .filter(parser -> !(parser instanceof LintAwareChangeLogParser));
     }
 
 }
