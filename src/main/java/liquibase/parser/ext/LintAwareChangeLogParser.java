@@ -14,7 +14,7 @@ import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 import liquibase.parser.ChangeLogParser;
-import liquibase.parser.core.ParsedNode;
+import liquibase.parser.core.formattedsql.FormattedSqlChangeLogParser;
 import liquibase.parser.core.json.JsonChangeLogParser;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.parser.core.yaml.YamlChangeLogParser;
@@ -30,9 +30,12 @@ import java.util.stream.Collectors;
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
     private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
-    private static final CustomXMLChangeLogSAXParser XML_PARSER = new CustomXMLChangeLogSAXParser();
-    private static final JsonChangeLogParser JSON_PARSER = new JsonChangeLogParser();
-    private static final YamlChangeLogParser YAML_PARSER = new YamlChangeLogParser();
+    private static final Collection<ChangeLogParser> SUPPORTED_PARSERS = ImmutableList.of(
+        new XMLChangeLogSAXParser(),
+        new JsonChangeLogParser(),
+        new YamlChangeLogParser(),
+        new FormattedSqlChangeLogParser()
+    );
 
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
@@ -69,30 +72,11 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private DatabaseChangeLog getDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        if (XML_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
-            return parseXmlDatabaseChangeLog(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        } else if (JSON_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
-            return JSON_PARSER.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        } else if (YAML_PARSER.supports(physicalChangeLogLocation, resourceAccessor)) {
-            return YAML_PARSER.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        }
-        throw new IllegalArgumentException("Change log file type not supported");
-    }
-
-    private DatabaseChangeLog parseXmlDatabaseChangeLog(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-        ParsedNode parsedNode = XML_PARSER.parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        if (parsedNode == null) {
-            return null;
-        }
-
-        DatabaseChangeLog changeLog = new DatabaseChangeLog(physicalChangeLogLocation);
-        changeLog.setChangeLogParameters(changeLogParameters);
-        try {
-            changeLog.load(parsedNode, resourceAccessor);
-        } catch (Exception e) {
-            throw new ChangeLogParseException(e);
-        }
-        return changeLog;
+        ChangeLogParser supportingParser = SUPPORTED_PARSERS.stream()
+            .filter(parser -> parser.supports(physicalChangeLogLocation, resourceAccessor))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Change log file type not supported"));
+        return supportingParser.parse(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
     }
 
     private void runReports(Report report) throws ChangeLogParseException {
@@ -111,9 +95,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     @Override
     public boolean supports(String changeLogFile, ResourceAccessor resourceAccessor) {
-        return XML_PARSER.supports(changeLogFile, resourceAccessor)
-            || JSON_PARSER.supports(changeLogFile, resourceAccessor)
-            || YAML_PARSER.supports(changeLogFile, resourceAccessor);
+        return SUPPORTED_PARSERS.stream().anyMatch(parser -> parser.supports(changeLogFile, resourceAccessor));
     }
 
     @Override
@@ -170,15 +152,6 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
                 throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
             }
         }
-    }
-
-    public static class CustomXMLChangeLogSAXParser extends XMLChangeLogSAXParser implements ChangeLogParser {
-
-        @Override
-        public ParsedNode parseToNode(String physicalChangeLogLocation, ChangeLogParameters changeLogParameters, ResourceAccessor resourceAccessor) throws ChangeLogParseException {
-            return super.parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
-        }
-
     }
 
 }
