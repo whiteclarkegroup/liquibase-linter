@@ -13,6 +13,7 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
     "fail-fast": false,
     "ignore-context-pattern": null,
     "ignore-files-pattern": null,
+    "enable-from": null,
     "rules": {}
 }
 ```
@@ -28,6 +29,40 @@ By default, lint failures are aggregated and reported at the end after all chang
 If you prefer, you can set `fail-fast` to `true` in your config file so that the process will exit as soon as it finds the first failure.
 
 ## Ignoring certain changes
+
+### `enable-from`
+
+This config option allows enabling liquibase linter from a certain point in time. This is configured by choosing a change log file path to enable from.
+Once this change log has been reached, liquibase linter will run for all changes after. This option is inclusive so the file you pass as the config
+value **will** be linted.
+
+This is useful for integrating Liquibase Linter into existing projects which have many legacy changes that fall foul of the configured lint rules.
+
+Example use:
+
+`example-2.xml` configured as the enable from point, both `example-2.xml` and `example-3.xml`
+**will** be linted. `example-1.xml` will **not** be linted.
+
+```json
+{
+    "enable-from": "src/main/resources/example-2.xml",
+    "rules": {}
+}
+```
+*Root deltas change log*
+```xml
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <include relativeToChangelogFile="true" file="example-1.xml"/>
+    <include relativeToChangelogFile="true" file="example-2.xml"/>
+    <include relativeToChangelogFile="true" file="example-3.xml"/>
+
+</databaseChangeLog>
+```
+
 
 ### `ignore-context-pattern`
 
