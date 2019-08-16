@@ -138,11 +138,9 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     private void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
         RuleConfig ruleConfig = config.getEnabledRuleConfig("no-duplicate-includes").stream().findAny().orElse(null);
-        if (ruleConfig != null) {
-            if (filesParsed.contains(physicalChangeLogLocation)) {
-                final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
-                throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
-            }
+        if (ruleConfig != null && filesParsed.contains(physicalChangeLogLocation)) {
+            final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
+            throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
         }
     }
 
