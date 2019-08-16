@@ -33,19 +33,19 @@ If you prefer, you can set `fail-fast` to `true` in your config file so that the
 ### `enable-from`
 
 This config option allows enabling liquibase linter from a certain point in time. This is configured by choosing a change log file path to enable from.
-Once this change log has been reached, liquibase linter will run for all changes after. This option is inclusive so the file you pass as the config
-value **will** be linted.
+Once this change log has been reached, liquibase linter will run for all changes after. This option is exclusive so the file you pass as the config
+value **will not** be linted.
 
 This is useful for integrating Liquibase Linter into existing projects which have many legacy changes that fall foul of the configured lint rules.
 
 Example use:
 
-`example-2.xml` configured as the enable from point, both `example-2.xml` and `example-3.xml`
+`example-1.xml` configured as the enable from point, both `example-2.xml` and `example-3.xml`
 **will** be linted. `example-1.xml` will **not** be linted.
 
 ```json
 {
-    "enable-from": "src/main/resources/example-2.xml",
+    "enable-from": "src/main/resources/example-1.xml",
     "rules": {}
 }
 ```
