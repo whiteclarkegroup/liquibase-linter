@@ -55,7 +55,6 @@ public class ChangeLogLinter {
             .add(LoadUpdateDataChange.class)
             .build();
 
-    @SuppressWarnings("unchecked")
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         ruleRunner.forDatabaseChangeLog(databaseChangeLog)
             .checkChangeLog();
