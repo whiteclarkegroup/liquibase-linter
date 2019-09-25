@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.report.console;
 
+import com.google.auto.service.AutoService;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import com.whiteclarkegroup.liquibaselinter.report.Reporter;
@@ -12,6 +13,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.groupingBy;
 import static org.fusesource.jansi.Ansi.ansi;
 
+@AutoService(Reporter.class)
 public class ConsoleReporter implements Reporter {
 
     private static final String NEW_LINE = "\n";

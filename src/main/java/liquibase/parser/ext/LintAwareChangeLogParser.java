@@ -1,6 +1,5 @@
 package liquibase.parser.ext;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
@@ -9,8 +8,6 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
 import com.whiteclarkegroup.liquibaselinter.report.Reporter;
-import com.whiteclarkegroup.liquibaselinter.report.console.ConsoleReporter;
-import com.whiteclarkegroup.liquibaselinter.report.junit.JunitReporter;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -19,16 +16,13 @@ import liquibase.parser.ChangeLogParserFactory;
 import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
-    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter(), new JunitReporter());
+    private static final ServiceLoader<Reporter> REPORTERS = ServiceLoader.load(Reporter.class);
 
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
