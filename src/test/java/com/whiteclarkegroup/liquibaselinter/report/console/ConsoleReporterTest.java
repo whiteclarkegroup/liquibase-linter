@@ -1,7 +1,8 @@
-package com.whiteclarkegroup.liquibaselinter.report;
+package com.whiteclarkegroup.liquibaselinter.report.console;
 
 import com.google.common.collect.ImmutableList;
-import com.whiteclarkegroup.liquibaselinter.report.console.ConsoleReporter;
+import com.whiteclarkegroup.liquibaselinter.report.Report;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import org.fusesource.jansi.Ansi;
