@@ -52,6 +52,7 @@
     </distributionManagement>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- libraries -->
         <liquibase.version>[3.4.0,3.9.0)</liquibase.version>
         <junit.jupiter.version>5.5.1</junit.jupiter.version>
@@ -182,6 +183,7 @@
                     <rulesets>
                         <ruleset>rulesets/java/quickstart.xml</ruleset>
                     </rulesets>
+                    <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
                     <execution>
