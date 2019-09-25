@@ -1,5 +1,8 @@
-package com.whiteclarkegroup.liquibaselinter.report;
+package com.whiteclarkegroup.liquibaselinter.report.console;
 
+import com.whiteclarkegroup.liquibaselinter.report.Report;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
+import com.whiteclarkegroup.liquibaselinter.report.Reporter;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
