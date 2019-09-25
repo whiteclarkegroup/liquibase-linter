@@ -27,6 +27,10 @@ public final class ReportItem {
         return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.IGNORED, message);
     }
 
+    public static ReportItem passed(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
+        return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.PASSED, message);
+    }
+
     private static String getChangeSetId(ChangeSet changeSet) {
         if (changeSet != null) {
             return changeSet.getId();
@@ -66,6 +70,7 @@ public final class ReportItem {
 
     public enum ReportItemType {
         ERROR,
-        IGNORED
+        IGNORED,
+        PASSED
     }
 }

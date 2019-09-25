@@ -22,7 +22,7 @@ public class ConsoleReporter implements Reporter {
     public void processReport(Report report) {
         installAnsi();
         StringBuilder output = new StringBuilder();
-        report.getByFileName().forEach((fileName, items) -> {
+        report.getErroredOrIgnoredByFileName().forEach((fileName, items) -> {
             printFileName(output, fileName);
             final Map<String, List<ReportItem>> groupedByChangeSet = items.stream().collect(groupingBy(ReportItem::getChangeSetId));
             printByChangeSet(output, groupedByChangeSet);

@@ -104,7 +104,7 @@ class RuleRunnerTest {
 
         ruleRunner.forChange(mockInvalidChange(null, "TBL_TABLE")).checkChange();
 
-        assertFalse(ruleRunner.getReport().hasItems());
+        assertFalse(ruleRunner.getReport().countErrors() > 0);
     }
 
     @DisplayName("Should not report ignored violation when condition resolves to false")
@@ -114,7 +114,7 @@ class RuleRunnerTest {
 
         ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE")).checkChange();
 
-        assertFalse(ruleRunner.getReport().hasItems());
+        assertFalse(ruleRunner.getReport().countIgnored() > 0);
     }
 
     private RuleRunner ruleRunnerWithTableNameRule(String condition, boolean failFast) {

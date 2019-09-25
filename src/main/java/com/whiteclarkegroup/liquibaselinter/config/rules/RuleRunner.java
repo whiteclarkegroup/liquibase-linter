@@ -109,6 +109,8 @@ public class RuleRunner {
                     changeRule.configure(config);
                     if (evaluateCondition(config, change) && changeRule.invalid(change)) {
                         handleViolation(changeRule.getMessage(change), changeRule.getName());
+                    } else {
+                        reportItems.add(ReportItem.passed(databaseChangeLog, changeSet, changeRule.getName(), changeRule.getMessage(change)));
                     }
                 }
             }
@@ -127,6 +129,8 @@ public class RuleRunner {
                 changeSetRule.configure(config);
                 if (evaluateCondition(config, change) && changeSetRule.invalid(changeSet)) {
                     handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName());
+                } else {
+                    reportItems.add(ReportItem.passed(databaseChangeLog, changeSet, changeSetRule.getName(), changeSetRule.getMessage(changeSet)));
                 }
             }
         }
@@ -144,6 +148,8 @@ public class RuleRunner {
                 changeLogRule.configure(config);
                 if (evaluateCondition(config, change) && changeLogRule.invalid(databaseChangeLog)) {
                     handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+                } else {
+                    reportItems.add(ReportItem.passed(databaseChangeLog, changeSet, changeLogRule.getName(), changeLogRule.getMessage(databaseChangeLog)));
                 }
             }
         }

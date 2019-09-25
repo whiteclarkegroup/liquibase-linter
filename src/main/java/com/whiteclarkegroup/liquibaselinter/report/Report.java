@@ -14,8 +14,10 @@ public class Report {
         return reportItems;
     }
 
-    public Map<String, List<ReportItem>> getByFileName() {
-        return reportItems.stream().collect(Collectors.groupingBy(ReportItem::getFilePath));
+    public Map<String, List<ReportItem>> getErroredOrIgnoredByFileName() {
+        return reportItems.stream()
+            .filter(item -> item.getType() == ReportItem.ReportItemType.ERROR || item.getType() == ReportItem.ReportItemType.IGNORED)
+            .collect(Collectors.groupingBy(ReportItem::getFilePath));
     }
 
     public long countErrors() {
