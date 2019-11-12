@@ -55,7 +55,6 @@ public class ChangeLogLinter {
             .add(LoadUpdateDataChange.class)
             .build();
 
-    @SuppressWarnings("unchecked")
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         ruleRunner.forDatabaseChangeLog(databaseChangeLog)
             .checkChangeLog();
@@ -65,7 +64,7 @@ public class ChangeLogLinter {
     private void lintChangeSets(DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         final List<ChangeSet> changeSets = databaseChangeLog.getChangeSets();
         for (ChangeSet changeSet : changeSets) {
-            if (isIgnorable(changeSet, config)) {
+            if (isIgnorable(changeSet, config, ruleRunner)) {
                 continue;
             }
 
@@ -80,8 +79,12 @@ public class ChangeLogLinter {
         }
     }
 
-    private boolean isIgnorable(ChangeSet changeSet, Config config) {
-        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet, config) || hasIgnoreComment(changeSet);
+    private boolean isIgnorable(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
+        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet, config) || hasIgnoreComment(changeSet) || hasAlreadyBeenParsed(changeSet, ruleRunner);
+    }
+
+    private boolean hasAlreadyBeenParsed(ChangeSet changeSet, RuleRunner ruleRunner) {
+        return ruleRunner.getFilesParsed().contains(changeSet.getFilePath());
     }
 
     private boolean isIgnorableContext(ChangeSet changeSet, Config config) {

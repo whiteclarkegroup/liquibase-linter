@@ -60,15 +60,15 @@ public abstract class AbstractLintRule implements LintRule {
 
     @Override
     public String getMessage() {
-        return getMesageTemplate();
+        return getMessageTemplate();
     }
 
-    private String getMesageTemplate() {
+    private String getMessageTemplate() {
         return Optional.ofNullable(ruleConfig.getErrorMessage()).orElse(message);
     }
 
     protected String formatMessage(Object... stuff) {
-        return String.format(getMesageTemplate(), Arrays.stream(stuff)
+        return String.format(getMessageTemplate(), Arrays.stream(stuff)
             .map(thing -> Optional.ofNullable(thing).orElse(""))
             .toArray());
     }

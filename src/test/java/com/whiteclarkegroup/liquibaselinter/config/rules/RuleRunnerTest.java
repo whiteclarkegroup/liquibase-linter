@@ -9,6 +9,8 @@ import liquibase.exception.ChangeLogParseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -129,7 +131,7 @@ class RuleRunnerTest {
                 .withPattern("^(?!FOO)[A-Z_]+(?<!_)$")
                 .withCondition(condition)
                 .build());
-        return new RuleRunner(new Config(null, null, ruleConfigMap, failFast));
+        return new RuleRunner(new Config(null, null, ruleConfigMap, failFast, null), new HashSet<>());
     }
 
     private Change mockInvalidChange(String changeComment, String tableName) {

@@ -7,7 +7,6 @@ import liquibase.exception.ChangeLogParseException;
 public final class ChangeLogParseExceptionHelper {
 
     private ChangeLogParseExceptionHelper() {
-
     }
 
     public static ChangeLogParseException build(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String customMessage) {

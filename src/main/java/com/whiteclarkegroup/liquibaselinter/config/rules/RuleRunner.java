@@ -10,10 +10,8 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.ServiceLoader;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class RuleRunner {
@@ -27,24 +25,18 @@ public class RuleRunner {
     private final List<ChangeSetRule> changeSetRules;
     private final List<ChangeLogRule> changeLogRules;
     private final Report report = new Report();
+    private final Set<String> filesParsed;
 
-    public RuleRunner(Config config) {
+    public RuleRunner(Config config, Set<String> filesParsed) {
         this.config = config;
-        this.changeRules = assembleChangeRules();
-        this.changeSetRules = assembleChangeSetRules();
-        this.changeLogRules = assembleChangeLogRules();
+        this.filesParsed = filesParsed;
+        this.changeRules = assembleRules(changeRuleServiceLoader);
+        this.changeSetRules = assembleRules(changeSetRuleServiceLoader);
+        this.changeLogRules = assembleRules(changeLogRuleServiceLoader);
     }
 
-    private List<ChangeRule> assembleChangeRules() {
-        return Streams.stream(changeRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
-    }
-
-    private List<ChangeSetRule> assembleChangeSetRules() {
-        return Streams.stream(changeSetRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
-    }
-
-    private List<ChangeLogRule> assembleChangeLogRules() {
-        return Streams.stream(changeLogRuleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
+    private <T extends LintRule> List<T> assembleRules(ServiceLoader<T> ruleServiceLoader) {
+        return Streams.stream(ruleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
     }
 
     private boolean filterRule(LintRule rule) {
@@ -55,20 +47,20 @@ public class RuleRunner {
         return report;
     }
 
+    public Set<String> getFilesParsed() {
+        return filesParsed;
+    }
+
     public RunningContext forChange(Change change) {
-        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet());
+        return new RunningContext(config, changeRules, null, changeLogRules, change, change.getChangeSet().getChangeLog(), report.getReportItems(), change.getChangeSet(), filesParsed);
     }
 
     public RunningContext forDatabaseChangeLog(DatabaseChangeLog databaseChangeLog) {
-        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null);
+        return new RunningContext(config, null, null, changeLogRules, null, databaseChangeLog, report.getReportItems(), null, filesParsed);
     }
 
     public RunningContext forChangeSet(ChangeSet changeSet) {
-        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet);
-    }
-
-    public RunningContext forGeneric() {
-        return new RunningContext(config, null, null, null, null, null, report.getReportItems(), null);
+        return new RunningContext(config, null, changeSetRules, null, null, changeSet.getChangeLog(), report.getReportItems(), changeSet, filesParsed);
     }
 
     @SuppressWarnings("unchecked")
@@ -83,8 +75,17 @@ public class RuleRunner {
         private final DatabaseChangeLog databaseChangeLog;
         private final Collection<ReportItem> reportItems;
         private final ChangeSet changeSet;
+        private final Set<String> filesParsed;
 
-        private RunningContext(Config config, List<ChangeRule> changeRules, List<ChangeSetRule> changeSetRules, List<ChangeLogRule> changeLogRules, Change change, DatabaseChangeLog databaseChangeLog, Collection<ReportItem> reportItems, ChangeSet changeSet) {
+        private RunningContext(Config config,
+                               List<ChangeRule> changeRules,
+                               List<ChangeSetRule> changeSetRules,
+                               List<ChangeLogRule> changeLogRules,
+                               Change change,
+                               DatabaseChangeLog databaseChangeLog,
+                               Collection<ReportItem> reportItems,
+                               ChangeSet changeSet,
+                               Set<String> filesParsed) {
             this.config = config;
             this.changeRules = changeRules;
             this.changeSetRules = changeSetRules;
@@ -93,6 +94,7 @@ public class RuleRunner {
             this.databaseChangeLog = databaseChangeLog;
             this.reportItems = reportItems;
             this.changeSet = changeSet;
+            this.filesParsed = filesParsed;
         }
 
         public RunningContext checkChange() throws ChangeLogParseException {
@@ -104,13 +106,7 @@ public class RuleRunner {
 
         private void checkChangeRule(ChangeRule changeRule) throws ChangeLogParseException {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
-                final List<RuleConfig> configs = config.forRule(changeRule.getName());
-                for (RuleConfig config : configs) {
-                    changeRule.configure(config);
-                    if (evaluateCondition(config, change) && changeRule.invalid(change)) {
-                        handleViolation(changeRule.getMessage(change), changeRule.getName());
-                    }
-                }
+                checkRule(changeRule, () -> changeRule.invalid(change), () -> changeRule.getMessage(change));
             }
         }
 
@@ -122,13 +118,7 @@ public class RuleRunner {
         }
 
         private void checkChangeSetRule(ChangeSetRule changeSetRule) throws ChangeLogParseException {
-            final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
-            for (RuleConfig config : configs) {
-                changeSetRule.configure(config);
-                if (evaluateCondition(config, change) && changeSetRule.invalid(changeSet)) {
-                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName());
-                }
-            }
+            checkRule(changeSetRule, () -> changeSetRule.invalid(changeSet), () -> changeSetRule.getMessage(changeSet));
         }
 
         public RunningContext checkChangeLog() throws ChangeLogParseException {
@@ -139,17 +129,21 @@ public class RuleRunner {
         }
 
         private void checkChangeLogRule(ChangeLogRule changeLogRule) throws ChangeLogParseException {
-            final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
-            for (RuleConfig config : configs) {
-                changeLogRule.configure(config);
-                if (evaluateCondition(config, change) && changeLogRule.invalid(databaseChangeLog)) {
-                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName());
+            checkRule(changeLogRule, () -> changeLogRule.invalid(databaseChangeLog), () -> changeLogRule.getMessage(databaseChangeLog));
+        }
+
+        private void checkRule(LintRule lintRule, Supplier<Boolean> invalidSupplier, Supplier<String> messageSupplier) throws ChangeLogParseException {
+            final List<RuleConfig> configs = config.forRule(lintRule.getName());
+            for (RuleConfig ruleConfig : configs) {
+                lintRule.configure(ruleConfig);
+                if (evaluateCondition(ruleConfig, change) && invalidSupplier.get()) {
+                    handleViolation(messageSupplier.get(), lintRule.getName(), ruleConfig);
                 }
             }
         }
 
-        private void handleViolation(String errorMessage, String rule) throws ChangeLogParseException {
-            if (isIgnored(rule)) {
+        private void handleViolation(String errorMessage, String rule, RuleConfig ruleConfig) throws ChangeLogParseException {
+            if (!isEnabledAfter(ruleConfig) || isIgnored(rule)) {
                 reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
                 return;
             }
@@ -174,6 +168,17 @@ public class RuleRunner {
             final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
             final String[] split = toIgnore.split(",");
             return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
+        }
+
+        private boolean isEnabledAfter(RuleConfig ruleConfig) {
+            if (!config.isEnabledAfter() && !ruleConfig.isEnabledAfter()) {
+                return true;
+            }
+            if (ruleConfig.isEnabledAfter()) {
+                return filesParsed.contains(ruleConfig.getEnableAfter());
+            } else {
+                return filesParsed.contains(config.getEnableAfter());
+            }
         }
     }
 

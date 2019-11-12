@@ -32,6 +32,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
+    private final Report report = new Report();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
 
@@ -49,13 +50,15 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
             checkDuplicateIncludes(physicalChangeLogLocation, config);
         }
 
-        RuleRunner ruleRunner = config.getRuleRunner();
+        RuleRunner ruleRunner = new RuleRunner(config, filesParsed);
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
+        report.merge(ruleRunner.getReport());
+
         if (hasFinishedParsing(physicalChangeLogLocation)) {
             checkForFilesNotIncluded(config, resourceAccessor);
-            runReports(ruleRunner.getReport());
+            runReports(report);
         }
 
         filesParsed.add(physicalChangeLogLocation);
@@ -138,11 +141,9 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     private void checkDuplicateIncludes(String physicalChangeLogLocation, Config config) throws ChangeLogParseException {
         RuleConfig ruleConfig = config.getEnabledRuleConfig("no-duplicate-includes").stream().findAny().orElse(null);
-        if (ruleConfig != null) {
-            if (filesParsed.contains(physicalChangeLogLocation)) {
-                final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
-                throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
-            }
+        if (ruleConfig != null && filesParsed.contains(physicalChangeLogLocation)) {
+            final String errorMessage = Optional.ofNullable(ruleConfig.getErrorMessage()).orElse("Changelog file '%s' was included more than once");
+            throw new ChangeLogParseException(String.format(errorMessage, physicalChangeLogLocation));
         }
     }
 

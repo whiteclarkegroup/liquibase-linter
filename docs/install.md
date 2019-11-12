@@ -35,6 +35,6 @@ The easiest way to use it is as a dependency of [the Liquibase Maven plugin](htt
 
 It doesn't matter whether you use Liquibase scripts written in XML, JSON or YAML, they will be linted just the same.
 
-Liquibase Linter has been tested with Liquibase versions 3.4.0 through 3.6.x, so you can confidently use it with those. From version 3.7.0, [Liquibase will be making a series of breaking API changes](https://www.liquibase.org/2018/04/liquibase-3-6-0-released.html#looking-forward-api-changes); we'll be working to keep up with those here as they happen.
+Liquibase Linter has been tested with Liquibase versions 3.4.0 through 3.7.x, so you can confidently use it with those. We'll be working to keep up with newer versions of Liquibase as they happen.
 
 As for Java support, Liquibase Linter needs at least Java 8, but you should have no issues with higher versions, unless they are with Liquibase itself.
