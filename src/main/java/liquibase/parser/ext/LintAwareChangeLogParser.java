@@ -32,6 +32,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
+    private final Report report = new Report();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
 
@@ -53,9 +54,11 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
+        report.merge(ruleRunner.getReport());
+
         if (hasFinishedParsing(physicalChangeLogLocation)) {
             checkForFilesNotIncluded(config, resourceAccessor);
-            runReports(ruleRunner.getReport());
+            runReports(report);
         }
 
         filesParsed.add(physicalChangeLogLocation);

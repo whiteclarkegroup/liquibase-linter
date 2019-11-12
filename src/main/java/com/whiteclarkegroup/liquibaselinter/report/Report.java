@@ -30,4 +30,8 @@ public class Report {
         return !reportItems.isEmpty();
     }
 
+    public void merge(Report report) {
+        reportItems.addAll(report.getReportItems());
+    }
+
 }
