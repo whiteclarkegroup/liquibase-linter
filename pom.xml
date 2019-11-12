@@ -62,6 +62,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <jansi.version>1.17.1</jansi.version>
         <auto-service.version>1.0-rc5</auto-service.version>
+        <yaml.version>1.24</yaml.version>
         <!-- plugins -->
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
@@ -121,6 +122,11 @@
             <groupId>com.google.auto.service</groupId>
             <artifactId>auto-service</artifactId>
             <version>${auto-service.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${yaml.version}</version>
         </dependency>
     </dependencies>
 
@@ -241,22 +247,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-        <!-- yaml was an optional dependency until 3.5+ so have to work around with profile -->
-        <profile>
-            <id>yaml</id>
-            <activation>
-                <property>
-                    <name>yaml.version</name>
-                </property>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.yaml</groupId>
-                    <artifactId>snakeyaml</artifactId>
-                    <version>${yaml.version}</version>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 
