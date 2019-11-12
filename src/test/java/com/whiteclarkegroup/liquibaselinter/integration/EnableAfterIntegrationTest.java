@@ -45,6 +45,17 @@ class EnableAfterIntegrationTest extends LinterIntegrationTest {
             "Should pass with a comment as rule not enabled nested",
             "enable-after/nested/root.xml",
             "enable-after/nested/lqllint-pass.json");
+
+        shouldFail(
+            "Should fail with multiple configs",
+            "enable-after/rule-enable-after-multiple-configs/root.xml",
+            "enable-after/rule-enable-after-multiple-configs/lqllint-fail.json",
+            "src/test/resources/integration/enable-after/rule-enable-after-multiple-configs/object-name-fail-2.xml");
+
+        shouldPass(
+            "Should pass with multiple rule configs",
+            "enable-after/rule-enable-after-multiple-configs/root.xml",
+            "enable-after/rule-enable-after-multiple-configs/lqllint-pass.json");
     }
 
 }
