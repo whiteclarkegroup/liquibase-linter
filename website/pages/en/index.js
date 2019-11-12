@@ -151,8 +151,12 @@ const Start = () => (
 </plugin>
 \`\`\``}</MarkdownBlock>
 <MarkdownBlock>
-**2** Add the [config file](examples/lqlint.json) to your project root, and start [turning on rules](docs/rules).
+    **2** Add the [config file](examples/lqlint.json) to your project root, and start [turning on rules](docs/rules).
 </MarkdownBlock>
+            <MarkdownBlock>
+                **3** Learn about full [configuration options](docs/configure) and [strategies for
+                retrofitting](docs/retrofitting).
+            </MarkdownBlock>
         </article>
     </Container>
 );

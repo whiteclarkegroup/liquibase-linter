@@ -1,6 +1,10 @@
 {
   "docs": {
-      "Setup": ["install", "configure"],
+      "Setup": [
+          "install",
+          "configure",
+          "retrofitting"
+      ],
       "Rules": [
           "rules/index",
           {
