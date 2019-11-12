@@ -28,19 +28,19 @@ public class Config {
     @JsonDeserialize(using = RuleConfigDeserializer.class)
     private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
-    private final String enableFrom;
+    private final String enableAfter;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
                   @JsonProperty("ignore-files-pattern") String ignoreFilesPatternString,
                   @JsonProperty("rules") ListMultimap<String, RuleConfig> rules,
                   @JsonProperty("fail-fast") boolean failFast,
-                  @JsonProperty("enable-from") String enableFrom) {
+                  @JsonProperty("enable-after") String enableAfter) {
         this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
         this.ignoreFilesPattern = ignoreFilesPatternString != null ? Pattern.compile(ignoreFilesPatternString) : null;
         this.rules = rules;
         this.failFast = failFast;
-        this.enableFrom = enableFrom;
+        this.enableAfter = enableAfter;
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -75,12 +75,12 @@ public class Config {
         return failFast;
     }
 
-    public String getEnableFrom() {
-        return enableFrom;
+    public String getEnableAfter() {
+        return enableAfter;
     }
 
-    public boolean isEnabledFrom() {
-        return enableFrom != null && !enableFrom.isEmpty();
+    public boolean isEnabledAfter() {
+        return enableAfter != null && !enableAfter.isEmpty();
     }
 
     static class RuleConfigDeserializer extends JsonDeserializer<Object> {

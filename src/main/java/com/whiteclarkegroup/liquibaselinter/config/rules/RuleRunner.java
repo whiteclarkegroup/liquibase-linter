@@ -143,7 +143,7 @@ public class RuleRunner {
         }
 
         private void handleViolation(String errorMessage, String rule, RuleConfig ruleConfig) throws ChangeLogParseException {
-            if (!isEnabledFrom(ruleConfig) || isIgnored(rule)) {
+            if (!isEnabledAfter(ruleConfig) || isIgnored(rule)) {
                 reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
                 return;
             }
@@ -170,14 +170,14 @@ public class RuleRunner {
             return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
         }
 
-        private boolean isEnabledFrom(RuleConfig ruleConfig) {
-            if (!config.isEnabledFrom() && !ruleConfig.isEnabledFrom()) {
+        private boolean isEnabledAfter(RuleConfig ruleConfig) {
+            if (!config.isEnabledAfter() && !ruleConfig.isEnabledAfter()) {
                 return true;
             }
-            if (ruleConfig.isEnabledFrom()) {
-                return filesParsed.contains(ruleConfig.getEnableFrom());
+            if (ruleConfig.isEnabledAfter()) {
+                return filesParsed.contains(ruleConfig.getEnableAfter());
             } else {
-                return filesParsed.contains(config.getEnableFrom());
+                return filesParsed.contains(config.getEnableAfter());
             }
         }
     }

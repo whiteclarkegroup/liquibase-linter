@@ -20,7 +20,7 @@ public class RuleConfig {
     private final List<String> values;
     private final Integer maxLength;
     private final String errorMessage;
-    private final String enableFrom;
+    private final String enableAfter;
     private Pattern pattern;
     private Expression conditionExpression;
     private Expression dynamicValueExpression;
@@ -33,7 +33,7 @@ public class RuleConfig {
         this.dynamicValue = builder.dynamicValue;
         this.values = builder.values;
         this.maxLength = builder.maxLength;
-        this.enableFrom = builder.enableFrom;
+        this.enableAfter = builder.enableAfter;
     }
 
     public static RuleConfig enabled() {
@@ -97,12 +97,12 @@ public class RuleConfig {
         return patternString != null && !patternString.equals("");
     }
 
-    public String getEnableFrom() {
-        return this.enableFrom;
+    public String getEnableAfter() {
+        return this.enableAfter;
     }
 
-    public boolean isEnabledFrom() {
-        return enableFrom != null && !enableFrom.isEmpty();
+    public boolean isEnabledAfter() {
+        return enableAfter != null && !enableAfter.isEmpty();
     }
 
     public static class RuleConfigBuilder {
@@ -113,7 +113,7 @@ public class RuleConfig {
         private String dynamicValue;
         private List<String> values;
         private Integer maxLength;
-        private String enableFrom;
+        private String enableAfter;
 
         public RuleConfigBuilder withEnabled(boolean enabled) {
             this.enabled = enabled;
@@ -150,8 +150,8 @@ public class RuleConfig {
             return this;
         }
 
-        public RuleConfigBuilder withEnableFrom(String enableFrom) {
-            this.enableFrom = enableFrom;
+        public RuleConfigBuilder withEnableAfter(String enableAfter) {
+            this.enableAfter = enableAfter;
             return this;
         }
 

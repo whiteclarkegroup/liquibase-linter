@@ -34,8 +34,8 @@ All rules also support two standard options (other than `enabled`):
 
 - `errorMessage` - (string) override the default error message for this rule, which is output when the rule fails on a change. This can be useful if you are using a rule in a very targeted way and want to make it clear to the developer why it has failed. Most rules make the invalid value they found available to be interpolated with `%s`.
 - `condition` - (string) - [Spring EL expression](https://www.baeldung.com/spring-expression-language) that should resolve to a boolean, which if provided will decide whether the rule should be applied or not. The expression scope is the [`Change`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/change/Change.java) object.
-- `enableFrom` - (string) works the same as `enable-from` configured at the root level of the Liquibase Linter configuration, but allows you to specify when to enable each rule from.
-This will take precedence over `enable-from` configured at the root level. [See root level enable from configuration](../configure.md#enable-from)
+- `enableAfter` - (string) works the same as `enable-after` configured at the root level of the Liquibase Linter configuration, but allows you to specify a point in time to enable each rule from.
+This will take precedence over `enable-after` configured at the root level. [See root level enable after configuration](../configure.md#enable-after)
 
 Individual rules also support their own options; you can find these documented with those rules.
 

@@ -13,7 +13,7 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
     "fail-fast": false,
     "ignore-context-pattern": null,
     "ignore-files-pattern": null,
-    "enable-from": null,
+    "enable-after": null,
     "rules": {}
 }
 ```
@@ -30,22 +30,21 @@ If you prefer, you can set `fail-fast` to `true` in your config file so that the
 
 ## Ignoring certain changes
 
-### `enable-from`
+### `enable-after`
 
-This config option allows enabling liquibase linter from a certain point in time. This is configured by choosing a change log file path to enable from.
-Once this change log has been reached, liquibase linter will run for all changes after. This option is exclusive so the file you pass as the config
-value **will not** be linted.
+This config option allows enabling liquibase linter from a certain point in time. This is configured by choosing a change log file path to enable after.
+Once this change log has been reached, liquibase linter will run for all changes after.
 
 This is useful for integrating Liquibase Linter into existing projects which have many legacy changes that fall foul of the configured lint rules.
 
 Example use:
 
-`example-1.xml` configured as the enable from point, both `example-2.xml` and `example-3.xml`
+`example-1.xml` configured as the enable after point, both `example-2.xml` and `example-3.xml`
 **will** be linted. `example-1.xml` will **not** be linted.
 
 ```json
 {
-    "enable-from": "src/main/resources/example-1.xml",
+    "enable-after": "src/main/resources/example-1.xml",
     "rules": {}
 }
 ```
