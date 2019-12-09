@@ -1,8 +1,11 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules.core;
 
+import liquibase.change.core.TagDatabaseChange;
 import liquibase.changelog.ChangeSet;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +18,15 @@ class HasCommentsRuleImplTest {
     void shouldPassWithPopulatedComment() {
         ChangeSet changeSet = mock(ChangeSet.class, RETURNS_DEEP_STUBS);
         when(changeSet.getComments()).thenReturn("Some comment");
+        assertFalse(new HasCommentRuleImpl().invalid(changeSet));
+    }
+
+    @DisplayName("Should pass when changeSet contains only a tagDatabase change")
+    @Test
+    void shouldPassWithTagDatabase() {
+        ChangeSet changeSet = mock(ChangeSet.class, RETURNS_DEEP_STUBS);
+        when(changeSet.getComments()).thenReturn(null);
+        when(changeSet.getChanges()).thenReturn(Collections.singletonList(mock(TagDatabaseChange.class)));
         assertFalse(new HasCommentRuleImpl().invalid(changeSet));
     }
 
