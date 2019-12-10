@@ -22,7 +22,7 @@ class ConfigLoaderTest {
     private ConfigLoader configLoader;
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         System.clearProperty(LQLINT_CONFIG_PATH_PROPERTY);
     }
 
