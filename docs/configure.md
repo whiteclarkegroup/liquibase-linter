@@ -38,7 +38,7 @@ where `lqlint.json` is stored directly under `src/main/resources` in `lqlint-con
             <version>${liquibaselinter.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.whiteclarkegroup</groupId>
+            <groupId>com.your.group.id</groupId>
             <artifactId>lqlint-config</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
@@ -50,7 +50,7 @@ where `lqlint.json` is stored directly under `src/main/resources` in `lqlint-con
 #### Custom lint config file path
 
 There is also support for changing the default path that the config file is loaded from. This is done by specifying the `lqlint.config.path`
-system property.
+system property. With maven this would look like `mvn resources:resources liquibase:update -Dlqlint.config.path=foo-lqlint.json`
 
 ## Reporting and `fail-fast`
 
