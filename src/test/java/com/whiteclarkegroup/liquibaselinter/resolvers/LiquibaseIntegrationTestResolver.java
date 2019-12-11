@@ -57,7 +57,7 @@ public class LiquibaseIntegrationTestResolver implements ParameterResolver {
 
         @Override
         public Set<InputStream> getResourcesAsStream(String path) throws IOException {
-            if (ConfigLoader.LQLLINT_CONFIG.equals(path)) {
+            if (ConfigLoader.LQLINT_CONFIG.equals(path)) {
                 return ImmutableSet.of(getClass().getResourceAsStream(configPath));
             }
             return super.getResourcesAsStream(path);

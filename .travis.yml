@@ -1,6 +1,6 @@
 language: java
 jdk:
-- openjdk8
+    - openjdk8
 script:
     - mvn test -B
     - ./build-scripts/run-tests-liquibase-versions.sh

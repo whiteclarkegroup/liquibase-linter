@@ -11,13 +11,13 @@ class ObjectNameIntegrationTest extends LinterIntegrationTest {
         shouldFail(
             "Should fail when object name does not match the pattern",
             "object-name/object-name-fail.xml",
-            "object-name/lqllint.json",
+            "object-name/lqlint.json",
             "Object name 'NOT%FOLLOWING%PATTERN' name must be uppercase and use '_' separation");
 
         shouldPass(
             "Should pass when object name matches the pattern",
             "object-name/object-name-pass.xml",
-            "object-name/lqllint.json");
+            "object-name/lqlint.json");
     }
 
 }

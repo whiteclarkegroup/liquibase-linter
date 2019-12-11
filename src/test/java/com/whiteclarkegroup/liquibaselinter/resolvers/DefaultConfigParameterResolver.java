@@ -15,7 +15,7 @@ public class DefaultConfigParameterResolver implements ParameterResolver {
     private final Config config;
 
     public DefaultConfigParameterResolver() {
-        try (InputStream inputStream = getClass().getResourceAsStream("/lqllint.test.json")) {
+        try (InputStream inputStream = getClass().getResourceAsStream("/lqlint.test.json")) {
             this.config = Config.fromInputStream(inputStream);
         } catch (IOException e) {
             throw new UnexpectedLiquibaseException("Failed to load test lq lint default config file", e);

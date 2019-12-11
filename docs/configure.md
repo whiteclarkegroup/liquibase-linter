@@ -16,8 +16,41 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
     "rules": {}
 }
 ```
-
 This example has nothing switched on but is a good place to start; you can [grab it from here](../examples/lqlint.json).
+
+#### From the classpath
+
+It is also possible for Liquibase Linter to load the `lqlint.json` file from the classpath. This can be useful when you have many different
+projects using Liquibase and want to share the rule config between them. With maven this would be done in the following way, 
+where `lqlint.json` is stored directly under `src/main/resources` in `lqlint-config`
+
+```xml
+<plugin>
+    <groupId>org.liquibase</groupId>
+    <artifactId>liquibase-maven-plugin</artifactId>
+    <configuration>
+        <propertyFile>${liquibase.property.file}</propertyFile>
+    </configuration>
+    <dependencies>
+        <dependency>
+            <groupId>com.whiteclarkegroup</groupId>
+            <artifactId>liquibase-linter</artifactId>
+            <version>${liquibaselinter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.your.group.id</groupId>
+            <artifactId>lqlint-config</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+    ...
+</plugin>
+```
+
+#### Custom lint config file path
+
+There is also support for changing the default path that the config file is loaded from. This is done by specifying the `lqlint.config.path`
+system property. With maven this would look like `mvn resources:resources liquibase:update -Dlqlint.config.path=foo-lqlint.json`
 
 ## Reporting and `fail-fast`
 

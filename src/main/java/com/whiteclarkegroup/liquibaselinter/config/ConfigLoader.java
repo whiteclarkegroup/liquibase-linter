@@ -5,20 +5,25 @@ import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
+
+import static java.lang.System.getProperty;
+import static java.util.stream.Collectors.toList;
 
 public class ConfigLoader {
 
     public static final String LQLINT_CONFIG = "/lqlint.json";
-    public static final String LQLLINT_CONFIG = "/lqllint.json";
+    public static final String LQLINT_CONFIG_CLASSPATH = "lqlint.json";
+    public static final String LQLINT_CONFIG_PATH_PROPERTY = "lqlint.config.path";
 
     public Config load(ResourceAccessor resourceAccessor) {
+        List<String> configPaths = Stream.of(getProperty(LQLINT_CONFIG_PATH_PROPERTY), LQLINT_CONFIG, LQLINT_CONFIG_CLASSPATH).filter(Objects::nonNull).collect(toList());
         try {
-            Config config = loadConfig(resourceAccessor, LQLINT_CONFIG);
-            if (config != null) {
-                return config;
-            } else {
-                config = loadConfig(resourceAccessor, LQLLINT_CONFIG);
+            for (String configPath : configPaths) {
+                Config config = loadConfig(resourceAccessor, configPath);
                 if (config != null) {
                     return config;
                 }

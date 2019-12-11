@@ -1,12 +1,12 @@
 databaseChangeLog:
 
-    - changeSet:
-          id: 201809011238
-          author: tester
-          changes:
-              - insert:
-                    tableName: FOO
-                    columns:
-                        - column:
-                              name: BAR
-                              type: test value
+    -   changeSet:
+            id: 201809011238
+            author: tester
+            changes:
+                -   insert:
+                        tableName: FOO
+                        columns:
+                            -   column:
+                                    name: BAR
+                                    type: test value
