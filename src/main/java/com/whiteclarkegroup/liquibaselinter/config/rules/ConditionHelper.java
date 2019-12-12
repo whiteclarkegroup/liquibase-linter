@@ -9,6 +9,10 @@ import java.util.Optional;
 
 public class ConditionHelper {
 
+    private ConditionHelper() {
+
+    }
+
     public static boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
         return ruleConfig.getConditionalExpression()
             .map(expression -> expression.getValue(new ConditionContext(change.getChangeSet().getChangeLog(), change.getChangeSet(), change), boolean.class))
