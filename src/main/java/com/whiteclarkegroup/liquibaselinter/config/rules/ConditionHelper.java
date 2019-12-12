@@ -7,7 +7,7 @@ import liquibase.changelog.DatabaseChangeLog;
 
 import java.util.Optional;
 
-public class ConditionEvaluator {
+public class ConditionHelper {
 
     public static boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
         return ruleConfig.getConditionalExpression()

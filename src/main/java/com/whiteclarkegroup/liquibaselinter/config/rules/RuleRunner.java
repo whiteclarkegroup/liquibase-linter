@@ -60,7 +60,7 @@ public class RuleRunner {
                 final List<RuleConfig> configs = config.forRule(changeRule.getName());
                 for (RuleConfig ruleConfig : configs) {
                     changeRule.configure(ruleConfig);
-                    if (ConditionEvaluator.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                    if (ConditionHelper.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
                         handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
                     }
                 }
@@ -73,7 +73,7 @@ public class RuleRunner {
             final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
             for (RuleConfig ruleConfig : configs) {
                 changeSetRule.configure(ruleConfig);
-                if (ConditionEvaluator.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
+                if (ConditionHelper.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
                     handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
                 }
             }
@@ -85,7 +85,7 @@ public class RuleRunner {
             final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
             for (RuleConfig ruleConfig : configs) {
                 changeLogRule.configure(ruleConfig);
-                if (ConditionEvaluator.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
+                if (ConditionHelper.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
                     handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
                 }
             }
