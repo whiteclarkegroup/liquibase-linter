@@ -56,8 +56,7 @@ public class ChangeLogLinter {
             .build();
 
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
-        ruleRunner.forDatabaseChangeLog(databaseChangeLog)
-            .checkChangeLog();
+        ruleRunner.checkChangeLog(databaseChangeLog);
         lintChangeSets(databaseChangeLog, config, ruleRunner);
     }
 
@@ -70,10 +69,10 @@ public class ChangeLogLinter {
 
             List<Change> changes = changeSet.getChanges();
 
-            ruleRunner.forChangeSet(changeSet).checkChangeSet();
+            ruleRunner.checkChangeSet(changeSet);
 
             for (Change change : changes) {
-                ruleRunner.forChange(change).checkChange();
+                ruleRunner.checkChange(change);
             }
 
         }
