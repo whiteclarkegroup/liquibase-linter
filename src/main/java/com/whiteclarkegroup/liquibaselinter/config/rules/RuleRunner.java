@@ -60,7 +60,7 @@ public class RuleRunner {
                 final List<RuleConfig> configs = config.forRule(changeRule.getName());
                 for (RuleConfig ruleConfig : configs) {
                     changeRule.configure(ruleConfig);
-                    if (evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                    if (ConditionEvaluator.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
                         handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
                     }
                 }
@@ -73,7 +73,7 @@ public class RuleRunner {
             final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
             for (RuleConfig ruleConfig : configs) {
                 changeSetRule.configure(ruleConfig);
-                if (changeSetRule.invalid(changeSet)) {
+                if (ConditionEvaluator.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
                     handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
                 }
             }
@@ -85,7 +85,7 @@ public class RuleRunner {
             final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
             for (RuleConfig ruleConfig : configs) {
                 changeLogRule.configure(ruleConfig);
-                if (changeLogRule.invalid(databaseChangeLog)) {
+                if (ConditionEvaluator.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
                     handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
                 }
             }
@@ -102,12 +102,6 @@ public class RuleRunner {
         } else {
             report.addError(databaseChangeLog, changeSet, rule, errorMessage);
         }
-    }
-
-    private boolean evaluateCondition(RuleConfig ruleConfig, Change change) {
-        return ruleConfig.getConditionalExpression()
-            .map(expression -> expression.getValue(change, boolean.class))
-            .orElse(true);
     }
 
     private boolean isIgnored(String ruleName, ChangeSet changeSet) {
