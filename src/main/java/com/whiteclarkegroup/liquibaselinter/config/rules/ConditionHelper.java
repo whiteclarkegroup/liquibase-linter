@@ -57,7 +57,7 @@ public class ConditionHelper {
         public boolean matchesContext(String... toMatch) {
             return Optional.ofNullable(changeSet)
                 .map(ChangeSet::getContexts)
-                .map(contexts -> contexts.matches(new Contexts(toMatch)))
+                .map(contexts -> !contexts.isEmpty() && contexts.matches(new Contexts(toMatch)))
                 .orElse(false);
         }
     }
