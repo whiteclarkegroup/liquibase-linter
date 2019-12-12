@@ -30,7 +30,6 @@ public class RuleRunner {
     private final Report report = new Report();
     private final Set<String> filesParsed;
 
-
     public RuleRunner(Config config, Set<String> filesParsed) {
         this.config = config;
         this.filesParsed = filesParsed;
@@ -57,17 +56,13 @@ public class RuleRunner {
 
     public void checkChange(Change change) throws ChangeLogParseException {
         for (ChangeRule changeRule : changeRules) {
-            checkChangeRule(changeRule, change);
-        }
-    }
-
-    private void checkChangeRule(ChangeRule changeRule, Change change) throws ChangeLogParseException {
-        if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
-            final List<RuleConfig> configs = config.forRule(changeRule.getName());
-            for (RuleConfig ruleConfig : configs) {
-                changeRule.configure(ruleConfig);
-                if (evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
-                    handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
+            if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
+                final List<RuleConfig> configs = config.forRule(changeRule.getName());
+                for (RuleConfig ruleConfig : configs) {
+                    changeRule.configure(ruleConfig);
+                    if (evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                        handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
+                    }
                 }
             }
         }
@@ -75,32 +70,24 @@ public class RuleRunner {
 
     public void checkChangeSet(ChangeSet changeSet) throws ChangeLogParseException {
         for (ChangeSetRule changeSetRule : changeSetRules) {
-            checkChangeSetRule(changeSetRule, changeSet);
-        }
-    }
-
-    private void checkChangeSetRule(ChangeSetRule changeSetRule, ChangeSet changeSet) throws ChangeLogParseException {
-        final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
-        for (RuleConfig ruleConfig : configs) {
-            changeSetRule.configure(ruleConfig);
-            if (changeSetRule.invalid(changeSet)) {
-                handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
+            final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
+            for (RuleConfig ruleConfig : configs) {
+                changeSetRule.configure(ruleConfig);
+                if (changeSetRule.invalid(changeSet)) {
+                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
+                }
             }
         }
     }
 
     public void checkChangeLog(DatabaseChangeLog databaseChangeLog) throws ChangeLogParseException {
         for (ChangeLogRule changeLogRule : changeLogRules) {
-            checkChangeLogRule(changeLogRule, databaseChangeLog);
-        }
-    }
-
-    private void checkChangeLogRule(ChangeLogRule changeLogRule, DatabaseChangeLog databaseChangeLog) throws ChangeLogParseException {
-        final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
-        for (RuleConfig ruleConfig : configs) {
-            changeLogRule.configure(ruleConfig);
-            if (changeLogRule.invalid(databaseChangeLog)) {
-                handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
+            final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
+            for (RuleConfig ruleConfig : configs) {
+                changeLogRule.configure(ruleConfig);
+                if (changeLogRule.invalid(databaseChangeLog)) {
+                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
+                }
             }
         }
     }
