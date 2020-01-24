@@ -1,0 +1,9 @@
+{
+    "fail-fast": true,
+    "rules": {
+        "has-comment": {
+            "enabled": true,
+            "condition": "matchesContext('bar')"
+        }
+    }
+}

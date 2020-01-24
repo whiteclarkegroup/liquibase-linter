@@ -21,7 +21,7 @@ class RuleRunnerTest {
     void shouldReportErrorsForFailureWhenNotIgnored() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, false);
 
-        ruleRunner.forChange(mockInvalidChange(null, "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange(null, "TBL_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countIgnored());
         assertEquals(1, ruleRunner.getReport().countErrors());
@@ -33,7 +33,7 @@ class RuleRunnerTest {
     void shouldReportErrorsForMultipleRuleConfigFailures() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, false);
 
-        ruleRunner.forChange(mockInvalidChange(null, "FOO_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange(null, "FOO_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countIgnored());
         assertEquals(1, ruleRunner.getReport().countErrors());
@@ -45,7 +45,7 @@ class RuleRunnerTest {
     void shouldReportIgnoredWhenIgnored() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, false);
 
-        ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countErrors());
         assertEquals(1, ruleRunner.getReport().countIgnored());
@@ -58,7 +58,7 @@ class RuleRunnerTest {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, true);
 
         ChangeLogParseException changeLogParseException =
-            assertThrows(ChangeLogParseException.class, () -> ruleRunner.forChange(mockInvalidChange(null, "TBL_TABLE")).checkChange());
+            assertThrows(ChangeLogParseException.class, () -> ruleRunner.checkChange(mockInvalidChange(null, "TBL_TABLE")));
 
         assertTrue(changeLogParseException.getMessage().contains("Table name does not follow pattern"));
     }
@@ -68,7 +68,7 @@ class RuleRunnerTest {
     void shouldNotThrowForIgnoredWhenFailFastOn() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule(null, true);
 
-        ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countErrors());
         assertEquals(1, ruleRunner.getReport().countIgnored());
@@ -80,7 +80,7 @@ class RuleRunnerTest {
     void shouldReportErrorWhenConditionTrue() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule("true", false);
 
-        ruleRunner.forChange(mockInvalidChange(null, "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange(null, "TBL_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countIgnored());
         assertEquals(1, ruleRunner.getReport().countErrors());
@@ -92,7 +92,7 @@ class RuleRunnerTest {
     void shouldReportIgnoredWhenConditionTrue() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule("true", false);
 
-        ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE"));
 
         assertEquals(0, ruleRunner.getReport().countErrors());
         assertEquals(1, ruleRunner.getReport().countIgnored());
@@ -104,7 +104,7 @@ class RuleRunnerTest {
     void shouldNotReportErrorWhenConditionFalse() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule("false", false);
 
-        ruleRunner.forChange(mockInvalidChange(null, "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange(null, "TBL_TABLE"));
 
         assertFalse(ruleRunner.getReport().hasItems());
     }
@@ -114,7 +114,7 @@ class RuleRunnerTest {
     void shouldNotReportIgnoredWhenConditionFalse() throws ChangeLogParseException {
         RuleRunner ruleRunner = ruleRunnerWithTableNameRule("false", false);
 
-        ruleRunner.forChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE")).checkChange();
+        ruleRunner.checkChange(mockInvalidChange("Test comment lql-ignore:table-name", "TBL_TABLE"));
 
         assertFalse(ruleRunner.getReport().hasItems());
     }

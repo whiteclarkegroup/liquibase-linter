@@ -1,5 +1,8 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
+import liquibase.changelog.ChangeSet;
+import liquibase.changelog.DatabaseChangeLog;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +35,14 @@ public class Report {
 
     public void merge(Report report) {
         reportItems.addAll(report.getReportItems());
+    }
+
+    public void addIgnored(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String errorMessage) {
+        reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
+    }
+
+    public void addError(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String errorMessage) {
+        reportItems.add(ReportItem.error(databaseChangeLog, changeSet, rule, errorMessage));
     }
 
 }
