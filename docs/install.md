@@ -28,6 +28,10 @@ Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://ww
 </plugin>
 ```
 
+## Gradle
+
+Add `liquibase-linter` as a dependency of [the Liquibase Gradle plugin](https://github.com/liquibase/liquibase-gradle-plugin):
+
 ## Command Line
 
 Starting with the latest [Liquibase release zip](https://github.com/liquibase/liquibase/releases/).
@@ -36,7 +40,7 @@ Download the latest Liquibase Linter jar from [maven central](https://repo1.mave
 the [dependencies](https://mvnrepository.com/artifact/com.whiteclarkegroup/liquibase-linter) required by Liquibase Linter, then add them to 
 the `lib` directory.
 
-Finally add your `lqlint.json` configuration file to the `lib` directory.
+Add your `lqlint.json` configuration file to the `lib` directory.
 
 ## Compatibility
 
