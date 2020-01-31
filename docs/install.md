@@ -6,10 +6,7 @@ Liquibase Linter is built with [the Extensions feature in Liquibase](https://liq
 
 ## Maven
 
-Liquibase Linter is available from Maven Central:
-https://search.maven.org/search?q=a:liquibase-linter
-
-The easiest way to use it is as a dependency of [the Liquibase Maven plugin](http://www.liquibase.org/documentation/maven/):
+Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://www.liquibase.org/documentation/maven/):
 
 ```xml
 <plugin>
