@@ -36,6 +36,7 @@
                   "rules/no-duplicate-includes",
                   "rules/no-preconditions",
                   "rules/no-schema-name",
+                  "rules/no-raw-sql",
                   "rules/object-name",
                   "rules/object-name-length",
                   "rules/primary-key-name",

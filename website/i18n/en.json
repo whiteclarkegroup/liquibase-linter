@@ -14,9 +14,9 @@
       "install": {
         "title": "Install"
       },
-        "retrofitting": {
-            "title": "Retrofitting"
-        },
+      "retrofitting": {
+        "title": "Retrofitting"
+      },
       "rules/create-column-no-define-primary-key": {
         "title": "create-column-no-define-primary-key"
       },
@@ -70,6 +70,9 @@
       },
       "rules/no-preconditions": {
         "title": "no-preconditions"
+      },
+      "rules/no-raw-sql": {
+        "title": "no-raw-sql"
       },
       "rules/no-schema-name": {
         "title": "no-schema-name"

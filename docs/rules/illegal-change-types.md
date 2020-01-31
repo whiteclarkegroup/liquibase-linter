@@ -12,7 +12,7 @@ This rule will fail if one of the change types provided is ever used in a script
 
 `values` - (array of strings) list of change types that should not be used; each can be expressed as either the tag name or the full Java class name of the [change type](https://github.com/liquibase/liquibase/tree/master/liquibase-core/src/main/java/liquibase/change/core)
 
-## Exmple Usage
+## Example Usage
 
 To prevent `loadData` changes being used:
 
