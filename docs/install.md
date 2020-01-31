@@ -31,6 +31,16 @@ The easiest way to use it is as a dependency of [the Liquibase Maven plugin](htt
 </plugin>
 ```
 
+## Command Line
+
+Starting with the latest [Liquibase release zip](https://github.com/liquibase/liquibase/releases/).
+ 
+Download the latest Liquibase Linter jar from [maven central](https://repo1.maven.org/maven2/com/whiteclarkegroup/liquibase-linter/) and download 
+the [dependencies](https://mvnrepository.com/artifact/com.whiteclarkegroup/liquibase-linter) required by Liquibase Linter, then add them to 
+the `lib` directory.
+
+Finally add your `lqlint.json` configuration file to the `lib` directory.
+
 ## Compatibility
 
 It doesn't matter whether you use Liquibase scripts written in XML, JSON or YAML, they will be linted just the same.
