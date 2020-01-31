@@ -46,6 +46,6 @@ Add your `lqlint.json` configuration file to the `lib` directory.
 
 It doesn't matter whether you use Liquibase scripts written in XML, JSON or YAML, they will be linted just the same.
 
-Liquibase Linter has been tested with Liquibase versions 3.4.0 through 3.7.x, so you can confidently use it with those. We'll be working to keep up with newer versions of Liquibase as they happen.
+Liquibase Linter has been tested with Liquibase versions 3.4.0 through to the latest version, so you can confidently use it with those. We'll be working to keep up with newer versions of Liquibase as they happen.
 
 As for Java support, Liquibase Linter needs at least Java 8, but you should have no issues with higher versions, unless they are with Liquibase itself.
