@@ -47,6 +47,12 @@ class ModifyDataMustHaveWhereIntegrationTest extends LinterIntegrationTest {
             "modify-data-enforce-where/modify-data-enforce-where-pass-pattern.xml",
             "modify-data-enforce-where/lqlint-pattern.json");
 
+        shouldFail(
+            "Should fail when delete data does not have where condition with regex matcher",
+            "modify-data-enforce-where/modify-data-enforce-where-fail-delete.xml",
+            "modify-data-enforce-where/lqlint-regex.json",
+            "Modify data on table 'MUST_HAVE_WHERE' must have a where condition");
+
     }
 
 }

@@ -5,6 +5,8 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeRule;
 import liquibase.change.core.AbstractModifyDataChange;
 
+import java.util.regex.Pattern;
+
 @AutoService({ChangeRule.class})
 public class ModifyDataEnforceWhereImpl extends AbstractLintRule implements ChangeRule<AbstractModifyDataChange> {
     private static final String NAME = "modify-data-enforce-where";
@@ -21,13 +23,17 @@ public class ModifyDataEnforceWhereImpl extends AbstractLintRule implements Chan
 
     @Override
     public boolean invalid(AbstractModifyDataChange modifyDataChange) {
-        return getConfig().getValues().contains(modifyDataChange.getTableName())
+        return matchesTableName(modifyDataChange.getTableName())
             && (checkNotBlank(modifyDataChange.getWhere()) || checkPattern(modifyDataChange.getWhere(), modifyDataChange));
     }
 
     @Override
     public String getMessage(AbstractModifyDataChange change) {
         return formatMessage(change.getTableName());
+    }
+
+    private boolean matchesTableName(String tableName) {
+        return getConfig().getValues().stream().anyMatch(value -> Pattern.compile(value).matcher(tableName).matches());
     }
 
 }
