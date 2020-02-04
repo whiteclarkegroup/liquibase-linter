@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.whiteclarkegroup</groupId>
+    <artifactId>liquibase-linter-maven-example</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <driver>org.hsqldb.jdbc.JDBCDriver</driver>
+                    <url>jdbc:hsqldb:mem:db</url>
+                    <username>SA</username>
+                    <password></password>
+                    <changeLogFile>changelog.xml</changeLogFile>
+                    <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.hsqldb</groupId>
+                        <artifactId>hsqldb</artifactId>
+                        <version>2.5.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.whiteclarkegroup</groupId>
+                        <artifactId>liquibase-linter</artifactId>
+                        <version>0.5.0</version>
+                    </dependency>
+                    <!-- see https://github.com/whiteclarkegroup/liquibase-linter/issues/92 -->
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-core</artifactId>
+                        <version>5.1.8.RELEASE</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>updateSQL</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
