@@ -6,7 +6,10 @@ Liquibase Linter is built with [the Extensions feature in Liquibase](https://liq
 
 ## Maven
 
-Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://www.liquibase.org/documentation/maven/):
+1. Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://www.liquibase.org/documentation/maven/):
+2. Add `lqlint.json` to the root of your project
+
+See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/examples/maven) maven project to help get you started
 
 ```xml
 <plugin>
@@ -30,7 +33,20 @@ Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://ww
 
 ## Gradle
 
-Add `liquibase-linter` as a dependency of [the Liquibase Gradle plugin](https://github.com/liquibase/liquibase-gradle-plugin):
+1. Add `liquibase-linter` as a dependency of [the Liquibase Gradle plugin](https://github.com/liquibase/liquibase-gradle-plugin):
+2. Add `lqlint.json` to the `lqlint` directory under the root of your project
+
+See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/examples/gradle) gradle project to help get you started
+
+```groovy
+dependencies {
+    liquibaseRuntime 'org.liquibase:liquibase-core:3.8.1'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
+    liquibaseRuntime 'org.hsqldb:hsqldb:2.5.0'
+    liquibaseRuntime 'com.whiteclarkegroup:liquibase-linter:0.5.0'
+    liquibaseRuntime files('lqlint')
+}
+```
 
 ## Command Line
 

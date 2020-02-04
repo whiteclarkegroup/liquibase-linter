@@ -1,1 +1,2 @@
-Run with `mvn clean generate-resources`
+### Run
+`mvn clean generate-resources`
