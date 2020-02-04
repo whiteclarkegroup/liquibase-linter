@@ -50,13 +50,11 @@ dependencies {
 
 ## Command Line
 
-Starting with the latest [Liquibase release zip](https://github.com/liquibase/liquibase/releases/).
- 
-Download the latest Liquibase Linter jar from [maven central](https://repo1.maven.org/maven2/com/whiteclarkegroup/liquibase-linter/) and download 
+1. Start with the latest [Liquibase release zip](https://github.com/liquibase/liquibase/releases/).
+2. Download the latest Liquibase Linter jar from [maven central](https://repo1.maven.org/maven2/com/whiteclarkegroup/liquibase-linter/) and download 
 the [dependencies](https://mvnrepository.com/artifact/com.whiteclarkegroup/liquibase-linter) required by Liquibase Linter, then add them to 
 the `lib` directory.
-
-Add your `lqlint.json` configuration file to the `lib` directory.
+3. Add your `lqlint.json` configuration file to the `lib` directory.
 
 ## Compatibility
 
