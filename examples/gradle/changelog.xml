@@ -1,0 +1,24 @@
+<databaseChangeLog
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="example" id="1">
+        <createTable catalogName="EXAMPLE" tableName="EXAMPLE_TABLE">
+            <column name="FIRST" type="VARCHAR2(128 BYTE)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SECOND" type="NUMBER"/>
+            <column name="THIRD" type="NUMBER"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="example" id="2">
+        <createIndex catalogName="EXAMPLE" indexName="EXAMPLE_INDEX" tableName="EXAMPLE_TABLE" unique="true">
+            <column name="FIRST"/>
+            <column name="SECOND"/>
+            <column name="THIRD"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

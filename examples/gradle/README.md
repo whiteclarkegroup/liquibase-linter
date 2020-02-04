@@ -1,0 +1,2 @@
+### Run
+`gradle updateSql`

@@ -1,5 +1,6 @@
 .idea/*
 **/target/*
+**/.gradle/*
 *.iml
 pom.xml.versionsBackup
 .svn/*
@@ -8,3 +9,4 @@ pom.xml.versionsBackup
 databasechangelog.csv
 databasechangelog.csv.new
 website/build
+examples/gradle/build
