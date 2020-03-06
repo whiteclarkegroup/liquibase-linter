@@ -32,7 +32,7 @@ class IgnoreFilesPatternIntegrationTest extends LinterIntegrationTest {
 
         shouldPass(
             "Should ignore file with spaces when in ignore pattern",
-            "ignore-files-pattern/nested/ignore/ignore no space.xml",
+            "ignore-files-pattern/nested/ignore/ignore change log with spaces.xml",
             "ignore-files-pattern/lqlint-ignore-spaces.json");
 
         shouldFail(

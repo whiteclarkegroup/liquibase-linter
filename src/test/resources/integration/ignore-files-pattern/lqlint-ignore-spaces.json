@@ -1,6 +1,6 @@
 {
     "fail-fast": true,
-    "ignore-files-pattern": "^.*ignore no space.xml.*$",
+    "ignore-files-pattern": "^.*ignore change log with spaces.xml.*$",
     "rules": {
         "has-comment": true
     }
