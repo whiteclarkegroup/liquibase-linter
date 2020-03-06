@@ -10,7 +10,6 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class ChangeLogLinter {
 
