@@ -29,6 +29,17 @@ class IgnoreFilesPatternIntegrationTest extends LinterIntegrationTest {
             "Should ignore file with no comment xml nested",
             "ignore-files-pattern/nested/root-change-log.xml",
             "ignore-files-pattern/lqlint-ignore-nested.json");
+
+        shouldPass(
+            "Should ignore file with spaces when in ignore pattern",
+            "ignore-files-pattern/nested/ignore/ignore no space.xml",
+            "ignore-files-pattern/lqlint-ignore-spaces.json");
+
+        shouldFail(
+            "Should fail when not in ignore pattern",
+            "ignore-files-pattern/nested/ignore/do not ignore spaces.xml",
+            "ignore-files-pattern/lqlint-ignore-spaces.json",
+            "Change set must have a comment");
     }
 
 }
