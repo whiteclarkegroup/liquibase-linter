@@ -2,6 +2,6 @@
     "fail-fast": true,
     "ignore-files-pattern": "^.*ignore change log with spaces.xml.*$",
     "rules": {
-        "has-comment": true
+        "file-name-no-spaces": true
     }
 }
