@@ -31,6 +31,12 @@
             <organization>White Clarke Group</organization>
             <organizationUrl>https://www.whiteclarkegroup.com/</organizationUrl>
         </developer>
+        <developer>
+            <name>Ryan Bratten</name>
+            <email>rbratten@whiteclarkegroup.com</email>
+            <organization>White Clarke Group</organization>
+            <organizationUrl>https://www.whiteclarkegroup.com/</organizationUrl>
+        </developer>
     </developers>
 
     <scm>
