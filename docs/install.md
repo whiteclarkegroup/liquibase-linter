@@ -22,7 +22,7 @@ See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/t
         <dependency>
             <groupId>com.whiteclarkegroup</groupId>
             <artifactId>liquibase-linter</artifactId>
-            <version>0.5.0</version>
+            <version>0.5.1</version>
         </dependency>
     </dependencies>
     <executions>
@@ -43,7 +43,7 @@ dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-core:3.8.1'
     liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.1.1'
     liquibaseRuntime 'org.hsqldb:hsqldb:2.5.0'
-    liquibaseRuntime 'com.whiteclarkegroup:liquibase-linter:0.5.0'
+    liquibaseRuntime 'com.whiteclarkegroup:liquibase-linter:0.5.1'
     liquibaseRuntime files('lqlint')
 }
 ```

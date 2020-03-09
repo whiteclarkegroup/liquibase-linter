@@ -142,7 +142,7 @@ const Start = () => (
         <dependency>
             <groupId>com.whiteclarkegroup</groupId>
             <artifactId>liquibase-linter</artifactId>
-            <version>0.5.0</version>
+            <version>0.5.1</version>
         </dependency>
     </dependencies>
     <executions>
