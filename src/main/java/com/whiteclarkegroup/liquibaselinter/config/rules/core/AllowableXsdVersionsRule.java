@@ -54,8 +54,9 @@ public class AllowableXsdVersionsRule extends AbstractLintRule implements Change
                 if (xmlEvent.isStartElement()) {
                     StartElement startElement = xmlEvent.asStartElement();
                     if (startElement.getName().getLocalPart().equalsIgnoreCase("databaseChangeLog")) {
-                        for (Iterator it = startElement.getAttributes(); it.hasNext(); ) {
-                            Attribute attr = (Attribute)it.next();
+                        Iterator attributes = startElement.getAttributes();
+                        while(attributes.hasNext()) {
+                            Attribute attr = (Attribute)attributes.next();
                             String value = attr.getValue();
                             Matcher m = dbChangelogPattern.matcher(value);
                             if (m.matches()) {
@@ -68,7 +69,7 @@ public class AllowableXsdVersionsRule extends AbstractLintRule implements Change
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to process "+changeLog);
+            throw new RuntimeException("Failed to process "+changeLog,e);
         }
         return null;
     }
