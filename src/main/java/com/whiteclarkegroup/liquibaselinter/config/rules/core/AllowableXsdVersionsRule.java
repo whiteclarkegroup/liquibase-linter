@@ -5,6 +5,7 @@ import com.whiteclarkegroup.liquibaselinter.config.rules.AbstractLintRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.ChangeLogRule;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import liquibase.changelog.DatabaseChangeLog;
+import liquibase.exception.UnexpectedLiquibaseException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
@@ -62,14 +63,14 @@ public class AllowableXsdVersionsRule extends AbstractLintRule implements Change
                             if (m.matches()) {
                                 return m.group(1);
                             } else {
-                                throw new RuntimeException("Unable to parse XSD version from "+value);
+                                throw new UnexpectedLiquibaseException("Unable to parse XSD version from "+value);
                             }
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException("Failed to process "+changeLog,e);
+            throw new UnexpectedLiquibaseException("Failed to process "+changeLog,e);
         }
         return null;
     }
