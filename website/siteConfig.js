@@ -21,20 +21,20 @@ const users = [
 ];
 
 const siteConfig = {
-  title: 'Liquibase Linter', // Title for your website.
-  tagline: 'Quality control for your Liquibase scripts',
-  url: 'https://whiteclarkegroup.github.io', // Your website URL
-  baseUrl: '/liquibase-linter/', // Base URL for your project */
-  // For github.io type URLs, you would set the url and baseUrl like:
-  //   url: 'https://facebook.github.io',
-  //   baseUrl: '/test-site/',
+    title: 'Liquibase Linter', // Title for your website.
+    tagline: 'Quality control for your Liquibase scripts',
+    url: 'https://liquibase-linter.dev', // Your website URL
+    baseUrl: '/', // Base URL for your project */
+    // For github.io type URLs, you would set the url and baseUrl like:
+    //   url: 'https://facebook.github.io',
+    //   baseUrl: '/test-site/',
 
-  // Used for publishing and more
-  projectName: 'liquibase-linter',
-  organizationName: 'whiteclarkegroup',
-  // For top-level user or org sites, the organization is still the same.
-  // e.g., for the https://JoelMarcey.github.io site, it would be set like...
-  //   organizationName: 'JoelMarcey'
+    // Used for publishing and more
+    projectName: 'liquibase-linter',
+    organizationName: 'whiteclarkegroup',
+    // For top-level user or org sites, the organization is still the same.
+    // e.g., for the https://JoelMarcey.github.io site, it would be set like...
+    //   organizationName: 'JoelMarcey'
 
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
