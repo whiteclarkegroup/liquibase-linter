@@ -12,7 +12,7 @@ class FileNotIncludedIntegrationTest extends LinterIntegrationTest {
             "Should not allow file not included in deltas change log",
             "file-not-included/file-not-included-root.xml",
             "file-not-included/file-not-included.json",
-            "Changelog file 'src/test/resources/integration/file-not-included/to-include/test-included-2.xml' was not included in deltas change log");
+            "Changelog file 'integration/file-not-included/to-include/test-included-2.xml' was not included in deltas change log");
 
         shouldPass(
             "Should allow all files included in deltas change log",

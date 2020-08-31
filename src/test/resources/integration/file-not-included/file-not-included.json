@@ -3,7 +3,7 @@
     "rules": {
         "file-not-included": {
             "values": [
-                "src/test/resources/integration/file-not-included/to-include/"
+                "integration/file-not-included/to-include/"
             ]
         }
     }

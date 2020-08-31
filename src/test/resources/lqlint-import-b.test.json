@@ -2,5 +2,8 @@
     "rules": {
         "file-name-no-spaces": true,
         "no-preconditions": true
+    },
+    "reporting": {
+        "markdown": true
     }
 }

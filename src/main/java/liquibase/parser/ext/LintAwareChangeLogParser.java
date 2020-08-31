@@ -1,15 +1,13 @@
 package liquibase.parser.ext;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
-import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
 import com.whiteclarkegroup.liquibaselinter.report.Report;
-import com.whiteclarkegroup.liquibaselinter.report.Reporter;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -18,21 +16,18 @@ import liquibase.parser.ChangeLogParserFactory;
 import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.stream.Stream;
+
+import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toSet;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
-    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
-
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
     private final ChangeLogLinter changeLogLinter = new ChangeLogLinter();
-    private final Report report = new Report();
+    private final List<ReportItem> reportItems = new ArrayList<>();
     protected Config config;
     private String rootPhysicalChangeLogLocation;
 
@@ -50,15 +45,18 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
             checkDuplicateIncludes(physicalChangeLogLocation, config);
         }
 
-        RuleRunner ruleRunner = new RuleRunner(config, filesParsed);
+        RuleRunner ruleRunner = new RuleRunner(config, reportItems, filesParsed);
 
         changeLogLinter.lintChangeLog(changeLog, config, ruleRunner);
 
-        report.merge(ruleRunner.getReport());
-
         if (hasFinishedParsing(physicalChangeLogLocation)) {
             checkForFilesNotIncluded(config, resourceAccessor);
-            runReports(report);
+            runReports(ruleRunner.buildReport());
+            final long errorCount = reportItems.stream().filter(item -> item.getType() == ReportItem.ReportItemType.ERROR).count();
+            if (errorCount > 0) {
+                throw new ChangeLogParseException(String.format("Linting failed with %d errors", errorCount));
+            }
+
         }
 
         filesParsed.add(physicalChangeLogLocation);
@@ -75,12 +73,11 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
     }
 
     private void runReports(Report report) throws ChangeLogParseException {
-        if (report.hasItems()) {
-            REPORTERS.forEach(reporter -> reporter.processReport(report));
-            if (report.countErrors() > 0) {
-                throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
+        config.getReporting().forEach((reportType, reporter) -> {
+            if (reporter.getConfiguration().isEnabled()) {
+                reporter.processReport(report);
             }
-        }
+        });
     }
 
     private boolean hasFinishedParsing(String physicalChangeLogLocation) {
@@ -125,9 +122,9 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
             return resourceAccessor.list(null, path, true, false, true)
                 .stream()
                 .map(fullPath -> fullPath.substring(fullPath.lastIndexOf(path)))
-                .collect(Collectors.toSet());
+                .collect(toSet());
         } catch (IOException e) {
-            return Collections.emptyList();
+            return emptyList();
         }
     }
 

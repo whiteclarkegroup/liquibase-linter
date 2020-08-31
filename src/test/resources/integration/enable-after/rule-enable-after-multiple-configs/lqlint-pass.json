@@ -5,12 +5,12 @@
             {
                 "pattern": "^(?!_)[A-Z_0-9]+(?<!_)$",
                 "errorMessage": "Object name '%s' name must be uppercase and use '_' separation",
-                "enableAfter": "src/test/resources/integration/enable-after/rule-enable-after-multiple-configs/object-name-fail-1.xml"
+                "enableAfter": "integration/enable-after/rule-enable-after-multiple-configs/object-name-fail-1.xml"
             },
             {
                 "pattern": "^POWER.*$",
                 "errorMessage": "Object name '%s' name must begin with 'POWER'",
-                "enableAfter": "src/test/resources/integration/enable-after/rule-enable-after-multiple-configs/object-name-fail-2.xml"
+                "enableAfter": "integration/enable-after/rule-enable-after-multiple-configs/object-name-fail-2.xml"
             }
         ]
     }

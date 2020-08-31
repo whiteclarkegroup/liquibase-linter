@@ -1,6 +1,6 @@
 {
     "fail-fast": true,
-    "ignore-files-pattern": "^src/test/resources/integration/ignore-files-pattern/nested/ignore/.*$",
+    "ignore-files-pattern": "^integration/ignore-files-pattern/nested/ignore/.*$",
     "rules": {
         "has-comment": true
     }

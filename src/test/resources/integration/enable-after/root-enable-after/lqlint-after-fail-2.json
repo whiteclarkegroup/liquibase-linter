@@ -1,6 +1,6 @@
 {
     "fail-fast": true,
-    "enable-after": "src/test/resources/integration/enable-after/root-enable-after/has-comment-fail-2.xml",
+    "enable-after": "integration/enable-after/root-enable-after/has-comment-fail-2.xml",
     "rules": {
         "has-comment": true
     }

@@ -1,6 +1,6 @@
 {
     "fail-fast": true,
-    "import": "src/test/resources/integration/import-override/lqlint-imported.json",
+    "import": "integration/import-override/lqlint-imported.json",
     "rules": {
         "object-name": {
             "pattern": "^[A-Z0-9]+$",

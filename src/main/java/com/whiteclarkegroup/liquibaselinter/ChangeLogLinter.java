@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
+import liquibase.ContextExpression;
 import liquibase.change.Change;
 import liquibase.change.core.*;
 import liquibase.changelog.ChangeSet;
@@ -11,6 +12,10 @@ import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static java.util.Collections.emptySet;
 
 public class ChangeLogLinter {
 
@@ -99,9 +104,10 @@ public class ChangeLogLinter {
     }
 
     private boolean isContextIgnored(ChangeSet changeSet, Config config) {
-        if (config.getIgnoreContextPattern() != null && changeSet.getContexts() != null && !changeSet.getContexts().getContexts().isEmpty()) {
-            return changeSet.getContexts().getContexts().stream()
-                .allMatch(context -> config.getIgnoreContextPattern().matcher(context).matches());
+        final Set<String> contexts = Optional.ofNullable(changeSet.getContexts())
+            .map(ContextExpression::getContexts).orElseGet(() -> emptySet());
+        if (config.getIgnoreContextPattern() != null && !contexts.isEmpty()) {
+            return contexts.stream().anyMatch(context -> config.getIgnoreContextPattern().matcher(context).matches());
         }
         return false;
     }

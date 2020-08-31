@@ -5,7 +5,7 @@
 
     <changeSet id="201809011238" author="luke.rogers">
         <loadData tableName="TEST"
-                  file="src/test/resources/integration/illegal-change-types.csv"/>
+                  file="integration/illegal-change-types.csv"/>
     </changeSet>
 
 </databaseChangeLog>

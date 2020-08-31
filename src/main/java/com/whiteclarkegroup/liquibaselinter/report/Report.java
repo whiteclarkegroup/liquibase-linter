@@ -1,48 +1,25 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
-import liquibase.changelog.ChangeSet;
-import liquibase.changelog.DatabaseChangeLog;
+import com.google.common.collect.ImmutableList;
+import com.whiteclarkegroup.liquibaselinter.config.Config;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 public class Report {
+    private final Config config;
+    private final List<ReportItem> items;
 
-    private final Collection<ReportItem> reportItems = new ArrayList<>();
-
-    public Collection<ReportItem> getReportItems() {
-        return reportItems;
+    public Report(Config config, List<ReportItem> items) {
+        this.config = config;
+        this.items = Optional.ofNullable(items).map(ImmutableList::copyOf).orElse(ImmutableList.of());
     }
 
-    public Map<String, List<ReportItem>> getByFileName() {
-        return reportItems.stream().collect(Collectors.groupingBy(ReportItem::getFilePath));
+    public Config getConfig() {
+        return config;
     }
 
-    public long countErrors() {
-        return reportItems.stream().filter(item -> item.getType() == ReportItem.ReportItemType.ERROR).count();
+    public List<ReportItem> getItems() {
+        return items;
     }
-
-    public long countIgnored() {
-        return reportItems.stream().filter(item -> item.getType() == ReportItem.ReportItemType.IGNORED).count();
-    }
-
-    public boolean hasItems() {
-        return !reportItems.isEmpty();
-    }
-
-    public void merge(Report report) {
-        reportItems.addAll(report.getReportItems());
-    }
-
-    public void addIgnored(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String errorMessage) {
-        reportItems.add(ReportItem.ignored(databaseChangeLog, changeSet, rule, errorMessage));
-    }
-
-    public void addError(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String errorMessage) {
-        reportItems.add(ReportItem.error(databaseChangeLog, changeSet, rule, errorMessage));
-    }
-
 }
