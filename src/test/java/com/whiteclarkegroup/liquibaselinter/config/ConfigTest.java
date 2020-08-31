@@ -1,15 +1,16 @@
-package com.whiteclarkegroup.liquibaselinter.config.rules;
+package com.whiteclarkegroup.liquibaselinter.config;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
-import com.whiteclarkegroup.liquibaselinter.config.Config;
+import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigTest {
@@ -108,6 +109,29 @@ class ConfigTest {
         assertFalse(config.isRuleEnabled("not-even-present"));
         assertFalse(config.isRuleEnabled("present-but-off"));
         assertTrue(config.isRuleEnabled("present-and-on"));
+    }
+
+    @DisplayName("Should support a simple import")
+    @Test
+    void shouldSupportSimpleImport() throws IOException {
+        String configJson = "{\n" +
+            "  \"import\": \"imported.json\"\n" +
+            "}";
+        Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        assertThat(config.getImports()).containsExactly("imported.json");
+    }
+
+    @DisplayName("Should support multiple imports")
+    @Test
+    void shouldSupportMultipleImports() throws IOException {
+        String configJson = "{\n" +
+            "  \"import\": [\n" +
+            "    \"first.json\",\n" +
+            "    \"second.json\"\n" +
+            "  ]\n" +
+            "}";
+        Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        assertThat(config.getImports()).containsExactly("first.json", "second.json");
     }
 
 }

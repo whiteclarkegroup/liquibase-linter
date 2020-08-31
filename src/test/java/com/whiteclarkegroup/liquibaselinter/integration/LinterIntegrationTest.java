@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 abstract class LinterIntegrationTest {
 
@@ -33,8 +32,9 @@ abstract class LinterIntegrationTest {
             final Writer nullWriter = CharStreams.nullWriter();
             final Contexts contexts = new Contexts();
             if (running.getMessage() != null) {
-                ChangeLogParseException changeLogParseException = assertThrows(ChangeLogParseException.class, () -> liquibase.update(contexts, nullWriter));
-                assertTrue(changeLogParseException.getMessage().contains(running.getMessage()));
+                assertThatExceptionOfType(ChangeLogParseException.class)
+                    .isThrownBy(() -> liquibase.update(contexts, nullWriter))
+                    .withMessageContaining(running.getMessage());
             } else {
                 liquibase.update(contexts, nullWriter);
             }
