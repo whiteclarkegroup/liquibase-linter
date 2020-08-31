@@ -1,12 +1,20 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// See https://docusaurus.io/docs/site-config for all the possible
-// site configuration options.
+module.exports = {
+    // ...
+    presets: [
+        [
+            '@docusaurus/preset-classic',
+            {
+                docs: {
+                    // Docs folder path relative to website dir.
+                    path: '../docs',
+                    // Sidebars file relative to website dir.
+                    sidebarPath: require.resolve('./sidebars.json'),
+                },
+                // ...
+            },
+        ],
+    ],
+};
 
 // List of projects/orgs using your project for the users page.
 const users = [
@@ -20,7 +28,7 @@ const users = [
   },
 ];
 
-const siteConfig = {
+const docusaurusConfig = {
     title: 'Liquibase Linter', // Title for your website.
     tagline: 'Quality control for your Liquibase scripts',
     url: 'https://liquibase-linter.dev', // Your website URL
@@ -84,4 +92,4 @@ const siteConfig = {
   repoUrl: 'https://github.com/whiteclarkegroup/liquibase-linter',
 };
 
-module.exports = siteConfig;
+module.exports = docusaurusConfig;
