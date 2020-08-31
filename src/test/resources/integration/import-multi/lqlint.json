@@ -1,0 +1,7 @@
+{
+    "fail-fast": true,
+    "import": [
+        "src/test/resources/integration/import-multi/lqlint-chars.json",
+        "src/test/resources/integration/import-multi/lqlint-prefix.json"
+    ]
+}

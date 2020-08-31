@@ -1,6 +1,7 @@
 package com.whiteclarkegroup.liquibaselinter.config;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
@@ -29,18 +30,44 @@ public class Config {
     private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
     private final String enableAfter;
+    private final List<String> imports;
 
     @JsonCreator
     public Config(@JsonProperty("ignore-context-pattern") String ignoreContextPatternString,
                   @JsonProperty("ignore-files-pattern") String ignoreFilesPatternString,
                   @JsonProperty("rules") ListMultimap<String, RuleConfig> rules,
                   @JsonProperty("fail-fast") boolean failFast,
-                  @JsonProperty("enable-after") String enableAfter) {
-        this.ignoreContextPattern = ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null;
-        this.ignoreFilesPattern = ignoreFilesPatternString != null ? Pattern.compile(ignoreFilesPatternString) : null;
+                  @JsonProperty("enable-after") String enableAfter,
+                  @JsonProperty("import") @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY) List<String> imports) {
+        this(
+            ignoreContextPatternString != null ? Pattern.compile(ignoreContextPatternString) : null,
+            ignoreFilesPatternString != null ? Pattern.compile(ignoreFilesPatternString) : null,
+            rules,
+            failFast,
+            enableAfter,
+            imports);
+    }
+
+    public Config(Pattern ignoreContextPattern,
+                  Pattern ignoreFilesPattern,
+                  ListMultimap<String, RuleConfig> rules,
+                  boolean failFast,
+                  String enableAfter) {
+        this(ignoreContextPattern, ignoreFilesPattern, rules, failFast, enableAfter, null);
+    }
+
+    Config(Pattern ignoreContextPattern,
+                  Pattern ignoreFilesPattern,
+                  ListMultimap<String, RuleConfig> rules,
+                  boolean failFast,
+                  String enableAfter,
+                  List<String> imports) {
+        this.ignoreContextPattern = ignoreContextPattern;
+        this.ignoreFilesPattern = ignoreFilesPattern;
         this.rules = rules;
         this.failFast = failFast;
         this.enableAfter = enableAfter;
+        this.imports = imports;
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -81,6 +108,10 @@ public class Config {
 
     public boolean isEnabledAfter() {
         return enableAfter != null && !enableAfter.isEmpty();
+    }
+
+    List<String> getImports() {
+        return this.imports;
     }
 
     static class RuleConfigDeserializer extends JsonDeserializer<Object> {
