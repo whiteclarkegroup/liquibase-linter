@@ -23,11 +23,12 @@ module.exports = {
     ],
     themeConfig: {
         navbar: {
+            title: 'Liquibase Linter',
             items: [
-                {to: 'install', label: 'Setup'},
-                {to: 'rules/index', label: 'Rules'},
-                {to: 'blog', label: 'Blog'},
-                {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
+                {to: 'docs/install', label: 'Setup', position: 'right'},
+                {to: 'docs/rules/index', label: 'Rules', position: 'right'},
+                {to: 'blog', label: 'Blog', position: 'right'},
+                {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub', position: 'right'}
             ],
         },
         footer: {
