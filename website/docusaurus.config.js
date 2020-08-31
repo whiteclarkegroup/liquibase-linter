@@ -1,95 +1,44 @@
 module.exports = {
-    // ...
+    title: 'Liquibase Linter',
+    tagline: 'Quality control for your Liquibase scripts',
+    url: 'https://liquibase-linter.dev',
+    baseUrl: '/',
+    projectName: 'liquibase-linter',
+    organizationName: 'whiteclarkegroup',
+    favicon: 'img/favicon.ico',
+    scripts: ['//buttons.github.io/buttons.js'],
+    stylesheets: ['//fonts.googleapis.com/css?family=Lato'],
     presets: [
         [
             '@docusaurus/preset-classic',
             {
                 docs: {
                     // Docs folder path relative to website dir.
-                    path: '../docs',
+                    path: './docs',
                     // Sidebars file relative to website dir.
                     sidebarPath: require.resolve('./sidebars.json'),
                 },
-                // ...
             },
         ],
     ],
+    themeConfig: {
+        navbar: {
+            items: [
+                {to: 'install', label: 'Setup'},
+                {to: 'rules/index', label: 'Rules'},
+                {to: 'blog', label: 'Blog'},
+                {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
+            ],
+        },
+        footer: {
+            logo: {
+                alt: 'Facebook Open Source Logo',
+                src: 'https://docusaurus.io/img/oss_logo.png',
+                href: 'https://opensource.facebook.com/',
+            },
+            copyright: `Copyright © ${new Date().getFullYear()} White Clarke Group`,
+        },
+        image: 'img/docusaurus.png',
+        sidebarCollapsible: false,
+    },
 };
-
-// List of projects/orgs using your project for the users page.
-const users = [
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/docusaurus.svg'.
-    image: '/img/docusaurus.svg',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-];
-
-const docusaurusConfig = {
-    title: 'Liquibase Linter', // Title for your website.
-    tagline: 'Quality control for your Liquibase scripts',
-    url: 'https://liquibase-linter.dev', // Your website URL
-    baseUrl: '/', // Base URL for your project */
-    // For github.io type URLs, you would set the url and baseUrl like:
-    //   url: 'https://facebook.github.io',
-    //   baseUrl: '/test-site/',
-
-    // Used for publishing and more
-    projectName: 'liquibase-linter',
-    organizationName: 'whiteclarkegroup',
-    // For top-level user or org sites, the organization is still the same.
-    // e.g., for the https://JoelMarcey.github.io site, it would be set like...
-    //   organizationName: 'JoelMarcey'
-
-  // For no header links in the top nav bar -> headerLinks: [],
-  headerLinks: [
-    {doc: 'install', label: 'Setup'},
-    {doc: 'rules/index', label: 'Rules'},
-    {blog: true, label: 'Blog'},
-    {href: 'https://github.com/whiteclarkegroup/liquibase-linter', label: 'GitHub'}
-  ],
-
-  // If you have users set above, you add it here:
-  users,
-
-  /* path to images for header/footer */
-  // headerIcon: 'img/docusaurus.svg',
-  // footerIcon: 'img/docusaurus.svg',
-  favicon: 'img/favicon.ico',
-
-  /* Colors for website */
-  colors: {
-    primaryColor: '#4A145A',
-    secondaryColor: '#7d478d',
-  },
-
-  // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
-  copyright: `Copyright © ${new Date().getFullYear()} White Clarke Group`,
-
-  highlight: {
-    // Highlight.js theme to use for syntax highlighting in code blocks.
-    theme: 'ocean',
-  },
-
-  // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['//buttons.github.io/buttons.js'],
-  stylesheets: ['//fonts.googleapis.com/css?family=Lato'],
-
-  // On page navigation for the current documentation page.
-  onPageNav: 'separate',
-  // No .html extensions for paths.
-  cleanUrl: true,
-
-  // Open Graph and Twitter card images.
-  // ogImage: 'img/docusaurus.png',
-  // twitterImage: 'img/docusaurus.png',
-
-  // You may provide arbitrary config keys to be used as needed by your
-  // template. For example, if you need your repo's URL...
-  repoUrl: 'https://github.com/whiteclarkegroup/liquibase-linter',
-};
-
-module.exports = docusaurusConfig;
