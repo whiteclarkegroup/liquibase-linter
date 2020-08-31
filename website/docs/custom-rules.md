@@ -62,7 +62,7 @@ public class FormLayoutContextRuleImpl extends AbstractLintRule implements Chang
 
 Some notes about how we've done this:
 
-- We've extended the `AbstractLintRule` class, which saves us fussing about a lot of boilerplate ourselves. We just need to pass our rule name (i.e. the key uses in the [rules config](rules)) and the failure message
+- We've extended the `AbstractLintRule` class, which saves us fussing about a lot of boilerplate ourselves. We just need to pass our rule name (i.e. the key uses in the [rules config](docs/rules)) and the failure message
 - The key method we need to implement ourselves is `invalid` - this accepts a [Liquibase `ChangeSet`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/changelog/ChangeSet.java) and should return true if the rule has _failed_ - in this case it will do so if any of the changes are an update on the `FORM_LAYOUT` table _and_ the `core` context is used
 
 All the core rules are implemented in this way as well, so if you're not sure how best to hook something up you might try looking in the source at [some existing core rules](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/core) that do something similar
@@ -110,4 +110,4 @@ So for our example custom rules project `wcg-liquibase-linter` we would have the
 </plugin>
 ```
 
-Then all we need is to [configure the rule as normal](rules) in `lqlint.json`.
+Then all we need is to [configure the rule as normal](docs/rules) in `lqlint.json`.
