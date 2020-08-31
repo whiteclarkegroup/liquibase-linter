@@ -56,7 +56,7 @@ system property. With maven this would look like `mvn resources:resources liquib
 
 By default, lint failures are aggregated and reported at the end after all changes are scanned:
 
-![Example console output for failed rules](/liquibase-linter/img/console-example.png)
+![Example console output for failed rules](/img/console-example.png)
 
 If you prefer, you can set `fail-fast` to `true` in your config file so that the process will exit as soon as it finds the first failure.
 
@@ -89,7 +89,7 @@ Example usage:
     "rules": {}
 }
 ```
-<small>To avoid issues with script file paths resolving to using either `\` or `/`, all occurrences of `\` are replaced with `/`
+<small>To avoid issues with script file paths resolving to using either `\` or `/`, all occurrences of `\` are replaced with `/`</small>
 
 <small>(Regular expression literals aren't valid JSON, so you do need to use a string.)</small>
 

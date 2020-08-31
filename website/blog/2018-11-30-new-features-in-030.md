@@ -24,7 +24,7 @@ Previously, we would exit the Liquibase process as soon as the first rule failed
 
 Now, we allow _all_ changes to be checked, collecting failures as we go and reporting them in a readable way in the console at the end:
 
-![Example console output for failed rules](/liquibase-linter/img/console-example.png)
+![Example console output for failed rules](/img/console-example.png)
 
 (Note that we still don't allow any script to be run if there is a failure; the linter hooks into the parsing phase of Liquibase's lifecycle, and with failures we force the process to exit before it even starts generating SQL.)
 
