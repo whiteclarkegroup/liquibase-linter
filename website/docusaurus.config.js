@@ -33,9 +33,9 @@ module.exports = {
         },
         footer: {
             logo: {
-                alt: 'Facebook Open Source Logo',
-                src: 'https://docusaurus.io/img/oss_logo.png',
-                href: 'https://opensource.facebook.com/',
+                alt: 'White Clarke Group Logo',
+                src: '/img/wcg-logo.svg',
+                href: 'https://whiteclarkegroup.com/',
             },
             copyright: `Copyright © ${new Date().getFullYear()} White Clarke Group`,
         },
