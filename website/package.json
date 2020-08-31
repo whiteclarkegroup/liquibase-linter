@@ -5,7 +5,7 @@
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy"
   },
-  "devDependencies": {
+  "dependencies": {
     "@docusaurus/core": "^2.0.0-alpha.62",
     "@docusaurus/preset-classic": "^2.0.0-alpha.62",
     "clsx": "^1.1.1",
