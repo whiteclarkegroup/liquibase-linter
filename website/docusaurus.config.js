@@ -22,6 +22,10 @@ module.exports = {
         ],
     ],
     themeConfig: {
+        colorMode: {
+            defaultMode: 'dark',
+            disableSwitch: true
+        },
         navbar: {
             title: 'Liquibase Linter',
             items: [
