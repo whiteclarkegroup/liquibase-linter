@@ -11,19 +11,29 @@ const MyPage = () => {
             permalink="/"
             title={siteConfig.title}
             description={siteConfig.tagline}>
-            <div className="hero text--center">
-                <div className="container ">
-                    <div className="padding-vert--md">
-                        <h1 className="hero__title">{siteConfig.title}</h1>
-                        <p className="hero__subtitle">{siteConfig.tagline}</p>
-                    </div>
-                    <div>
-                        <Link
-                            to={useBaseUrl('/docs/install')}
-                            className="button button--lg button--outline button--primary">
-                            Get started
-                        </Link>
-                    </div>
+            <div className="lqlint-hero">
+                <div className="lqlint-intro">
+                    <h1 className="lqlint-title">{siteConfig.title}</h1>
+                    <h2 className="lqlint-tagline">{siteConfig.tagline}</h2>
+                    <Link
+                        to={useBaseUrl('/docs/install')}
+                        className="button button--lg button--primary">
+                        Get started
+                    </Link>
+                </div>
+                <div className="lqlint-pitch">
+                    <p className="lqlint-benefit">
+                        <strong>Prevent</strong> changes that will cause issues at the source, before they make it into
+                        any of your databases.
+                    </p>
+                    <p className="lqlint-benefit">
+                        <strong>Configure</strong> your setup and rules to suit your project's needs &mdash; and easily
+                        retrofit without rewriting existing code.
+                    </p>
+                    <p className="lqlint-benefit">
+                        <strong>Educate</strong> developers about best practices and improve consistency in your
+                        codebase.
+                    </p>
                 </div>
             </div>
         </Layout>
