@@ -12,6 +12,9 @@ module.exports = {
         [
             '@docusaurus/preset-classic',
             {
+                theme: {
+                    customCss: require.resolve('./src/css/custom.css'),
+                },
                 docs: {
                     // Docs folder path relative to website dir.
                     path: './docs',
@@ -23,7 +26,7 @@ module.exports = {
     ],
     themeConfig: {
         colorMode: {
-            defaultMode: 'dark',
+            defaultMode: 'light',
             disableSwitch: true
         },
         navbar: {
