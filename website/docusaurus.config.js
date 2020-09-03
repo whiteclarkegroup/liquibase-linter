@@ -1,13 +1,13 @@
 module.exports = {
     title: 'Liquibase Linter',
-    tagline: 'Quality control for your Liquibase scripts',
+    tagline: 'The configurable, extensible linter for Liquibase',
     url: 'https://liquibase-linter.dev',
     baseUrl: '/',
     projectName: 'liquibase-linter',
     organizationName: 'whiteclarkegroup',
     favicon: 'img/favicon.ico',
     scripts: ['//buttons.github.io/buttons.js'],
-    stylesheets: ['//fonts.googleapis.com/css?family=Lato'],
+    stylesheets: ['//fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,700;1,400;1,700&family=Inconsolata&display=swap'],
     presets: [
         [
             '@docusaurus/preset-classic',

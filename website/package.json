@@ -10,6 +10,7 @@
     "@docusaurus/preset-classic": "^2.0.0-alpha.62",
     "clsx": "^1.1.1",
     "react": "^16.10.2",
-    "react-dom": "^16.10.2"
+    "react-dom": "^16.10.2",
+    "react-github-btn": "^1.2.0"
   }
 }
