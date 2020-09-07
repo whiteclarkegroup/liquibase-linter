@@ -4,7 +4,7 @@ title: foreign-key-name
 
 ## Why?
 
-You might already have a broad standard for object names - and be enforcing it with [the object-name rule](rules/object-name.md) - but you might also want a more specific rule concerning how foreign key constraints are named.
+You might already have a broad standard for object names - and be enforcing it with [the object-name rule](object-name.md) - but you might also want a more specific rule concerning how foreign key constraints are named.
 
 This rule will fail if the given name for a new foreign key constraint does not match the configured regex.
 

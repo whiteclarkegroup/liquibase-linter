@@ -8,7 +8,7 @@ You might have a very specific set of valid [contexts](https://www.liquibase.org
 
 The `valid-context` rule will fail if any contexts of a changeSet don't match the provided regex.
 
-This rule will not enforce the prescence of a context; see [has-context](docs/rules/has-context.md) for that.
+This rule will not enforce the prescence of a context; see [has-context](has-context.md) for that.
 
 ## Options
 

@@ -8,7 +8,7 @@ You might want to make sure that DDL changes are kept in a separate context or s
 
 The `separate-ddl-context` rule will fail if the context of a changeSet with DDL changes is not matched by the provided regex.
 
-This rule would typically be used in conjunction with [isolate-ddl-changes](docs/rules/isolate-ddl-changes.md).
+This rule would typically be used in conjunction with [isolate-ddl-changes](isolate-ddl-changes.md).
 
 ## Options
 

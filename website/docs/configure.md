@@ -2,6 +2,8 @@
 title: Configure
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Liquibase Linter doesn't have a standard configuration, so it's up to you to decide what you want it to enforce and how on your project.
 
 ## JSON config file
@@ -16,7 +18,6 @@ You do this by providing a `lqlint.json` file at the root of your project. Here'
     "rules": {}
 }
 ```
-This example has nothing switched on but is a good place to start; you can [grab it from here](../examples/lqlint.json).
 
 #### From the classpath
 
@@ -56,7 +57,7 @@ system property. With maven this would look like `mvn resources:resources liquib
 
 By default, lint failures are aggregated and reported at the end after all changes are scanned:
 
-![Example console output for failed rules](/img/console-example.png)
+<img alt="Example console output for failed rules" src={useBaseUrl('img/console-example.png')} />
 
 If you prefer, you can set `fail-fast` to `true` in your config file so that the process will exit as soon as it finds the first failure.
 

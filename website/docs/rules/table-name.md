@@ -4,7 +4,7 @@ title: table-name
 
 ## Why?
 
-You might already have a broad standard for object names - and be enforcing it with [the object-name rule](rules/object-name.md) - but you might also want a more specific rule concerning how tables are named.
+You might already have a broad standard for object names - and be enforcing it with [the object-name rule](object-name.md) - but you might also want a more specific rule concerning how tables are named.
 
 This rule will fail if the given regex does not match against the name when creating or renaming a table.
 
