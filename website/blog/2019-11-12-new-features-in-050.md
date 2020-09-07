@@ -14,7 +14,7 @@ This release has mostly been about making it easier to integrate the linter into
 
 Using Liquibase Linter in a brand new project is pretty straightforward, but more often than not you'll be retrofitting it to an existing project with a history of changes. It's likely that many of those changes would not pass the set of rules you are applying, but since changes are supposed to be immutable, fixing them retrospectively is not really an option.
 
-The configuration file now supports an "enable-after" property that can be specified at the root level and/or on individual rules, which tells the linter to only check change logs after that one. Read more on the [Retrofitting](/liquibase-linter/docs/retrofitting) page.
+The configuration file now supports an "enable-after" property that can be specified at the root level and/or on individual rules, which tells the linter to only check change logs after that one. Read more on the [Retrofitting](../../../../docs/retrofitting) page.
 
 There's also the new "ignore-files-pattern" option, which is regular expression that will cause linting to be skipped for change logs whose file path match against it. If you are able to segregate your historical changes into a separate directory/module when integrating Liquibase Linter, this might be a simpler way to exclude them from linting.
 
