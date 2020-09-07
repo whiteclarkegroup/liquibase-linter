@@ -14,7 +14,7 @@ In this release we have fixed a few issues, but primarily we've been restructuri
 
 ## New core rules
 
-- The [new `no-schema-name` rule](../../../../docs/rules/no-schema-name.md) will prevent changes that use the `schemaName` attribute. This supports the practise we follow internally, where we run Liquibase once per schema with a user who only has access to that schema.
+- The [new `no-schema-name` rule](../../../../docs/rules/no-schema-name) will prevent changes that use the `schemaName` attribute. This supports the practise we follow internally, where we run Liquibase once per schema with a user who only has access to that schema.
 
 ## JSON and YAML support
 
