@@ -11,8 +11,7 @@ const MyPage = () => {
     return (
         <Layout
             permalink="/"
-            title={siteConfig.title}
-            description={siteConfig.tagline}>
+            title={siteConfig.tagline}>
             <div className="lqlint-hero">
                 <div className="container padding-vert--xl">
                     <div className="lqlint-intro">
