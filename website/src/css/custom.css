@@ -15,6 +15,12 @@
     --ifm-font-family-monospace: 'Inconsolata', monospace;
 }
 
+.navbar__logo {
+    /* overriding docusaurus styles */
+    height: 66%;
+    margin-right: 0.25rem;
+}
+
 .navbar__title {
     text-transform: uppercase;
 }

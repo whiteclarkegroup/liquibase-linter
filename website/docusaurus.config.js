@@ -5,7 +5,7 @@ module.exports = {
     baseUrl: '/',
     projectName: 'liquibase-linter',
     organizationName: 'whiteclarkegroup',
-    favicon: 'img/favicon.ico',
+    favicon: 'img/wcg-icon.svg',
     scripts: ['//buttons.github.io/buttons.js'],
     stylesheets: ['//fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,700;1,400;1,700&family=Inconsolata&display=swap'],
     presets: [
@@ -31,6 +31,10 @@ module.exports = {
         },
         navbar: {
             title: 'Liquibase Linter',
+            logo: {
+                alt: 'White Clarke Group',
+                src: 'img/wcg-icon.svg'
+            },
             items: [
                 {to: 'docs/install', label: 'Setup', position: 'right'},
                 {to: 'docs/rules/index', label: 'Rules', position: 'right'},
