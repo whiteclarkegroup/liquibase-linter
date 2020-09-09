@@ -34,13 +34,13 @@ const MyPage = () => {
                         <div className="col">
                             <Feature illustration="tools"
                                      title="Works with your tools">
-                                Slots right into your Maven or Gradle project with a small dependency footprint.
+                                Slots right into your Maven or Gradle project, with a small dependency footprint.
                             </Feature>
                         </div>
                         <div className="col">
                             <Feature illustration="setup"
                                      title="Painless setup">
-                                Easily retrofit to an existing project without rewriting anything.
+                                Easily retrofit to an established project, without rewriting your existing scripts.
                             </Feature>
                         </div>
                         <div className="col">
