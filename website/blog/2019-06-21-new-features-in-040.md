@@ -21,7 +21,7 @@ Until now, as with most rules-based quality tools, each rule you used in Liquiba
 
 Multiple configs can also be desirable even when you aren't handling different use cases; for any of the rules concerned with naming, you might find that a single regular expression is a little unwieldy, or that having more granular failure messaging would better serve your developers.
 
-So, where normally you would provide a single configuration object for any rule in your config file, you can now [provide an array of them](../../../../docs/rules/index#multiple-configs) if you like, and they will be applied with "AND" logic - so they all have to pass for any change(set|log).
+So, where normally you would provide a single configuration object for any rule in your config file, you can now [provide an array of them](../../../../docs/rules/#multiple-configs) if you like, and they will be applied with "AND" logic - so they all have to pass for any change(set|log).
 
 
 
