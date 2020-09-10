@@ -33,19 +33,22 @@ const MyPage = () => {
                     <div className="row">
                         <div className="col">
                             <Feature illustration="tools"
-                                     title="Works with your tools">
+                                     title="Works with your tools"
+                                     to="/docs/install">
                                 Slots right into your Maven or Gradle project, with a small dependency footprint.
                             </Feature>
                         </div>
                         <div className="col">
                             <Feature illustration="setup"
-                                     title="Painless setup">
+                                     title="Painless setup"
+                                     to="/docs/retrofitting">
                                 Easily retrofit to an established project, without rewriting your existing scripts.
                             </Feature>
                         </div>
                         <div className="col">
                             <Feature illustration="rules"
-                                     title="Custom rules">
+                                     title="Custom rules"
+                                     to="/docs/custom-rules">
                                 Write custom rules to fit your needs, and share them across your projects.
                             </Feature>
                         </div>
