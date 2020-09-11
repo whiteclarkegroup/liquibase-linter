@@ -22,7 +22,7 @@ So, we started looking at [Liquibase's extensions system](https://liquibase.jira
 
 Many lint tools are self-styled as being "opinionated" &mdash; they are somewhat inflexible in the style and conventions they enforce. This can be a good fit for some things (the success of [Standard](https://standardjs.com/) in the JavaScript world is one example) but we knew that making Liquibase Linter like that would be just about the worst thing we could do with it; people's needs from, and usages of, Liquibase vary hugely, and we want as many of them as possible to be able to take advantage of this tool.
 
-So there is no "standard" config &mdash; all the rules are off by default &mdash; and for the [rules you turn on](../../../../docs/rules) you can configure them in a way that makes sense for your project, so it's up to you what you do with contexts, how you name tables and constraints, which databases you support, what types of change you want to allow, etc.
+So there is no "standard" config &mdash; all the rules are off by default &mdash; and for the [rules you turn on](../../../../docs/rules/) you can configure them in a way that makes sense for your project, so it's up to you what you do with contexts, how you name tables and constraints, which databases you support, what types of change you want to allow, etc.
 
 ### Influence
 

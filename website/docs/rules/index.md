@@ -1,5 +1,6 @@
 ---
 title: Using Rules
+slug: /rules/
 ---
 
 Liquibase Linter has several dozen rules that you can turn on and configure to suit your project.

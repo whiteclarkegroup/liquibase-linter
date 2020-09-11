@@ -1,7 +1,0 @@
-{
-    "fail-fast": false,
-    "ignore-context-pattern": null,
-    "ignore-files-pattern": null,
-    "enable-after": null,
-    "rules": {}
-}

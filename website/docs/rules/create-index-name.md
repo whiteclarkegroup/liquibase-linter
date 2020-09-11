@@ -6,7 +6,7 @@ title: create-index-name
 
 When [creating an index](http://www.liquibase.org/documentation/changes/create_index.html), it's possible to omit a specific `constraintName` for the index. This is hazardous, because the database vendor will automatically name it for you in an unpredictable way, which makes things difficult later if you want to reference or remove it.
 
-Also, you might already have a broad standard for object names - and be enforcing it with [the object-name rule](rules/object-name.md) - but you might also want a more specific rule concerning how indexes are named.
+Also, you might already have a broad standard for object names - and be enforcing it with [the object-name rule](object-name.md) - but you might also want a more specific rule concerning how indexes are named.
 
 This rule will fail if there is no `constraintName` given when creating an index, or when configured with a pattern, will fail if the given name does not match the pattern.
 

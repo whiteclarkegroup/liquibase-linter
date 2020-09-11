@@ -4,6 +4,8 @@ author: David Goss
 authorURL: http://davidgoss.co/
 ---
 
+import useBaseUrl from '@docusaurus/useBaseUrl';
+
 Liquibase Linter [0.3.0 is released](https://github.com/whiteclarkegroup/liquibase-linter/releases/tag/0.3.0) and available now [in Maven Central](https://search.maven.org/artifact/com.whiteclarkegroup/liquibase-linter/0.3.0/jar)!
 
 In this release we have fixed a few issues, but primarily we've been restructuring the codebase and adding new features including improved logging and custom rules support.
@@ -12,7 +14,7 @@ In this release we have fixed a few issues, but primarily we've been restructuri
 
 ## New core rules
 
-- The [new `no-schema-name` rule](/liquibase-linter/rules/no-schema-name) will prevent changes that use the `schemaName` attribute. This supports the practise we follow internally, where we run Liquibase once per schema with a user who only has access to that schema.
+- The [new `no-schema-name` rule](../../../../docs/rules/no-schema-name) will prevent changes that use the `schemaName` attribute. This supports the practise we follow internally, where we run Liquibase once per schema with a user who only has access to that schema.
 
 ## JSON and YAML support
 
@@ -24,13 +26,13 @@ Previously, we would exit the Liquibase process as soon as the first rule failed
 
 Now, we allow _all_ changes to be checked, collecting failures as we go and reporting them in a readable way in the console at the end:
 
-![Example console output for failed rules](/liquibase-linter/img/console-example.png)
+<img alt="Example console output for failed rules" src={useBaseUrl('img/console-example.png')} />
 
 (Note that we still don't allow any script to be run if there is a failure; the linter hooks into the parsing phase of Liquibase's lifecycle, and with failures we force the process to exit before it even starts generating SQL.)
 
 ## Custom rules
 
-You can now write your own rule that's specific to your project or company and use it in Liquibase Linter. There's a [complete guide in the docs](/liquibase-linter/docs/custom-rules), but essentially you just need to write a Java class and do a little configuration in your project.
+You can now write your own rule that's specific to your project or company and use it in Liquibase Linter. There's a [complete guide in the docs](../../../../docs/custom-rules), but essentially you just need to write a Java class and do a little configuration in your project.
 
 This is the change we're most excited about, as it will give users the power to extend the linter to solve their own particular problems with relative ease.
 

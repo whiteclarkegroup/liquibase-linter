@@ -8,16 +8,16 @@
       "Rules": [
           "rules/index",
           {
-              "type": "subcategory",
+              "type": "category",
               "label": "Custom Rules",
-              "ids": [
+              "items": [
                   "custom-rules"
               ]
           },
           {
-              "type": "subcategory",
+              "type": "category",
               "label": "Core Rules",
-              "ids": [
+              "items": [
                   "rules/create-column-no-define-primary-key",
                   "rules/create-column-nullable-constraint",
                   "rules/create-column-remarks",
