@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class ConfigTest {
 
@@ -30,9 +30,8 @@ class ConfigTest {
             "  }\n" +
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
-        assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("schema-name").get(0);
-        assertTrue(ruleConfig.isEnabled());
+        assertThat(config.getRules().size()).isEqualTo(1);
+        assertThat(config.getRules().get("schema-name")).extracting("enabled").containsExactly(true);
     }
 
     @DisplayName("Should not support invalid config object")
@@ -43,9 +42,9 @@ class ConfigTest {
             "    \"no-duplicate-includes\": \"foo\"\n" +
             "  }\n" +
             "}";
-        JsonMappingException mappingException =
-            assertThrows(JsonMappingException.class, () -> OBJECT_MAPPER.readValue(configJson, Config.class));
-        assertTrue(mappingException.getMessage().contains("instance of `com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig$RuleConfigBuilder`"));
+        assertThatExceptionOfType(JsonMappingException.class)
+            .isThrownBy(() -> OBJECT_MAPPER.readValue(configJson, Config.class))
+            .withMessageContaining("instance of `com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig$RuleConfigBuilder`");
     }
 
     @DisplayName("Should support having rule config value as boolean")
@@ -57,9 +56,9 @@ class ConfigTest {
             "  }\n" +
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
-        assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces").get(0);
-        assertTrue(ruleConfig.isEnabled());
+
+        assertThat(config.getRules().size()).isEqualTo(1);
+        assertThat(config.getRules().get("file-name-no-spaces")).extracting("enabled").containsExactly(true);
     }
 
     @DisplayName("Should support having an array of configs for one rule")
@@ -80,7 +79,7 @@ class ConfigTest {
             "    }\n" +
             "}\n";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
-        assertEquals(2, config.getRules().size());
+        assertThat(config.getRules().size()).isEqualTo(2);
     }
 
     @DisplayName("Should return disabled rule for null config object")
@@ -92,9 +91,8 @@ class ConfigTest {
             "  }\n" +
             "}";
         Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
-        assertEquals(1, config.getRules().size());
-        RuleConfig ruleConfig = config.getRules().get("file-name-no-spaces").get(0);
-        assertFalse(ruleConfig.isEnabled());
+        assertThat(config.getRules().size()).isEqualTo(1);
+        assertThat(config.getRules().get("file-name-no-spaces")).extracting("enabled").containsExactly(false);
     }
 
     @DisplayName("Should indicate whether rule enabled from config map")
@@ -104,11 +102,11 @@ class ConfigTest {
             "present-but-off", RuleConfig.disabled(),
             "present-and-on", RuleConfig.enabled()
         );
-        Config config = new Config(null, null, map, true, null);
+        Config config = new Config.Builder().withRules(map).withFailFast(true).build();
 
-        assertFalse(config.isRuleEnabled("not-even-present"));
-        assertFalse(config.isRuleEnabled("present-but-off"));
-        assertTrue(config.isRuleEnabled("present-and-on"));
+        assertThat(config.isRuleEnabled("not-even-present")).isFalse();
+        assertThat(config.isRuleEnabled("present-but-off")).isFalse();
+        assertThat(config.isRuleEnabled("present-and-on")).isTrue();
     }
 
     @DisplayName("Should support a simple import")
@@ -134,4 +132,32 @@ class ConfigTest {
         assertThat(config.getImports()).containsExactly("first.json", "second.json");
     }
 
+    @DisplayName("Should create read-only config with builder")
+    @Test
+    void shouldCreateReadOnlyConfigWithBuilder() throws IOException {
+        Config config = new Config.Builder().withIgnoreContextPattern("abc").withIgnoreFilesPattern("def")
+            .withRules(ImmutableListMultimap.of("rule-name", RuleConfig.enabled()))
+            .withFailFast(true).withEnableAfter("after").withImports("a", "b").build();
+
+        assertThat(config.getIgnoreContextPattern()).asString().isEqualTo("abc");
+        assertThat(config.getIgnoreFilesPattern()).asString().isEqualTo("def");
+        assertThat(config.getRules().asMap()).containsOnlyKeys("rule-name");
+        assertThat(config.isFailFast()).isTrue();
+        assertThat(config.getEnableAfter()).isEqualTo("after");
+        assertThat(config.getImports()).containsExactly("a", "b");
+
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> config.getRules().put("new-rule", RuleConfig.enabled()));
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> config.getImports().add("new-import"));
+    }
+
+    @DisplayName("Should copy existing config with builder")
+    @Test
+    void shouldCopyConfigWithBuilder() throws IOException {
+        Config config = new Config.Builder().withIgnoreContextPattern("abc").withIgnoreFilesPattern("def")
+            .withRules(ImmutableListMultimap.of("rule-name", RuleConfig.enabled()))
+            .withFailFast(true).withEnableAfter("after").withImports("a", "b").build();
+        Config copy = new Config.Builder(config).build();
+
+        assertThat(config).usingRecursiveComparison().isEqualTo(copy);
+    }
 }

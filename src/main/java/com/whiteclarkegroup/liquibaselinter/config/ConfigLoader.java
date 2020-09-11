@@ -75,8 +75,7 @@ public class ConfigLoader {
                 throw new UnexpectedLiquibaseException("Failed to load imported lq lint config file: " + path, e);
             }
         });
-        return new Config(config.getIgnoreContextPattern(), config.getIgnoreFilesPattern(), combinedRules.build(),
-            config.isFailFast(), config.getEnableAfter(), null);
+        return new Config.Builder(config).withRules(combinedRules.build()).withImports().build();
     }
 
 }
