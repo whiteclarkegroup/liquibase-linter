@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigTest {
@@ -104,7 +105,7 @@ class ConfigTest {
             "present-but-off", RuleConfig.disabled(),
             "present-and-on", RuleConfig.enabled()
         );
-        Config config = new Config(null, null, map, true, null);
+        Config config = new Config.Builder().withRules(map).withFailFast(true).build();
 
         assertFalse(config.isRuleEnabled("not-even-present"));
         assertFalse(config.isRuleEnabled("present-but-off"));
@@ -134,4 +135,32 @@ class ConfigTest {
         assertThat(config.getImports()).containsExactly("first.json", "second.json");
     }
 
+    @DisplayName("Should create read-only config with builder")
+    @Test
+    void shouldCreateReadOnlyConfigWithBuilder() throws IOException {
+        Config config = new Config.Builder().withIgnoreContextPattern("abc").withIgnoreFilesPattern("def")
+            .withRules(ImmutableListMultimap.of("rule-name", RuleConfig.enabled()))
+            .withFailFast(true).withEnableAfter("after").withImports("a", "b").build();
+
+        assertThat(config.getIgnoreContextPattern()).asString().isEqualTo("abc");
+        assertThat(config.getIgnoreFilesPattern()).asString().isEqualTo("def");
+        assertThat(config.getRules().asMap()).containsOnlyKeys("rule-name");
+        assertThat(config.isFailFast()).isTrue();
+        assertThat(config.getEnableAfter()).isEqualTo("after");
+        assertThat(config.getImports()).containsExactly("a", "b");
+
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> config.getRules().put("new-rule", RuleConfig.enabled()));
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> config.getImports().add("new-import"));
+    }
+
+    @DisplayName("Should copy existing config with builder")
+    @Test
+    void shouldCopyConfigWithBuilder() throws IOException {
+        Config config = new Config.Builder().withIgnoreContextPattern("abc").withIgnoreFilesPattern("def")
+            .withRules(ImmutableListMultimap.of("rule-name", RuleConfig.enabled()))
+            .withFailFast(true).withEnableAfter("after").withImports("a", "b").build();
+        Config copy = new Config.Builder(config).build();
+
+        assertThat(config).usingRecursiveComparison().isEqualTo(copy);
+    }
 }
