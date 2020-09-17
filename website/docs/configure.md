@@ -118,7 +118,7 @@ You can also disable an individual rule while leaving all others on, if that's a
 
 ### Importing other configuration
 
-The Liquibase Linter configuration can import configuration from other configuraiton files.
+The Liquibase Linter configuration can import configuration from other configuration files.
 ```json
 {
     "import": [ "imported-lqlint.json" ]

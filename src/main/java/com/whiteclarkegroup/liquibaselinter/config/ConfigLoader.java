@@ -6,12 +6,12 @@ import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import liquibase.exception.UnexpectedLiquibaseException;
 import liquibase.resource.ResourceAccessor;
-import liquibase.util.ObjectUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -53,7 +53,7 @@ public class ConfigLoader {
         if (config.getImports() == null || config.getImports().isEmpty()) {
             return config;
         }
-        final ListMultimap<String, RuleConfig> configRules = ObjectUtil.defaultIfNull(config.getRules(), ArrayListMultimap.create());
+        final ListMultimap<String, RuleConfig> configRules = Optional.ofNullable(config.getRules()).orElse(ArrayListMultimap.create());
         final ImmutableListMultimap.Builder<String, RuleConfig> combinedRules = new ImmutableListMultimap.Builder<>();
         combinedRules.putAll(configRules);
 
