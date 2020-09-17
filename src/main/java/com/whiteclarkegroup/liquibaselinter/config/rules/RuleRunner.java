@@ -9,41 +9,25 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
+
+import static java.util.stream.Collectors.toList;
 
 @SuppressWarnings("unchecked")
 public class RuleRunner {
 
     private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
-    private static final ServiceLoader<ChangeRule> changeRuleServiceLoader = ServiceLoader.load(ChangeRule.class);
-    private static final ServiceLoader<ChangeLogRule> changeLogRuleServiceLoader = ServiceLoader.load(ChangeLogRule.class);
-    private static final ServiceLoader<ChangeSetRule> changeSetRuleServiceLoader = ServiceLoader.load(ChangeSetRule.class);
 
     private final Config config;
-    private final List<ChangeRule> changeRules;
-    private final List<ChangeSetRule> changeSetRules;
-    private final List<ChangeLogRule> changeLogRules;
+    private final List<ChangeRule> changeRules = Streams.stream(ServiceLoader.load(ChangeRule.class)).collect(toList());
+    private final List<ChangeSetRule> changeSetRules = Streams.stream(ServiceLoader.load(ChangeSetRule.class)).collect(toList());
+    private final List<ChangeLogRule> changeLogRules = Streams.stream(ServiceLoader.load(ChangeLogRule.class)).collect(toList());
     private final Report report = new Report();
     private final Set<String> filesParsed;
 
     public RuleRunner(Config config, Set<String> filesParsed) {
         this.config = config;
         this.filesParsed = filesParsed;
-        this.changeRules = assembleRules(changeRuleServiceLoader);
-        this.changeSetRules = assembleRules(changeSetRuleServiceLoader);
-        this.changeLogRules = assembleRules(changeLogRuleServiceLoader);
-    }
-
-    private <T extends LintRule> List<T> assembleRules(ServiceLoader<T> ruleServiceLoader) {
-        return Streams.stream(ruleServiceLoader).filter(this::filterRule).collect(Collectors.toList());
-    }
-
-    private boolean filterRule(LintRule rule) {
-        return rule != null && config.isRuleEnabled(rule.getName());
     }
 
     public Report getReport() {
@@ -57,11 +41,21 @@ public class RuleRunner {
     public void checkChange(Change change) throws ChangeLogParseException {
         for (ChangeRule changeRule : changeRules) {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
-                final List<RuleConfig> configs = config.forRule(changeRule.getName());
+                final String ruleName = changeRule.getName();
+                final List<RuleConfig> configs = config.forRule(ruleName);
+
                 for (RuleConfig ruleConfig : configs) {
-                    changeRule.configure(ruleConfig);
-                    if (ConditionHelper.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
-                        handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
+                    if (ruleConfig.isEnabled()) {
+                        changeRule.configure(ruleConfig);
+                        final ChangeSet changeSet = change.getChangeSet();
+                        final DatabaseChangeLog databaseChangeLog = changeSet.getChangeLog();
+                        final String message = changeRule.getMessage(change);
+
+                        if (ConditionHelper.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                            handleViolation(databaseChangeLog, changeSet, ruleName, ruleConfig, message);
+                        } else {
+                            report.addPassed(databaseChangeLog, changeSet, ruleName, message);
+                        }
                     }
                 }
             }
@@ -70,11 +64,18 @@ public class RuleRunner {
 
     public void checkChangeSet(ChangeSet changeSet) throws ChangeLogParseException {
         for (ChangeSetRule changeSetRule : changeSetRules) {
-            final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
+            final String ruleName = changeSetRule.getName();
+            final List<RuleConfig> configs = config.forRule(ruleName);
             for (RuleConfig ruleConfig : configs) {
-                changeSetRule.configure(ruleConfig);
-                if (ConditionHelper.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
-                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
+                if (ruleConfig.isEnabled()) {
+                    changeSetRule.configure(ruleConfig);
+                    final DatabaseChangeLog databaseChangeLog = changeSet.getChangeLog();
+                    final String message = changeSetRule.getMessage(changeSet);
+                    if (ConditionHelper.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
+                        handleViolation(databaseChangeLog, changeSet, ruleName, ruleConfig, message);
+                    } else {
+                        report.addPassed(databaseChangeLog, changeSet, ruleName, message);
+                    }
                 }
             }
         }
@@ -82,25 +83,31 @@ public class RuleRunner {
 
     public void checkChangeLog(DatabaseChangeLog databaseChangeLog) throws ChangeLogParseException {
         for (ChangeLogRule changeLogRule : changeLogRules) {
-            final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
+            final String ruleName = changeLogRule.getName();
+            final List<RuleConfig> configs = config.forRule(ruleName);
             for (RuleConfig ruleConfig : configs) {
-                changeLogRule.configure(ruleConfig);
-                if (ConditionHelper.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
-                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
+                if (ruleConfig.isEnabled()) {
+                    changeLogRule.configure(ruleConfig);
+                    final String message = changeLogRule.getMessage(databaseChangeLog);
+                    if (ConditionHelper.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
+                        handleViolation(databaseChangeLog, null, ruleName, ruleConfig, message);
+                    } else {
+                        report.addPassed(databaseChangeLog, null, ruleName, message);
+                    }
                 }
             }
         }
     }
 
-    private void handleViolation(String errorMessage, String rule, RuleConfig ruleConfig, DatabaseChangeLog databaseChangeLog, ChangeSet changeSet) throws ChangeLogParseException {
-        if (!isEnabledAfter(ruleConfig) || isIgnored(rule, changeSet)) {
-            report.addIgnored(databaseChangeLog, changeSet, rule, errorMessage);
-            return;
-        }
-        if (config.isFailFast()) {
-            throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
+    private void handleViolation(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, RuleConfig ruleConfig, String message) throws ChangeLogParseException {
+        if (isSkipped(ruleConfig)) {
+            report.addSkipped(databaseChangeLog, changeSet, rule, message);
+        } else if (isIgnored(rule, changeSet)) {
+            report.addIgnored(databaseChangeLog, changeSet, rule, message);
+        } else if (config.isFailFast()) {
+            throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, message);
         } else {
-            report.addError(databaseChangeLog, changeSet, rule, errorMessage);
+            report.addError(databaseChangeLog, changeSet, rule, message);
         }
     }
 
@@ -114,15 +121,58 @@ public class RuleRunner {
         return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
     }
 
-    private boolean isEnabledAfter(RuleConfig ruleConfig) {
-        if (!config.isEnabledAfter() && !ruleConfig.isEnabledAfter()) {
+    private boolean isSkipped(RuleConfig ruleConfig) {
+        if (config.isEnabledAfter() && !filesParsed.contains(config.getEnableAfter())) {
+            return true;
+        } else if (ruleConfig.isEnabledAfter() && !filesParsed.contains(ruleConfig.getEnableAfter())) {
             return true;
         }
-        if (ruleConfig.isEnabledAfter()) {
-            return filesParsed.contains(ruleConfig.getEnableAfter());
-        } else {
-            return filesParsed.contains(config.getEnableAfter());
-        }
+        return false;
     }
 
+    public int countDisabledRules() {
+        return countDisabledChangeLogRules() + countDisabledChangeSetRules() + countDisabledChangeRules();
+    }
+
+    public int countDisabledChangeLogRules() {
+        int count = 0;
+        for (ChangeLogRule rule : changeLogRules) {
+            final String ruleName = rule.getName();
+            final List<RuleConfig> configs = config.forRule(ruleName);
+            for (RuleConfig config : configs) {
+                if (!config.isEnabled()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public int countDisabledChangeSetRules() {
+        int count = 0;
+        for (ChangeSetRule rule : changeSetRules) {
+            final String ruleName = rule.getName();
+            final List<RuleConfig> configs = config.forRule(ruleName);
+            for (RuleConfig config : configs) {
+                if (!config.isEnabled()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public int countDisabledChangeRules() {
+        int count = 0;
+        for (ChangeRule<Change> rule : changeRules) {
+            final String ruleName = rule.getName();
+            final List<RuleConfig> configs = config.forRule(ruleName);
+            for (RuleConfig config : configs) {
+                if (!config.isEnabled()) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
 }

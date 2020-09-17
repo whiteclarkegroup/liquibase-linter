@@ -9,16 +9,14 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ListMultimap;
+import com.google.common.collect.*;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import com.whiteclarkegroup.liquibaselinter.report.Reporter;
+import liquibase.exception.UnexpectedLiquibaseException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -30,6 +28,7 @@ public class Config {
     private final ListMultimap<String, RuleConfig> rules;
     private final boolean failFast;
     private final String enableAfter;
+    private final ListMultimap<String, Reporter> reporting;
     private final List<String> imports;
 
     private Config(Pattern ignoreContextPattern,
@@ -37,13 +36,16 @@ public class Config {
                    ListMultimap<String, RuleConfig> rules,
                    boolean failFast,
                    String enableAfter,
+                   ListMultimap<String, Reporter> reporting,
                    List<String> imports) {
         this.ignoreContextPattern = ignoreContextPattern;
         this.ignoreFilesPattern = ignoreFilesPattern;
-        this.rules = rules;
+        this.rules = Optional.ofNullable(rules).map(ImmutableListMultimap::copyOf).orElse(ImmutableListMultimap.of());
         this.failFast = failFast;
         this.enableAfter = enableAfter;
-        this.imports = imports;
+        this.reporting = Optional.ofNullable(reporting).map(ImmutableListMultimap::copyOf).orElse(ImmutableListMultimap.of());
+        ;
+        this.imports = Optional.ofNullable(imports).map(ImmutableList::copyOf).orElse(ImmutableList.of());
     }
 
     public static Config fromInputStream(final InputStream inputStream) throws IOException {
@@ -63,7 +65,7 @@ public class Config {
     }
 
     public List<RuleConfig> forRule(String ruleName) {
-        return rules.get(ruleName);
+        return rules != null ? rules.get(ruleName) : Collections.emptyList();
     }
 
     public List<RuleConfig> getEnabledRuleConfig(String ruleName) {
@@ -71,7 +73,7 @@ public class Config {
     }
 
     public boolean isRuleEnabled(String name) {
-        return rules.containsKey(name) && rules.get(name).stream().anyMatch(RuleConfig::isEnabled);
+        return rules != null && rules.containsKey(name) && rules.get(name).stream().anyMatch(RuleConfig::isEnabled);
     }
 
     public boolean isFailFast() {
@@ -86,6 +88,10 @@ public class Config {
         return enableAfter != null && !enableAfter.isEmpty();
     }
 
+    public ListMultimap<String, Reporter> getReporting() {
+        return this.reporting;
+    }
+
     List<String> getImports() {
         return this.imports;
     }
@@ -97,6 +103,7 @@ public class Config {
         private ListMultimap<String, RuleConfig> rules = ImmutableListMultimap.of();
         private boolean failFast;
         private String enableAfter;
+        private ListMultimap<String, Reporter> reporting = ImmutableListMultimap.of();
         private List<String> imports = Collections.emptyList();
 
         public Builder() {
@@ -153,6 +160,13 @@ public class Config {
             return this;
         }
 
+        @JsonProperty("reporting")
+        @JsonDeserialize(using = ReportingConfigDeserializer.class)
+        public Builder withReporting(ListMultimap<String, Reporter> reporting) {
+            this.reporting = reporting;
+            return this;
+        }
+
         @JsonProperty("import")
         @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
         public Builder withImports(String... imports) {
@@ -161,7 +175,7 @@ public class Config {
         }
 
         public Config build() {
-            return new Config(ignoreContextPattern, ignoreFilesPattern, rules, failFast, enableAfter, imports);
+            return new Config(ignoreContextPattern, ignoreFilesPattern, rules, failFast, enableAfter, reporting, imports);
         }
     }
 
@@ -192,6 +206,49 @@ public class Config {
             } catch (IllegalArgumentException e) {
                 RuleConfig ruleConfig = OBJECT_MAPPER.convertValue(value, RuleConfig.class);
                 ruleConfigs.put(key, ruleConfig);
+            }
+        }
+    }
+
+    static class ReportingConfigDeserializer extends JsonDeserializer<Object> {
+        private static final ServiceLoader<Reporter.Factory> reporters = ServiceLoader.load(Reporter.Factory.class);
+        private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+        private static final TypeReference<Map<String, Object>> VALUE_TYPE_REF = new TypeReference<Map<String, Object>>() {
+        };
+
+        @Override
+        public ListMultimap<String, Reporter> deserialize(JsonParser jsonParser, DeserializationContext context) throws IOException {
+            final Map<String, Object> config = jsonParser.readValueAs(VALUE_TYPE_REF);
+            final ImmutableListMultimap.Builder<String, Reporter> reportingConfigs = new ImmutableListMultimap.Builder<>();
+            config.forEach((key, value) -> {
+                if (value instanceof List) {
+                    ((List) value).forEach(item -> populateConfigValue(reportingConfigs, key, item));
+                } else {
+                    populateConfigValue(reportingConfigs, key, value);
+                }
+            });
+            return reportingConfigs.build();
+        }
+
+        private void populateConfigValue(ImmutableListMultimap.Builder<String, Reporter> reporting, String key, Object value) {
+            final List<Reporter.Factory> factories = Streams.stream(reporters.iterator())
+                .filter(factory -> factory.supports(key))
+                .collect(Collectors.toList());
+
+            if (factories.isEmpty()) {
+                throw new UnexpectedLiquibaseException("No lq lint reporter named '" + key + '\'');
+            }
+
+            try {
+                final boolean enabled = OBJECT_MAPPER.convertValue(value, boolean.class);
+                factories.forEach(factory -> reporting.put(key, factory.create(enabled)));
+            } catch (IllegalArgumentException enabledException) {
+                try {
+                    final String path = OBJECT_MAPPER.convertValue(value, String.class);
+                    factories.forEach(factory -> reporting.put(key, factory.create(path)));
+                } catch (IllegalArgumentException pathException) {
+                    factories.forEach(factory -> reporting.put(key, factory.create(value)));
+                }
             }
         }
     }

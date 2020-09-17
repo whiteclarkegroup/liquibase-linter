@@ -5,6 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import com.whiteclarkegroup.liquibaselinter.report.AbstractReporter;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem;
+import liquibase.exception.UnexpectedLiquibaseException;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.*;
 
 class ConfigTest {
 
@@ -165,4 +171,56 @@ class ConfigTest {
 
         assertThat(config).usingRecursiveComparison().isEqualTo(copy);
     }
+
+    @DisplayName("Should load reporting configuration")
+    @Test
+    void shouldSupportReporting() throws IOException {
+        String configJson = "{\n" +
+            "  \"reporting\": {\n" +
+            "    \"text\": \"path/to/report.txt\",\n" +
+            "    \"console\": {\n" +
+            "      \"filter\": \"ERROR\"" +
+            "    },\n" +
+            "    \"markdown\": [\n" +
+            "      {\n" +
+            "        \"path\": \"path/to/report.md\"," +
+            "        \"filter\": [\n" +
+            "          \"ERROR\",\n" +
+            "          \"IGNORED\",\n" +
+            "          \"PASSED\"\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"path\": \"path/to/report2.md\"," +
+            "        \"enabled\": true\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "}";
+        Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        assertThat(config.getReporting().asMap()).containsOnlyKeys("text", "console", "markdown");
+
+        assertThat(config.getReporting().get("text")).extracting("path").containsExactly("path/to/report.txt");
+
+        assertThat(config.getReporting().get("console")).extracting("enabled").containsExactly(true);
+        assertThat(config.getReporting().get("console").get(0)).extracting("filter", as(InstanceOfAssertFactories.ITERABLE)).containsExactly(ERROR);
+
+        assertThat(config.getReporting().get("markdown")).extracting("path").containsExactly("path/to/report.md", "path/to/report2.md");
+        assertThat(config.getReporting().get("markdown").get(0)).extracting("filter", as(InstanceOfAssertFactories.ITERABLE)).containsExactly(ERROR, IGNORED, PASSED);
+        assertThat(config.getReporting().get("markdown").get(1).isEnabled()).isTrue();
+    }
+
+    @DisplayName("Should not load with missing reporters")
+    @Test
+    void shouldNotLoadWithMissingReporters() throws IOException {
+        String configJson = "{\n" +
+            "  \"reporting\": {\n" +
+            "    \"other\": false\n" +
+            "  }\n" +
+            "}";
+        assertThatExceptionOfType(JsonMappingException.class).isThrownBy(() -> {
+            Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        }).withMessageContaining("No lq lint reporter named 'other'");
+    }
+
 }

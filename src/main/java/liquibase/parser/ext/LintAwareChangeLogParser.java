@@ -1,15 +1,12 @@
 package liquibase.parser.ext;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogLinter;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.ConfigLoader;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
-import com.whiteclarkegroup.liquibaselinter.report.ConsoleReporter;
-import com.whiteclarkegroup.liquibaselinter.report.Report;
-import com.whiteclarkegroup.liquibaselinter.report.Reporter;
+import com.whiteclarkegroup.liquibaselinter.report.*;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
@@ -18,16 +15,13 @@ import liquibase.parser.ChangeLogParserFactory;
 import liquibase.resource.ResourceAccessor;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("WeakerAccess")
 public class LintAwareChangeLogParser implements ChangeLogParser {
-    private static final Collection<Reporter> REPORTERS = ImmutableList.of(new ConsoleReporter());
+    private static final ServiceLoader<Reporter> REPORTERS = ServiceLoader.load(Reporter.class);
 
     protected final ConfigLoader configLoader = new ConfigLoader();
     private final Set<String> filesParsed = Sets.newConcurrentHashSet();
@@ -58,6 +52,7 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
         if (hasFinishedParsing(physicalChangeLogLocation)) {
             checkForFilesNotIncluded(config, resourceAccessor);
+            report.setDisabledRuleCount(ruleRunner.countDisabledRules());
             runReports(report);
         }
 
@@ -76,7 +71,16 @@ public class LintAwareChangeLogParser implements ChangeLogParser {
 
     private void runReports(Report report) throws ChangeLogParseException {
         if (report.hasItems()) {
-            REPORTERS.forEach(reporter -> reporter.processReport(report));
+            if (!config.getReporting().containsKey(ConsoleReporter.NAME)) {
+                // if no console logging configured, report using standard console logging
+                ConsoleReporter console = new ConsoleReporter.Builder().build();
+                console.process(report);
+            }
+            config.getReporting().forEach((reportType, reporter) -> {
+                if (reporter.isEnabled()) {
+                    reporter.process(report);
+                }
+            });
             if (report.countErrors() > 0) {
                 throw new ChangeLogParseException(String.format("Linting failed with %d errors", report.countErrors()));
             }
