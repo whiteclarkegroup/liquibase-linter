@@ -115,3 +115,19 @@ You can also disable an individual rule while leaving all others on, if that's a
     <delete tableName="FOO"/>
 </changeSet>
 ```
+
+### Importing other configuration
+
+The Liquibase Linter configuration can import configuration from other configuration files.
+```json
+{
+    "import": [ "imported-lqlint.json" ]
+}
+```
+In this way, common configuration can be centralized. For example, common
+configuration could be published as a Maven artifact and included in the
+Liquibase plugin dependencies in the same way `liquibase-linter` is included.
+
+If multiple configurations are imported, their rules are combined. Any named
+rules in the main configuration will replace all rules of the same name from
+the imported configuration. In this way, rules can be easily overridden.

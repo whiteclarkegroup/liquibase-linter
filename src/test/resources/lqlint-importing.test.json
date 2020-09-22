@@ -1,0 +1,9 @@
+{
+    "import": [
+        "lqlint-import-a.test.json",
+        "lqlint-import-b.test.json"
+    ],
+    "rules": {
+        "no-preconditions": false
+    }
+}
