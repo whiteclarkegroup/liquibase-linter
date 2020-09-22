@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleRunner;
@@ -56,7 +57,7 @@ public class ChangeLogLinter {
             .build();
 
     public void lintChangeLog(final DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
-        if (!isIgnorable(databaseChangeLog, config, ruleRunner)) {
+        if (shouldLint(databaseChangeLog, config, ruleRunner)) {
             ruleRunner.checkChangeLog(databaseChangeLog);
         }
         lintChangeSets(databaseChangeLog, config, ruleRunner);
@@ -64,35 +65,40 @@ public class ChangeLogLinter {
 
     private void lintChangeSets(DatabaseChangeLog databaseChangeLog, Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         final List<ChangeSet> changeSets = databaseChangeLog.getChangeSets();
+
         for (ChangeSet changeSet : changeSets) {
-            if (isIgnorable(changeSet, config, ruleRunner)) {
-                continue;
+            if (shouldLint(changeSet, config, ruleRunner)) {
+                ruleRunner.checkChangeSet(changeSet);
+
+                for (Change change : changeSet.getChanges()) {
+                    ruleRunner.checkChange(change);
+                }
             }
-
-            List<Change> changes = changeSet.getChanges();
-
-            ruleRunner.checkChangeSet(changeSet);
-
-            for (Change change : changes) {
-                ruleRunner.checkChange(change);
-            }
-
         }
+    }
+
+    private boolean shouldLint(DatabaseChangeLog changeLog, Config config, RuleRunner ruleRunner) {
+        return isEnabled(config, ruleRunner)
+            && !isFilePathIgnored(changeLog.getFilePath(), config)
+            && !hasAlreadyBeenParsed(changeLog.getFilePath(), ruleRunner);
+    }
+
+    private boolean isEnabled(Config config, RuleRunner ruleRunner) {
+        return Strings.isNullOrEmpty(config.getEnableAfter()) || hasAlreadyBeenParsed(config.getEnableAfter(), ruleRunner);
     }
 
     private boolean hasAlreadyBeenParsed(String filePath, RuleRunner ruleRunner) {
         return ruleRunner.getFilesParsed().contains(filePath);
     }
 
-    private boolean isIgnorable(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
-        return isIgnorableContext(changeSet, config) || isIgnorableFilePath(changeSet.getFilePath(), config) || hasIgnoreComment(changeSet) || hasAlreadyBeenParsed(changeSet.getFilePath(), ruleRunner);
+    private boolean shouldLint(ChangeSet changeSet, Config config, RuleRunner ruleRunner) {
+        return isEnabled(config, ruleRunner)
+            && !isContextIgnored(changeSet, config)
+            && !isFilePathIgnored(changeSet.getFilePath(), config)
+            && !hasAlreadyBeenParsed(changeSet.getFilePath(), ruleRunner);
     }
 
-    private boolean isIgnorable(DatabaseChangeLog changeLog, Config config, RuleRunner ruleRunner) {
-        return isIgnorableFilePath(changeLog.getFilePath(), config) || hasAlreadyBeenParsed(changeLog.getFilePath(), ruleRunner);
-    }
-
-    private boolean isIgnorableContext(ChangeSet changeSet, Config config) {
+    private boolean isContextIgnored(ChangeSet changeSet, Config config) {
         if (config.getIgnoreContextPattern() != null && changeSet.getContexts() != null && !changeSet.getContexts().getContexts().isEmpty()) {
             return changeSet.getContexts().getContexts().stream()
                 .allMatch(context -> config.getIgnoreContextPattern().matcher(context).matches());
@@ -100,11 +106,7 @@ public class ChangeLogLinter {
         return false;
     }
 
-    private boolean hasIgnoreComment(ChangeSet changeSet) {
-        return changeSet.getComments() != null && changeSet.getComments().endsWith("lql-ignore");
-    }
-
-    private boolean isIgnorableFilePath(String filePath, Config config) {
+    private boolean isFilePathIgnored(String filePath, Config config) {
         if (filePath != null && config.getIgnoreFilesPattern() != null) {
             String changeLogPath = filePath.replace('\\', '/');
             return config.getIgnoreFilesPattern().matcher(changeLogPath).matches();
