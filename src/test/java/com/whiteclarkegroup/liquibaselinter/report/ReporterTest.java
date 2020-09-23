@@ -7,6 +7,7 @@ import com.google.common.io.Files;
 import com.google.common.io.Resources;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType;
 import org.fusesource.jansi.HtmlAnsiOutputStream;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -28,6 +29,8 @@ import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemT
 import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.IGNORED;
 import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.PASSED;
 import static org.assertj.core.api.Assertions.assertThat;
+
+import static com.whiteclarkegroup.liquibaselinter.report.ReporterConfig.builder;
 
 class ReporterTest {
 
@@ -86,41 +89,35 @@ class ReporterTest {
     }
 
     private void addDefaultFilters(String reportType, String suffix) {
-        ReporterConfig.Builder builder = new ReporterConfig.Builder();
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-report." + suffix, "defaultFilters." + suffix));
-        builder.withPath("target/lqlint-custom." + suffix);
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-custom." + suffix, "defaultFilters." + suffix));
+        final Report report = buildFullReport();
+        tests.add(new ReportingTestConfig(reportType, builder().build(),
+            report, "target/lqlint-report." + suffix, "defaultFilters." + suffix));
+        tests.add(new ReportingTestConfig(reportType, builder().withPath("target/lqlint-custom." + suffix).build(),
+            report, "target/lqlint-custom." + suffix, "defaultFilters." + suffix));
     }
 
     private void addLimitedFilters(String reportType, String suffix) {
-        ReporterConfig.Builder builder = new ReporterConfig.Builder();
-        builder.withFilter(ERROR);
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-report." + suffix, "limitedFilters." + suffix));
-        builder.withPath("target/lqlint-custom." + suffix);
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-custom." + suffix, "limitedFilters." + suffix));
+        Report report = buildFullReport();
+        tests.add(new ReportingTestConfig(reportType, builder().withFilter(ERROR).build(),
+            report, "target/lqlint-report." + suffix, "limitedFilters." + suffix));
+        tests.add(new ReportingTestConfig(reportType, builder().withFilter(ERROR).withPath("target/lqlint-custom." + suffix).build(),
+            report, "target/lqlint-custom." + suffix, "limitedFilters." + suffix));
     }
 
     private void addFullFilters(String reportType, String suffix) {
-        ReporterConfig.Builder builder = new ReporterConfig.Builder();
-        builder.withFilter(ReportItem.ReportItemType.values());
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-report." + suffix, "fullFilters." + suffix));
-        builder.withPath("target/lqlint-custom." + suffix);
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildFullReport(),
-            "target/lqlint-custom." + suffix, "fullFilters." + suffix));
+        final Report report = buildFullReport();
+        tests.add(new ReportingTestConfig(reportType, builder().withFilter(ReportItemType.values()).build(),
+            report, "target/lqlint-report." + suffix, "fullFilters." + suffix));
+        tests.add(new ReportingTestConfig(reportType, builder().withFilter(ReportItemType.values()).withPath("target/lqlint-custom." + suffix).build(),
+            report, "target/lqlint-custom." + suffix, "fullFilters." + suffix));
     }
 
     private void addEmptyReport(String reportType, String suffix) {
-        ReporterConfig.Builder builder = new ReporterConfig.Builder();
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildEmptyReport(),
-            "target/lqlint-report." + suffix, "emptyReport." + suffix));
-        builder.withPath("target/lqlint-custom." + suffix);
-        tests.add(new ReportingTestConfig(reportType, builder.build(), buildEmptyReport(),
-            "target/lqlint-custom." + suffix, "emptyReport." + suffix));
+        final Report report = buildEmptyReport();
+        tests.add(new ReportingTestConfig(reportType, builder().build(),
+            report, "target/lqlint-report." + suffix, "emptyReport." + suffix));
+        tests.add(new ReportingTestConfig(reportType, builder().withPath("target/lqlint-custom." + suffix).build(),
+            report, "target/lqlint-custom." + suffix, "emptyReport." + suffix));
     }
 
     private Report buildFullReport() {

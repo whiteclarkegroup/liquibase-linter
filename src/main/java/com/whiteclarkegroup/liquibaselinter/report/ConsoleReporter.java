@@ -87,7 +87,7 @@ public class ConsoleReporter extends TextReporter {
     }
 
     @AutoService(Reporter.Factory.class)
-    public static class Factory extends AbstractReporter.Factory<ConsoleReporter, ReporterConfig> {
+    public static class Factory extends AbstractReporter.Factory<ConsoleReporter> {
 
         public Factory() {
             super(NAME);

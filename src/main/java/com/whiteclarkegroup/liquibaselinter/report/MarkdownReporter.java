@@ -132,7 +132,7 @@ public class MarkdownReporter extends TextReporter {
     }
 
     @AutoService(Reporter.Factory.class)
-    public static class Factory extends AbstractReporter.Factory<MarkdownReporter, ReporterConfig> {
+    public static class Factory extends AbstractReporter.Factory<MarkdownReporter> {
 
         public Factory() {
             super(NAME);

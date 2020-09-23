@@ -43,7 +43,7 @@ public class CustomReporter extends AbstractReporter {
         // Alternatively, extend an existing core reporter and override methods.
     }
 
-    public static class Factory extends AbstractReporter.Factory<CustomReporter, ReporterConfig> {
+    public static class Factory extends AbstractReporter.Factory<CustomReporter> {
         public Factory() {
             super(NAME);
         }
@@ -113,8 +113,9 @@ Then all we need is to [configure the reporter as normal](reporting/index.md) in
 ## Adding custom config to the `Reporter`
 
 If additional configuration opens are required for the `CustomReporter` to operate, extend `ReporterConfig` and create
-a new builder. Add `@JsonDeserialize` so that the `CustomReporter.Config` can be loaded from the Liquibase Linter
-configuration.
+a new builder that extends `ReporterConfig.BaseBuilder` and change the `Factory` to extend `ReporterConfig.BaseFactory`,
+adding in the `Config` class to the generic type declaration. Add `@JsonDeserialize` to the `Config` class so that the
+`CustomReporter.Config` can be loaded from the Liquibase Linter configuration.
 
 ```java
 package com.fake.fancyapp.liquibase;
@@ -144,7 +145,7 @@ public class CustomReporter extends AbstractReporter {
         // Alternatively, extend an existing core reporter and override methods.
     }
 
-    public static class Factory extends AbstractReporter.Factory<CustomReporter, CustomReporter.Config> {
+    public static class Factory extends AbstractReporter.BaseFactory<CustomReporter, Config> {
         public Factory() {
             super(NAME);
         }
@@ -160,7 +161,7 @@ public class CustomReporter extends AbstractReporter {
         }
     }
 
-    public static class Builder extends ReporterConfig.Builder<CustomReporter.Builder> {
+    public static class Builder extends ReporterConfig.BaseBuilder<Builder> {
         String customConfigOption;
 
         public Builder withCustomConfigOption(String customConfigOption) {

@@ -2,7 +2,7 @@ package com.whiteclarkegroup.liquibaselinter.report;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.google.common.collect.ImmutableSet;
-import com.whiteclarkegroup.liquibaselinter.report.ReporterConfig.Builder;
+import com.whiteclarkegroup.liquibaselinter.report.ReporterConfig.BaseBuilder;
 import liquibase.exception.UnexpectedLiquibaseException;
 import org.springframework.core.GenericTypeResolver;
 
@@ -56,16 +56,20 @@ public abstract class AbstractReporter implements Reporter {
         return report.getConfig().getRules().values().stream().filter(rule -> !rule.isEnabled()).count();
     }
 
-    public abstract static class Factory<R extends Reporter, C extends ReporterConfig> implements Reporter.Factory<R, C> {
+    public abstract static class BaseFactory<R extends Reporter, C extends ReporterConfig> implements Reporter.Factory<R, C> {
         private final String name;
         private final Class<? extends R> reporterClass;
         private final Class<? extends C> configClass;
+        private final Class<?> configBuilderClass;
 
-        protected Factory(final String name) {
+        protected BaseFactory(final String name) {
             this.name = name;
             final Class<?>[] factoryTypes = GenericTypeResolver.resolveTypeArguments(getClass(), Reporter.Factory.class);
-            this.reporterClass = (Class<? extends R>) factoryTypes[0];
-            this.configClass = (Class<? extends C>) factoryTypes[1];
+            reporterClass = (Class<? extends R>) factoryTypes[0];
+            configClass = (Class<? extends C>) factoryTypes[1];
+            configBuilderClass = Optional.ofNullable(configClass.getAnnotation(JsonDeserialize.class))
+                .map(json -> json.builder())
+                .orElseThrow(() -> new UnexpectedLiquibaseException("Cannot find builder for " + configClass));
         }
 
         @Override
@@ -101,18 +105,19 @@ public abstract class AbstractReporter implements Reporter {
             }
         }
 
-        private Builder<? extends Builder> newConfigBuilder() {
-            Class<?> builderClass = Optional.ofNullable(configClass.getAnnotation(JsonDeserialize.class))
-                .map(json -> json.builder())
-                .orElse(null);
-            if (builderClass != null) {
-                try {
-                    return (Builder<? extends Builder>) builderClass.newInstance();
-                } catch (InstantiationException | IllegalAccessException e) {
-                    throw new UnexpectedLiquibaseException("Cannot instantiate builder for " + configClass, e);
-                }
+        private BaseBuilder<?> newConfigBuilder() {
+            try {
+                return (BaseBuilder<?>) configBuilderClass.newInstance();
+            } catch (InstantiationException | IllegalAccessException e) {
+                throw new UnexpectedLiquibaseException("Cannot instantiate builder for " + configClass, e);
             }
-            throw new UnexpectedLiquibaseException("Cannot find builder for " + configClass);
+        }
+    }
+
+    public static class Factory<R extends Reporter> extends BaseFactory<R, ReporterConfig> {
+
+        protected Factory(String name) {
+            super(name);
         }
     }
 }

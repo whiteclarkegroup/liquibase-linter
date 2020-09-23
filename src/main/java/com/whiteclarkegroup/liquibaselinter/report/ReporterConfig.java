@@ -17,7 +17,7 @@ public class ReporterConfig {
     private final String path;
     private final Set<ReportItem.ReportItemType> filter;
 
-    public ReporterConfig(ReporterConfig.Builder builder) {
+    public ReporterConfig(ReporterConfig.BaseBuilder<?> builder) {
         enabled = builder.isEnabled();
         path = builder.getPath();
         filter = builder.getFilter();
@@ -35,7 +35,7 @@ public class ReporterConfig {
         return filter;
     }
 
-    public static class Builder<B extends Builder<B>> {
+    public abstract static class BaseBuilder<B extends BaseBuilder<B>> {
         private boolean enabled = true;
         private String path;
         private Set<ReportItem.ReportItemType> filter = new LinkedHashSet<>(Arrays.asList(ERROR, IGNORED));
@@ -71,5 +71,13 @@ public class ReporterConfig {
         public ReporterConfig build() {
             return new ReporterConfig(this);
         }
+    }
+
+    public static class Builder extends BaseBuilder<Builder> {
+        // default concrete builder
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 }
