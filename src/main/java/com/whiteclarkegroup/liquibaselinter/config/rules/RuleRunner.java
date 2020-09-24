@@ -1,5 +1,6 @@
 package com.whiteclarkegroup.liquibaselinter.config.rules;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.Streams;
 import com.whiteclarkegroup.liquibaselinter.ChangeLogParseExceptionHelper;
 import com.whiteclarkegroup.liquibaselinter.config.Config;
@@ -11,6 +12,7 @@ import liquibase.exception.ChangeLogParseException;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("unchecked")
 public class RuleRunner {
 
-    private static final String LQL_IGNORE_TOKEN = "lql-ignore:";
+    private static final String LQL_IGNORE_TOKEN = "lql-ignore";
     private static final ServiceLoader<ChangeRule> changeRuleServiceLoader = ServiceLoader.load(ChangeRule.class);
     private static final ServiceLoader<ChangeLogRule> changeLogRuleServiceLoader = ServiceLoader.load(ChangeLogRule.class);
     private static final ServiceLoader<ChangeSetRule> changeSetRuleServiceLoader = ServiceLoader.load(ChangeSetRule.class);
@@ -58,10 +60,13 @@ public class RuleRunner {
         for (ChangeRule changeRule : changeRules) {
             if (changeRule.getChangeType().isAssignableFrom(change.getClass()) && changeRule.supports(change)) {
                 final List<RuleConfig> configs = config.forRule(changeRule.getName());
+
                 for (RuleConfig ruleConfig : configs) {
-                    changeRule.configure(ruleConfig);
-                    if (ConditionHelper.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
-                        handleViolation(changeRule.getMessage(change), changeRule.getName(), ruleConfig, change.getChangeSet().getChangeLog(), change.getChangeSet());
+                    if (isEnabled(ruleConfig)) {
+                        changeRule.configure(ruleConfig);
+                        if (ConditionHelper.evaluateCondition(ruleConfig, change) && changeRule.invalid(change)) {
+                            handleViolation(changeRule.getMessage(change), changeRule.getName(), change.getChangeSet().getChangeLog(), change.getChangeSet());
+                        }
                     }
                 }
             }
@@ -72,9 +77,11 @@ public class RuleRunner {
         for (ChangeSetRule changeSetRule : changeSetRules) {
             final List<RuleConfig> configs = config.forRule(changeSetRule.getName());
             for (RuleConfig ruleConfig : configs) {
-                changeSetRule.configure(ruleConfig);
-                if (ConditionHelper.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
-                    handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), ruleConfig, changeSet.getChangeLog(), changeSet);
+                if (isEnabled(ruleConfig)) {
+                    changeSetRule.configure(ruleConfig);
+                    if (ConditionHelper.evaluateCondition(ruleConfig, changeSet) && changeSetRule.invalid(changeSet)) {
+                        handleViolation(changeSetRule.getMessage(changeSet), changeSetRule.getName(), changeSet.getChangeLog(), changeSet);
+                    }
                 }
             }
         }
@@ -84,20 +91,20 @@ public class RuleRunner {
         for (ChangeLogRule changeLogRule : changeLogRules) {
             final List<RuleConfig> configs = config.forRule(changeLogRule.getName());
             for (RuleConfig ruleConfig : configs) {
-                changeLogRule.configure(ruleConfig);
-                if (ConditionHelper.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
-                    handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), ruleConfig, databaseChangeLog, null);
+                if (isEnabled(ruleConfig)) {
+                    changeLogRule.configure(ruleConfig);
+                    if (ConditionHelper.evaluateCondition(ruleConfig, databaseChangeLog) && changeLogRule.invalid(databaseChangeLog)) {
+                        handleViolation(changeLogRule.getMessage(databaseChangeLog), changeLogRule.getName(), databaseChangeLog, null);
+                    }
                 }
             }
         }
     }
 
-    private void handleViolation(String errorMessage, String rule, RuleConfig ruleConfig, DatabaseChangeLog databaseChangeLog, ChangeSet changeSet) throws ChangeLogParseException {
-        if (!isEnabledAfter(ruleConfig) || isIgnored(rule, changeSet)) {
+    private void handleViolation(String errorMessage, String rule, DatabaseChangeLog databaseChangeLog, ChangeSet changeSet) throws ChangeLogParseException {
+        if (isIgnored(rule, changeSet)) {
             report.addIgnored(databaseChangeLog, changeSet, rule, errorMessage);
-            return;
-        }
-        if (config.isFailFast()) {
+        } else if (config.isFailFast()) {
             throw ChangeLogParseExceptionHelper.build(databaseChangeLog, changeSet, errorMessage);
         } else {
             report.addError(databaseChangeLog, changeSet, rule, errorMessage);
@@ -105,24 +112,21 @@ public class RuleRunner {
     }
 
     private boolean isIgnored(String ruleName, ChangeSet changeSet) {
-        if (changeSet == null || changeSet.getComments() == null || !changeSet.getComments().contains(LQL_IGNORE_TOKEN)) {
-            return false;
-        }
-        final String comments = changeSet.getComments();
-        final String toIgnore = comments.substring(comments.indexOf(LQL_IGNORE_TOKEN) + LQL_IGNORE_TOKEN.length());
-        final String[] split = toIgnore.split(",");
-        return Arrays.stream(split).anyMatch(ruleName::equalsIgnoreCase);
-    }
-
-    private boolean isEnabledAfter(RuleConfig ruleConfig) {
-        if (!config.isEnabledAfter() && !ruleConfig.isEnabledAfter()) {
+        final String comments = Optional.ofNullable(changeSet).map(ChangeSet::getComments).orElse("");
+        if (comments.endsWith(LQL_IGNORE_TOKEN)) {
             return true;
         }
-        if (ruleConfig.isEnabledAfter()) {
-            return filesParsed.contains(ruleConfig.getEnableAfter());
-        } else {
-            return filesParsed.contains(config.getEnableAfter());
+        int index = comments.indexOf(LQL_IGNORE_TOKEN + ':'); // see if this specific rule is ignored
+        if (index >= 0) {
+            final String toIgnore = comments.substring(index + LQL_IGNORE_TOKEN.length() + 1);
+            return Arrays.stream(toIgnore.split(",")).anyMatch(ruleName::equalsIgnoreCase);
         }
+        return false;
+    }
+
+    private boolean isEnabled(RuleConfig ruleConfig) {
+        return ruleConfig.isEnabled()
+            && (Strings.isNullOrEmpty(ruleConfig.getEnableAfter()) || filesParsed.contains(ruleConfig.getEnableAfter()));
     }
 
 }

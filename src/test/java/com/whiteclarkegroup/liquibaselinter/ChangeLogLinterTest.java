@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -51,13 +52,15 @@ class ChangeLogLinterTest {
     }
 
 
-    @DisplayName("Should not lint change sets with lint disabled comment")
+    @DisplayName("Should ignore rule violations for change sets with lint disabled comment")
     @Test
-    void shouldNotLintChangeSetsWithLintDisabledComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
+    void shouldIgnoreChangeSetsWithLintIgnoreComment(Config config, RuleRunner ruleRunner) throws ChangeLogParseException {
         DatabaseChangeLog databaseChangeLog = mock(DatabaseChangeLog.class);
-        ChangeSet changeSet = getChangeSet(databaseChangeLog, null, "comment includes lql-ignore");
+        ChangeSet changeSet = getChangeSet(databaseChangeLog, ImmutableSet.of("ddl_test"), "comment includes lql-ignore");
+        addChangeToChangeSet(changeSet, new AddColumnChange(), new AddColumnChange());
+
         changeLogLinter.lintChangeLog(databaseChangeLog, config, ruleRunner);
-        verify(changeSet, never()).getChanges();
+        assertThat(ruleRunner.getReport().countIgnored()).isEqualTo(1);
     }
 
     @DisplayName("Should not fall over on null comment")
