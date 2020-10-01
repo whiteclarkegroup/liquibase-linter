@@ -47,14 +47,14 @@ public class MarkdownReporter extends TextReporter {
         int row = 0;
 
         SortedMap<String, List<ReportItem>> itemsByChangeSet = items.stream()
-            .collect(groupingBy(item -> ofNullable(item.getChangeSetId()).map(String::trim).orElse(""), () -> new TreeMap<>(), toList()));
+            .collect(groupingBy(item -> ofNullable(item.getChangeSetId()).map(String::trim).orElse(""), TreeMap::new, toList()));
 
         for (Map.Entry<String, List<ReportItem>> changeSetEntry : itemsByChangeSet.entrySet()) {
             String changeSet = tableCellFormat(isNullOrEmpty(changeSetEntry.getKey()) ? "*none*" : changeSetEntry.getKey());
             maxWidth[COL_CHANGE_SET] = max(maxWidth[COL_CHANGE_SET], tableCellWidth(changeSet));
 
             final SortedMap<ReportItem.ReportItemType, List<ReportItem>> itemsByType = changeSetEntry.getValue().stream()
-                .collect(groupingBy(ReportItem::getType, () -> new TreeMap<>(), toList()));
+                .collect(groupingBy(ReportItem::getType, TreeMap::new, toList()));
 
             for (Map.Entry<ReportItem.ReportItemType, List<ReportItem>> typedEntry : itemsByType.entrySet()) {
                 String status = tableCellFormat(typedEntry.getKey().name());
@@ -89,7 +89,7 @@ public class MarkdownReporter extends TextReporter {
     private static int tableCellWidth(String value) {
         final String trimmed = ofNullable(value).map(String::trim).orElse("");
         return Arrays.stream(trimmed.split("<br>"))
-            .map(line -> line.length())
+            .map(String::length)
             .max(Integer::compare)
             .get();
     }

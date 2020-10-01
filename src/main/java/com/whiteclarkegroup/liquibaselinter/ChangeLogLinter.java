@@ -11,11 +11,10 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.exception.ChangeLogParseException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
-import static java.util.Collections.emptySet;
 
 public class ChangeLogLinter {
 
@@ -105,7 +104,7 @@ public class ChangeLogLinter {
 
     private boolean isContextIgnored(ChangeSet changeSet, Config config) {
         final Set<String> contexts = Optional.ofNullable(changeSet.getContexts())
-            .map(ContextExpression::getContexts).orElseGet(() -> emptySet());
+            .map(ContextExpression::getContexts).orElseGet(Collections::emptySet);
         if (config.getIgnoreContextPattern() != null && !contexts.isEmpty()) {
             return contexts.stream().anyMatch(context -> config.getIgnoreContextPattern().matcher(context).matches());
         }

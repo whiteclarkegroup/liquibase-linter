@@ -3,7 +3,7 @@ title: Implementing a Custom Reporter
 ---
 
 While Liquibase Linter has some good core reporters, you may have a use case that's particular to your project and
-wouldn't make sense as a core rule.
+wouldn't make sense as a core reporter.
 
 Fortunately it's trivial to implement custom reporters and apply them in your own project; you just need to write a
 Java class implementing the reporting interface and do a little configuration. 
@@ -80,8 +80,8 @@ And in the file, we'll write:
 
 ## Configuring the reporter in Maven
 
-In the project where our scripts live, we'll add a dependency on our rules project to `liquibase-maven-plugin`, in much
-the same way that we [added a dependency for `liquibase-linter` originally](configure.md):
+In the project where our scripts live, we'll add a dependency on our reporters project to `liquibase-maven-plugin`, in
+much the same way that we [added a dependency for `liquibase-linter` originally](configure.md).
 So for our example custom reporting project `wcg-liquibase-linter` we would have the following dependency.
 
 ```xml
