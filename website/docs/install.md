@@ -9,7 +9,7 @@ Liquibase Linter is built with [the Extensions feature in Liquibase](https://liq
 1. Add `liquibase-linter` as a dependency of [the Liquibase Maven plugin](http://www.liquibase.org/documentation/maven/):
 2. Add `lqlint.json` to the root of your project
 
-See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/examples/maven) maven project to help get you started
+See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/main/examples/maven) maven project to help get you started
 
 ```xml
 <plugin>
@@ -36,7 +36,7 @@ See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/t
 1. Add `liquibase-linter` as a dependency of [the Liquibase Gradle plugin](https://github.com/liquibase/liquibase-gradle-plugin):
 2. Add `lqlint.json` to the `lqlint` directory under the root of your project
 
-See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/examples/gradle) gradle project to help get you started
+See this simple [example](https://github.com/whiteclarkegroup/liquibase-linter/tree/main/examples/gradle) gradle project to help get you started
 
 ```groovy
 dependencies {

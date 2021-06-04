@@ -13,7 +13,7 @@ This rule will fail if there is no `constraintName` given when creating an index
 ## Options
 
 - `pattern` - (regex, as string) optional regular expression that the name of any created index must adhere to
-- `dynamicValue` - (string) Spring EL expression, with the [`CreateIndexChange`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/change/core/CreateIndexChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
+- `dynamicValue` - (string) Spring EL expression, with the [`CreateIndexChange`](https://github.com/liquibase/liquibase/blob/main/liquibase-core/src/main/java/liquibase/change/core/CreateIndexChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
 
 ## Example Usage
 

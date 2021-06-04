@@ -13,7 +13,7 @@ This rule will fail if there is no `constraintName` given when adding a primary 
 ## Options
 
 - `pattern` - (regex, as string) optional regular expression that the name of any added primary key must adhere to
-- `dynamicValue` - (string) Spring EL expression, with the [`AddPrimaryKeyChange`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/change/core/AddPrimaryKeyChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
+- `dynamicValue` - (string) Spring EL expression, with the [`AddPrimaryKeyChange`](https://github.com/liquibase/liquibase/blob/main/liquibase-core/src/main/java/liquibase/change/core/AddPrimaryKeyChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
 
 ## Example Usage
 

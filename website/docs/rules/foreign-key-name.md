@@ -13,7 +13,7 @@ Note that unlike some other constraint rules, the linter does not enforce a fore
 ## Options
 
 - `pattern` - (regex, as string) regular expression that the name of any added foreign key constraint must adhere to
-- `dynamicValue` - (string) Spring EL expression, with the [`AddForeignKeyConstraintChange`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/change/core/AddForeignKeyConstraintChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
+- `dynamicValue` - (string) Spring EL expression, with the [`AddForeignKeyConstraintChange`](https://github.com/liquibase/liquibase/blob/main/liquibase-core/src/main/java/liquibase/change/core/AddForeignKeyConstraintChange.java) instance as its expression scope, that should resolve to a string, and can then be interpolated in the pattern with `{{value}}`
 
 ## Example Usage
 

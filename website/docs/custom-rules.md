@@ -18,9 +18,9 @@ We want to stop this happening again at the source, so let's see if we can do it
 
 There are three interfaces you could implement when writing a custom rule in Java; which you use depends on what level you want to work at.
 
-- [ChangeRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeRule.java) for linting each individual change, useful when you want to prevent issues with the content of the change itself
-- [ChangeSetRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeSetRule.java) for linting each changeSet, useful when you want to check things like comments and contexts, or the overall content of a changeSet e.g. when you want ensure certain changes happen together, or in isolation
-- [ChangeLogRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeLogRule.java) for linting each changeLog file, useful when you want to check the overall content at changeLog level - rarely used in practise
+- [ChangeRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/main/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeRule.java) for linting each individual change, useful when you want to prevent issues with the content of the change itself
+- [ChangeSetRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/main/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeSetRule.java) for linting each changeSet, useful when you want to check things like comments and contexts, or the overall content of a changeSet e.g. when you want ensure certain changes happen together, or in isolation
+- [ChangeLogRule](https://github.com/whiteclarkegroup/liquibase-linter/blob/main/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/ChangeLogRule.java) for linting each changeLog file, useful when you want to check the overall content at changeLog level - rarely used in practise
 
 The `ChangeRule` interface uses generics, so you can target a specific change type e.g. `implements ChangeRule<InsertDataChange>` for inserts, or just do `implements ChangeRule<Change>` to catch all changes. You can also use this to lint [custom changes](http://www.liquibase.org/documentation/changes/custom_change.html), if you have any of those in your project.
 
@@ -63,9 +63,9 @@ public class FormLayoutContextRuleImpl extends AbstractLintRule implements Chang
 Some notes about how we've done this:
 
 - We've extended the `AbstractLintRule` class, which saves us fussing about a lot of boilerplate ourselves. We just need to pass our rule name (i.e. the key uses in the [rules config](rules/index.md)) and the failure message
-- The key method we need to implement ourselves is `invalid` - this accepts a [Liquibase `ChangeSet`](https://github.com/liquibase/liquibase/blob/master/liquibase-core/src/main/java/liquibase/changelog/ChangeSet.java) and should return true if the rule has _failed_ - in this case it will do so if any of the changes are an update on the `FORM_LAYOUT` table _and_ the `core` context is used
+- The key method we need to implement ourselves is `invalid` - this accepts a [Liquibase `ChangeSet`](https://github.com/liquibase/liquibase/blob/main/liquibase-core/src/main/java/liquibase/changelog/ChangeSet.java) and should return true if the rule has _failed_ - in this case it will do so if any of the changes are an update on the `FORM_LAYOUT` table _and_ the `core` context is used
 
-All the core rules are implemented in this way as well, so if you're not sure how best to hook something up you might try looking in the source at [some existing core rules](https://github.com/whiteclarkegroup/liquibase-linter/tree/master/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/core) that do something similar
+All the core rules are implemented in this way as well, so if you're not sure how best to hook something up you might try looking in the source at [some existing core rules](https://github.com/whiteclarkegroup/liquibase-linter/tree/main/src/main/java/com/whiteclarkegroup/liquibaselinter/config/rules/core) that do something similar
 
 ## Making the rule discoverable
 
