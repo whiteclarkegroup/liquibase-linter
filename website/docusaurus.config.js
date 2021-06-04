@@ -1,8 +1,8 @@
 module.exports = {
     title: 'Liquibase Linter',
     tagline: 'The configurable, extensible linter for Liquibase',
-    url: 'https://liquibase-linter.dev',
-    baseUrl: '/',
+    url: 'https://whiteclarkegroup.github.io',
+    baseUrl: '/liquibase-linter/',
     projectName: 'liquibase-linter',
     organizationName: 'whiteclarkegroup',
     favicon: 'img/wcg-icon.svg',
