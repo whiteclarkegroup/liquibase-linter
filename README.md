@@ -31,4 +31,4 @@
 
 **2** Add the [config file](website/examples/lqlint.json) to your project root, and start turning on rules.
 
-Try the [full documentation](https://liquibase-linter.dev/docs/install) for details of config and rules.
+Try the [full documentation](https://whiteclarkegroup.github.io/liquibase-linter/docs/install) for details of config and rules.
