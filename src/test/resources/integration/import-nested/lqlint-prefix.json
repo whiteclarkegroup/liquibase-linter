@@ -1,9 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "object-name": {
-            "pattern": "^OBJ_.*$",
-            "errorMessage": "Object name '%s' name must start with 'OBJ_'"
-        }
-    }
-}

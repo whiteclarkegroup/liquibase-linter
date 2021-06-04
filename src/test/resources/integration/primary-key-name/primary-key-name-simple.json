@@ -1,6 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "primary-key-name": true
-    }
-}

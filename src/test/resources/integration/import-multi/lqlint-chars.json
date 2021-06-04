@@ -1,9 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "object-name": {
-            "pattern": "^[A-Z_]+$",
-            "errorMessage": "Object name '%s' name must be uppercase letters and use '_' separation"
-        }
-    }
-}

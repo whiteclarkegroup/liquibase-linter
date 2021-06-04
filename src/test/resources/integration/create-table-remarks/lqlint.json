@@ -1,6 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "create-table-remarks": true
-    }
-}

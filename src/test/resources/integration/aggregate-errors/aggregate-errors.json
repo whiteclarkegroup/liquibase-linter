@@ -1,7 +1,0 @@
-{
-    "rules": {
-        "no-preconditions": true,
-        "has-comment": true,
-        "has-context": true
-    }
-}

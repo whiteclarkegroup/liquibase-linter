@@ -1,6 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "create-column-no-define-primary-key": true
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "valid-context": {
-            "pattern": "^.*_test|.*_script$",
-            "errorMessage": "Context is incorrect, should end with '_test' or '_script'"
-        }
-    }
-}

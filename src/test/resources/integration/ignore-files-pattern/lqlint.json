@@ -1,6 +1,0 @@
-{
-    "fail-fast": true,
-    "rules": {
-        "has-comment": true
-    }
-}
