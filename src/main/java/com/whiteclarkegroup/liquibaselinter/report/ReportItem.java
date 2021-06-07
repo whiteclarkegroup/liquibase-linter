@@ -11,7 +11,7 @@ public final class ReportItem {
     private final ReportItemType type;
     private final String message;
 
-    private ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {
+    ReportItem(String filePath, String changeSetId, String rule, ReportItemType type, String message) {
         this.filePath = filePath;
         this.changeSetId = changeSetId;
         this.rule = rule;
@@ -20,18 +20,19 @@ public final class ReportItem {
     }
 
     public static ReportItem error(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
-        return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.ERROR, message);
+        return create(databaseChangeLog, changeSet, rule, message, ReportItemType.ERROR);
     }
 
     public static ReportItem ignored(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
-        return new ReportItem(getFilePath(databaseChangeLog, changeSet), getChangeSetId(changeSet), rule, ReportItemType.IGNORED, message);
+        return create(databaseChangeLog, changeSet, rule, message, ReportItemType.IGNORED);
     }
 
-    private static String getChangeSetId(ChangeSet changeSet) {
-        if (changeSet != null) {
-            return changeSet.getId();
-        }
-        return "";
+    public static ReportItem passed(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message) {
+        return create(databaseChangeLog, changeSet, rule, message, ReportItemType.PASSED);
+    }
+
+    private static ReportItem create(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet, String rule, String message, ReportItemType type) {
+        return new ReportItem(getFilePath(databaseChangeLog, changeSet), changeSet == null ? null : changeSet.getId(), rule, type, message);
     }
 
     private static String getFilePath(DatabaseChangeLog databaseChangeLog, ChangeSet changeSet) {
@@ -39,9 +40,8 @@ public final class ReportItem {
             return changeSet.getFilePath();
         } else if (databaseChangeLog != null) {
             return databaseChangeLog.getFilePath();
-        } else {
-            return "Other";
         }
+        return null;
     }
 
     public String getFilePath() {
@@ -66,6 +66,7 @@ public final class ReportItem {
 
     public enum ReportItemType {
         ERROR,
-        IGNORED
+        IGNORED,
+        PASSED
     }
 }

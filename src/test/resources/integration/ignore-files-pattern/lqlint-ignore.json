@@ -1,6 +1,6 @@
 {
     "fail-fast": true,
-    "ignore-files-pattern": "^src/test/resources/integration/ignore-files-pattern/subdir/.*$",
+    "ignore-files-pattern": "^integration/ignore-files-pattern/subdir/.*$",
     "rules": {
         "has-comment": true
     }

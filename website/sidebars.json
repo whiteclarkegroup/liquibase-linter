@@ -48,6 +48,25 @@
                   "rules/valid-context"
               ]
           }
+      ],
+      "Reporting": [
+          "reporting/index",
+          {
+              "type": "category",
+              "label": "Custom Reporters",
+              "items": [
+                  "custom-reporters"
+              ]
+          },
+          {
+              "type": "category",
+              "label": "Core Reporters",
+              "items": [
+                  "reporting/console",
+                  "reporting/markdown",
+                  "reporting/text"
+              ]
+          }
       ]
   }
 }

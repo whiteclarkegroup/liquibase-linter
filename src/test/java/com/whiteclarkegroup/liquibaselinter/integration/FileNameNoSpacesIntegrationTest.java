@@ -20,7 +20,7 @@ class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
     void shouldNotAllowFileNameWithSpaces(Liquibase liquibase) {
         ChangeLogParseException changeLogParseException =
             assertThrows(ChangeLogParseException.class, () -> liquibase.update(new Contexts(), CharStreams.nullWriter()));
-        assertTrue(changeLogParseException.getMessage().contains("src/test/resources/integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces"));
+        assertTrue(changeLogParseException.getMessage().contains("integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces"));
     }
 
     @Override
@@ -29,13 +29,13 @@ class FileNameNoSpacesIntegrationTest extends LinterIntegrationTest {
             "Should not allow file name with spaces",
             "file-name-no-spaces/file-name no-spaces.xml",
             "file-name-no-spaces/file-name-no-spaces.json",
-            "src/test/resources/integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
+            "integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
 
         shouldFail(
             "Should not allow included file with name that has spaces",
             "file-name-no-spaces/file-name-no-spaces.xml",
             "file-name-no-spaces/file-name-no-spaces.json",
-            "src/test/resources/integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
+            "integration/file-name-no-spaces/file-name no-spaces.xml -- Message: Changelog filenames should not contain spaces");
 
         shouldPass(
             "Should allow file name without spaces",

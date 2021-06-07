@@ -1,5 +1,10 @@
 {
     "rules": {
         "no-duplicate-includes": true
+    },
+    "reporting": {
+        "console": {
+            "filter": ["ERROR"]
+        }
     }
 }

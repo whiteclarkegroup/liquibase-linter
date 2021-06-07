@@ -86,5 +86,25 @@
             "dynamicValue": "(baseTableName + referencedTableName + '_FK').length() <= 30 ? baseTableName + '_' + referencedTableName : '[A-Z_]+'"
         },
         "drop-not-null-require-column-data-type": {}
+    },
+    "reporting": {
+        "text": "path/to/report.txt",
+        "console": {
+            "filter": "ERROR"
+        },
+        "markdown": [
+            {
+                "path": "path/to/report.md",
+                "filter": [
+                    "ERROR",
+                    "IGNORED",
+                    "PASSED"
+                ]
+            },
+            {
+                "path": "path/to/report2.md",
+                "enabled": true
+            }
+        ]
     }
 }

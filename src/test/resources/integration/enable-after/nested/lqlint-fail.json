@@ -2,7 +2,7 @@
     "fail-fast": true,
     "rules": {
         "has-comment": {
-            "enableAfter": "src/test/resources/integration/enable-after/nested/core/base/base.xml"
+            "enableAfter": "integration/enable-after/nested/core/base/base.xml"
         }
     }
 }

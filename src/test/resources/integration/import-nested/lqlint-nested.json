@@ -1,7 +1,7 @@
 {
     "fail-fast": true,
     "import": [
-        "src/test/resources/integration/import-nested/lqlint-chars.json",
-        "src/test/resources/integration/import-nested/lqlint-prefix.json"
+        "integration/import-nested/lqlint-chars.json",
+        "integration/import-nested/lqlint-prefix.json"
     ]
 }

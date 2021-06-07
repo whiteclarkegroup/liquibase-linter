@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class RuleRunnerParameterResolver implements ParameterResolver {
@@ -18,7 +19,7 @@ public class RuleRunnerParameterResolver implements ParameterResolver {
 
     public RuleRunnerParameterResolver() {
         try (InputStream inputStream = getClass().getResourceAsStream("/lqlint.test.json")) {
-            this.ruleRunner = new RuleRunner(Config.fromInputStream(inputStream), new HashSet<>());
+            this.ruleRunner = new RuleRunner(Config.fromInputStream(inputStream), new ArrayList<>(), new HashSet<>());
         } catch (IOException e) {
             throw new UnexpectedLiquibaseException("Failed to load test lq lint default config file", e);
         }

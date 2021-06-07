@@ -1,0 +1,32 @@
+src/main/resources/ddl/first.xml
+ERROR
+	'error-rule': Error message 1
+IGNORED
+	'ignored-rule': Ignored message 1
+changeSet '2020010101'
+ERROR
+	'error-rule': Error message 2
+IGNORED
+	'ignored-rule': Ignored message 2
+changeSet '2020010102'
+ERROR
+	'error-rule': Error message 3.1
+	'error-rule': Error message 3.2
+IGNORED
+	'ignored-rule': Ignored message 3
+
+src/main/resources/ddl/second.xml
+changeSet '2020010103'
+ERROR
+	'error-rule': Error message 4
+		with newline
+
+Other
+ERROR
+	'error-rule': No change log
+
+Summary:
+	ERROR: 6
+	IGNORED: 3
+	PASSED: 3
+	DISABLED: 2

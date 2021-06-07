@@ -2,7 +2,7 @@
     "fail-fast": true,
     "rules": {
         "has-comment": {
-            "enableAfter": "src/test/resources/integration/enable-after/rule-enable-after/has-comment-fail-2.xml"
+            "enableAfter": "integration/enable-after/rule-enable-after/has-comment-fail-2.xml"
         }
     }
 }

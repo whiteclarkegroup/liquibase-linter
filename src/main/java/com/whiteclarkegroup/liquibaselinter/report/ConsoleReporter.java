@@ -1,87 +1,81 @@
 package com.whiteclarkegroup.liquibaselinter.report;
 
+import com.google.auto.service.AutoService;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Map;
 
-import static java.util.stream.Collectors.groupingBy;
 import static org.fusesource.jansi.Ansi.ansi;
 
-public class ConsoleReporter implements Reporter {
+public class ConsoleReporter extends TextReporter {
+    public static final String NAME = "console";
 
-    private static final String NEW_LINE = "\n";
+    public ConsoleReporter(ReporterConfig config) {
+        super(config);
+    }
 
     @Override
-    public void processReport(Report report) {
+    protected void process(Report report, List<ReportItem> items) {
         installAnsi();
-        StringBuilder output = new StringBuilder();
-        report.getByFileName().forEach((fileName, items) -> {
-            printFileName(output, fileName);
-            final Map<String, List<ReportItem>> groupedByChangeSet = items.stream().collect(groupingBy(ReportItem::getChangeSetId));
-            printByChangeSet(output, groupedByChangeSet);
-        });
-        printToConsole(output);
+        PrintWriter writer = new PrintWriter(System.out);
+        printReport(writer, report, items);
+        writer.flush();
         uninstallAnsi();
     }
 
-    private void printByChangeSet(StringBuilder output, Map<String, List<ReportItem>> groupedByChangeSet) {
-        groupedByChangeSet.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> {
-                printChangeSetLine(output, entry.getKey());
-                final Map<ReportItem.ReportItemType, List<ReportItem>> groupedByType = entry.getValue().stream().collect(groupingBy(ReportItem::getType));
-                printRulesByType(output, groupedByType);
-            });
+    @Override
+    protected void printItemTypeHeader(PrintWriter output, ReportItem.ReportItemType type) {
+        printItemTypeName(output, type);
+        output.println();
     }
 
-    private void printRulesByType(StringBuilder output, final Map<ReportItem.ReportItemType, List<ReportItem>> groupedByType) {
-        groupedByType.entrySet().stream()
-            .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> {
-                printTypeLine(output, entry.getKey());
-                entry.getValue().forEach(itemByType -> printRuleLine(output, itemByType));
-            });
-    }
-
-    private void printFileName(StringBuilder output, String fileName) {
-        output.append(NEW_LINE).append(fileName).append(NEW_LINE);
-    }
-
-    private void printToConsole(StringBuilder output) {
-        System.out.println(output.toString());
-    }
-
-    private void printChangeSetLine(StringBuilder output, String changeSetId) {
-        if (!changeSetId.isEmpty()) {
-            output.append("changeSet '").append(changeSetId).append("'");
-            output.append(NEW_LINE);
+    @Override
+    protected void printItemTypeSummary(PrintWriter output, ReportItem.ReportItemType type, List<ReportItem> items) {
+        output.append('\t');
+        if (items.isEmpty()) {
+            // don't draw attention with color when there are no report items
+            output.print(type.name());
+        } else {
+            printItemTypeName(output, type);
         }
+        output.append(": ").println(items.size());
     }
 
-    private void printTypeLine(StringBuilder output, ReportItem.ReportItemType type) {
-        output.append(getType(type));
-        output.append(NEW_LINE);
-    }
-
-    private void printRuleLine(StringBuilder output, ReportItem item) {
-        output.append("\t'").append(item.getRule()).append("': ").append(item.getMessage()).append(NEW_LINE);
-    }
-
-    private String getType(ReportItem.ReportItemType type) {
+    private void printItemTypeName(PrintWriter output, ReportItem.ReportItemType type) {
         switch (type) {
             case ERROR:
-                return coloured(Ansi.Color.RED, type.name());
+                printColoured(output, Ansi.Color.RED, type.name());
+                break;
             case IGNORED:
-                return coloured(Ansi.Color.YELLOW, type.name());
+                printColoured(output, Ansi.Color.YELLOW, type.name());
+                break;
+            case PASSED:
+                printColoured(output, Ansi.Color.GREEN, type.name());
+                break;
             default:
-                return type.name();
+                super.printItemTypeHeader(output, type);
+                break;
         }
     }
 
-    private String coloured(Ansi.Color colour, String value) {
-        return ansi().reset().fg(colour).a(value).reset().toString();
+    private void printColoured(PrintWriter output, Ansi.Color colour, String line) {
+        output.print(ansi().reset().fg(colour).a(line).reset().toString());
+    }
+
+    @Override
+    protected void printSummaryDisabledRules(PrintWriter output, Report report) {
+        long disabled = countDisabledRules(report);
+
+        output.append('\t');
+        if (disabled > 0) {
+            output.print(ansi().reset().fg(Ansi.Color.MAGENTA).a("DISABLED").reset().toString());
+        } else {
+            // don't draw attention with color when there are no report items
+            output.print("DISABLED");
+        }
+        output.append(": ").println(disabled);
     }
 
     protected void installAnsi() {
@@ -92,4 +86,11 @@ public class ConsoleReporter implements Reporter {
         AnsiConsole.systemInstall();
     }
 
+    @AutoService(Reporter.Factory.class)
+    public static class Factory extends AbstractReporter.Factory<ConsoleReporter> {
+
+        public Factory() {
+            super(NAME);
+        }
+    }
 }

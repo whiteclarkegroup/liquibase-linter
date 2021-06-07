@@ -1,0 +1,5 @@
+Summary:
+	ERROR: 0
+	IGNORED: 0
+	PASSED: 0
+	DISABLED: 0

@@ -3,13 +3,17 @@ package com.whiteclarkegroup.liquibaselinter.config;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ListMultimap;
 import com.whiteclarkegroup.liquibaselinter.config.rules.RuleConfig;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.ERROR;
+import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.IGNORED;
+import static com.whiteclarkegroup.liquibaselinter.report.ReportItem.ReportItemType.PASSED;
+import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
@@ -95,20 +99,6 @@ class ConfigTest {
         assertThat(config.getRules().get("file-name-no-spaces")).extracting("enabled").containsExactly(false);
     }
 
-    @DisplayName("Should indicate whether rule enabled from config map")
-    @Test
-    void shouldIndicateWhetherRuleEnabledFromConfigMap() {
-        ListMultimap<String, RuleConfig> map = ImmutableListMultimap.of(
-            "present-but-off", RuleConfig.disabled(),
-            "present-and-on", RuleConfig.enabled()
-        );
-        Config config = new Config.Builder().withRules(map).withFailFast(true).build();
-
-        assertThat(config.isRuleEnabled("not-even-present")).isFalse();
-        assertThat(config.isRuleEnabled("present-but-off")).isFalse();
-        assertThat(config.isRuleEnabled("present-and-on")).isTrue();
-    }
-
     @DisplayName("Should support a simple import")
     @Test
     void shouldSupportSimpleImport() throws IOException {
@@ -160,4 +150,56 @@ class ConfigTest {
 
         assertThat(config).usingRecursiveComparison().isEqualTo(copy);
     }
+
+    @DisplayName("Should load reporting configuration")
+    @Test
+    void shouldSupportReporting() throws IOException {
+        String configJson = "{\n" +
+            "  \"reporting\": {\n" +
+            "    \"text\": \"path/to/report.txt\",\n" +
+            "    \"console\": {\n" +
+            "      \"filter\": \"ERROR\"" +
+            "    },\n" +
+            "    \"markdown\": [\n" +
+            "      {\n" +
+            "        \"path\": \"path/to/report.md\"," +
+            "        \"filter\": [\n" +
+            "          \"ERROR\",\n" +
+            "          \"IGNORED\",\n" +
+            "          \"PASSED\"\n" +
+            "        ]\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"path\": \"path/to/report2.md\"," +
+            "        \"enabled\": true\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  }\n" +
+            "}";
+        Config config = OBJECT_MAPPER.readValue(configJson, Config.class);
+        assertThat(config.getReporting().asMap()).containsOnlyKeys("text", "console", "markdown");
+
+        assertThat(config.getReporting().get("text")).extracting("path").containsExactly("path/to/report.txt");
+
+        assertThat(config.getReporting().get("console")).extracting("configuration.enabled").containsExactly(true);
+        assertThat(config.getReporting().get("console").get(0)).extracting("filter", as(InstanceOfAssertFactories.ITERABLE)).containsExactly(ERROR);
+
+        assertThat(config.getReporting().get("markdown")).extracting("path").containsExactly("path/to/report.md", "path/to/report2.md");
+        assertThat(config.getReporting().get("markdown").get(0)).extracting("filter", as(InstanceOfAssertFactories.ITERABLE)).containsExactly(ERROR, IGNORED, PASSED);
+        assertThat(config.getReporting().get("markdown").get(1).getConfiguration().isEnabled()).isTrue();
+    }
+
+    @DisplayName("Should not load with missing reporters")
+    @Test
+    void shouldNotLoadWithMissingReporters() throws IOException {
+        String configJson = "{\n" +
+            "  \"reporting\": {\n" +
+            "    \"other\": false\n" +
+            "  }\n" +
+            "}";
+        assertThatExceptionOfType(JsonMappingException.class).isThrownBy(() -> {
+            OBJECT_MAPPER.readValue(configJson, Config.class);
+        }).withMessageContaining("No lq lint reporter named 'other'");
+    }
+
 }
