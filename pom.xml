@@ -65,7 +65,7 @@
         <mockito.version>3.1.0</mockito.version>
         <jackson.version>2.10.5.1</jackson.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <spring.version>5.2.1.RELEASE</spring.version>
+        <spring.version>5.2.21.RELEASE</spring.version>
         <jansi.version>1.17.1</jansi.version>
         <auto-service.version>1.0-rc6</auto-service.version>
         <yaml.version>1.26</yaml.version>
