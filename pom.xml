@@ -68,7 +68,7 @@
         <spring.version>5.2.1.RELEASE</spring.version>
         <jansi.version>1.17.1</jansi.version>
         <auto-service.version>1.0-rc6</auto-service.version>
-        <yaml.version>1.26</yaml.version>
+        <yaml.version>1.31</yaml.version>
         <!-- plugins -->
         <maven.surefire.plugin.version>2.22.2</maven.surefire.plugin.version>
         <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
